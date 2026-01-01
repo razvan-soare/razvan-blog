@@ -123,3 +123,131 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* MDX Content Styles */
+.mdx-content {
+  @apply text-foreground;
+}
+
+.mdx-content .mdx-h1 {
+  @apply scroll-m-20 text-3xl font-bold tracking-tight lg:text-4xl mb-6 mt-8;
+}
+
+.mdx-content .mdx-h1:first-child {
+  @apply mt-0;
+}
+
+.mdx-content .mdx-h2 {
+  @apply scroll-m-20 border-b border-border/50 pb-2 text-2xl font-semibold tracking-tight transition-colors mb-4 mt-10;
+}
+
+.mdx-content .mdx-h2:first-child {
+  @apply mt-0;
+}
+
+.mdx-content .mdx-h3 {
+  @apply scroll-m-20 text-xl font-semibold tracking-tight mb-3 mt-8;
+}
+
+.mdx-content .mdx-h4 {
+  @apply scroll-m-20 text-lg font-semibold tracking-tight mb-2 mt-6;
+}
+
+.mdx-content .mdx-p {
+  @apply leading-7 text-muted-foreground mb-4;
+}
+
+.mdx-content .mdx-ul {
+  @apply my-4 ml-6 list-disc text-muted-foreground;
+}
+
+.mdx-content .mdx-ul li {
+  @apply mt-2 leading-7;
+}
+
+.mdx-content .mdx-ol {
+  @apply my-4 ml-6 list-decimal text-muted-foreground;
+}
+
+.mdx-content .mdx-ol li {
+  @apply mt-2 leading-7;
+}
+
+.mdx-content .mdx-blockquote {
+  @apply mt-6 border-l-4 border-primary/50 pl-6 italic text-muted-foreground mb-4;
+}
+
+.mdx-content .inline-code {
+  @apply relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm text-primary;
+}
+
+.mdx-content .mdx-link {
+  @apply font-medium text-primary underline underline-offset-4 hover:text-primary/80 transition-colors;
+}
+
+.mdx-content .mdx-hr {
+  @apply my-8 border-border/50;
+}
+
+.mdx-content strong {
+  @apply font-semibold text-foreground;
+}
+
+.mdx-content em {
+  @apply italic;
+}
+
+/* Code Block Styles */
+.mdx-content .code-block-wrapper {
+  @apply relative my-6 rounded-lg overflow-hidden border border-border/30;
+}
+
+.mdx-content .code-block-header {
+  @apply flex items-center justify-between px-4 py-2 border-b border-border/30;
+  background-color: #1a1b26;
+}
+
+.mdx-content .code-block-lang {
+  @apply text-xs font-mono uppercase tracking-wider;
+  color: #7aa2f7;
+}
+
+.mdx-content .code-block-content {
+  @apply overflow-x-auto text-sm;
+  background-color: #1a1b26;
+}
+
+.mdx-content .code-block-content pre {
+  @apply p-4 m-0;
+  background-color: transparent !important;
+}
+
+.mdx-content .code-block-content code {
+  @apply font-mono;
+  background-color: transparent !important;
+}
+
+/* Table Styles */
+.mdx-content .mdx-table-wrapper {
+  @apply my-6 w-full overflow-x-auto;
+}
+
+.mdx-content .mdx-table {
+  @apply w-full border-collapse text-sm;
+}
+
+.mdx-content .mdx-table thead {
+  @apply bg-muted/50;
+}
+
+.mdx-content .mdx-table th {
+  @apply px-4 py-3 text-left font-medium text-foreground border-b border-border/50;
+}
+
+.mdx-content .mdx-table td {
+  @apply px-4 py-3 text-muted-foreground border-b border-border/50;
+}
+
+.mdx-content .mdx-table tr {
+  @apply transition-colors hover:bg-muted/30;
+}
