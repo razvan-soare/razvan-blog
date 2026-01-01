@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 interface StickFigureProps {
@@ -9,6 +9,8 @@ interface StickFigureProps {
 
 export function StickFigure({ className }: StickFigureProps) {
   const [isWaving, setIsWaving] = useState(false);
+  const [eyeOffset, setEyeOffset] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleInteraction = () => {
     if (!isWaving) {
@@ -17,14 +19,42 @@ export function StickFigure({ className }: StickFigureProps) {
     }
   };
 
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!containerRef.current) return;
+
+      const rect = containerRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height * 0.12; // Eyes position adjusted for new viewBox
+
+      const deltaX = event.clientX - centerX;
+      const deltaY = event.clientY - centerY;
+
+      // Calculate distance for normalization
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      const maxOffset = 3; // Maximum eye movement in SVG units
+
+      if (distance > 0) {
+        // Normalize and scale the offset
+        const normalizedX = (deltaX / distance) * Math.min(distance / 100, 1) * maxOffset;
+        const normalizedY = (deltaY / distance) * Math.min(distance / 100, 1) * maxOffset;
+        setEyeOffset({ x: normalizedX, y: normalizedY });
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   return (
     <motion.div
+      ref={containerRef}
       className={className}
       animate={{
-        y: [0, -8, 0],
+        y: [0, -10, 0],
       }}
       transition={{
-        duration: 3,
+        duration: 4,
         repeat: Infinity,
         ease: 'easeInOut',
       }}
@@ -33,11 +63,11 @@ export function StickFigure({ className }: StickFigureProps) {
       style={{ cursor: 'pointer' }}
     >
       <svg
-        viewBox="0 0 200 300"
+        viewBox="0 0 200 340"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-full"
-        aria-label="Animated stick figure character"
+        aria-label="Animated stick figure character floating on an island"
       >
         {/* Head */}
         <motion.circle
@@ -50,9 +80,31 @@ export function StickFigure({ className }: StickFigureProps) {
           className="text-foreground"
         />
 
-        {/* Eyes */}
-        <circle cx="88" cy="40" r="4" fill="currentColor" className="text-foreground" />
-        <circle cx="112" cy="40" r="4" fill="currentColor" className="text-foreground" />
+        {/* Eyes - with tracking */}
+        <motion.circle
+          cx={88 + eyeOffset.x}
+          cy={40 + eyeOffset.y}
+          r="4"
+          fill="currentColor"
+          className="text-foreground"
+          animate={{
+            cx: 88 + eyeOffset.x,
+            cy: 40 + eyeOffset.y,
+          }}
+          transition={{ duration: 0.1, ease: 'easeOut' }}
+        />
+        <motion.circle
+          cx={112 + eyeOffset.x}
+          cy={40 + eyeOffset.y}
+          r="4"
+          fill="currentColor"
+          className="text-foreground"
+          animate={{
+            cx: 112 + eyeOffset.x,
+            cy: 40 + eyeOffset.y,
+          }}
+          transition={{ duration: 0.1, ease: 'easeOut' }}
+        />
 
         {/* Smile */}
         <path
@@ -207,6 +259,66 @@ export function StickFigure({ className }: StickFigureProps) {
           strokeLinecap="round"
           className="text-foreground"
         />
+
+        {/* Floating Island */}
+        <g id="island">
+          {/* Main island body - earthy brown tones */}
+          <ellipse
+            cx="100"
+            cy="290"
+            rx="70"
+            ry="20"
+            fill="#8B7355"
+          />
+          {/* Island top surface - grass green */}
+          <ellipse
+            cx="100"
+            cy="285"
+            rx="68"
+            ry="18"
+            fill="#4A7C23"
+          />
+          {/* Grass highlights */}
+          <ellipse
+            cx="100"
+            cy="283"
+            rx="60"
+            ry="14"
+            fill="#5D9E2B"
+          />
+
+          {/* Island bottom rocky layers */}
+          <path
+            d="M35 290 Q50 310 70 320 Q100 330 130 320 Q150 310 165 290"
+            fill="#6B5344"
+          />
+          <path
+            d="M45 295 Q60 315 80 322 Q100 328 120 322 Q140 315 155 295"
+            fill="#5A4636"
+          />
+
+          {/* Small plants/grass tufts */}
+          <g stroke="#3D6B1E" strokeWidth="2" strokeLinecap="round">
+            <line x1="60" y1="280" x2="55" y2="270" />
+            <line x1="60" y1="280" x2="60" y2="268" />
+            <line x1="60" y1="280" x2="65" y2="272" />
+
+            <line x1="140" y1="280" x2="135" y2="272" />
+            <line x1="140" y1="280" x2="140" y2="268" />
+            <line x1="140" y1="280" x2="145" y2="270" />
+
+            <line x1="80" y1="278" x2="78" y2="272" />
+            <line x1="80" y1="278" x2="82" y2="270" />
+
+            <line x1="120" y1="278" x2="118" y2="270" />
+            <line x1="120" y1="278" x2="122" y2="272" />
+          </g>
+
+          {/* Small flower accents */}
+          <circle cx="75" cy="276" r="3" fill="#FFD700" />
+          <circle cx="130" cy="277" r="2.5" fill="#FF69B4" />
+          <circle cx="95" cy="279" r="2" fill="#87CEEB" />
+        </g>
       </svg>
     </motion.div>
   );
