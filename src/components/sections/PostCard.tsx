@@ -2,15 +2,25 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { Clock, Calendar } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import type { BlogPost, PostCategory } from '@/lib/data/posts';
 
-const categoryColors: Record<PostCategory, string> = {
+export const categoryColors: Record<PostCategory, string> = {
   hooks: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  helper: 'bg-green-500/20 text-green-400 border-green-500/30',
+  helpers: 'bg-green-500/20 text-green-400 border-green-500/30',
   tips: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
 };
+
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
 
 interface PostCardProps {
   post: BlogPost;
@@ -19,19 +29,32 @@ interface PostCardProps {
 export function PostCard({ post }: PostCardProps) {
   return (
     <motion.div
-      whileHover={{ y: -8 }}
+      whileHover={{ y: -8, scale: 1.02 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className="h-full"
     >
-      <Card className="h-full bg-card/50 border-border/50 hover:border-primary/50 transition-colors duration-300 group">
+      <Card className="h-full bg-card/50 border-border/50 hover:border-primary/50 transition-colors duration-300 group flex flex-col">
         <CardHeader className="pb-2">
-          <Badge className={`${categoryColors[post.category]} w-fit mb-2`}>
-            {post.category}
-          </Badge>
+          <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
+            <Badge className={`${categoryColors[post.category]} w-fit`}>
+              {post.category}
+            </Badge>
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+              <span className="inline-flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                {post.readingTime} min
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <Calendar className="h-3 w-3" />
+                {formatDate(post.publishedAt)}
+              </span>
+            </div>
+          </div>
           <CardTitle className="text-lg leading-snug group-hover:text-primary transition-colors duration-300">
             {post.title}
           </CardTitle>
         </CardHeader>
-        <CardContent className="pb-4">
+        <CardContent className="pb-4 flex-1">
           <p className="text-muted-foreground text-sm line-clamp-3">
             {post.excerpt}
           </p>
