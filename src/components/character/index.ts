@@ -1,0 +1,1 @@
+export { StickFigure } from './StickFigure';

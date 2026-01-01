@@ -1,3 +1,5 @@
+import { StickFigure } from '@/components/character';
+
 export function Hero() {
   return (
     <section className="min-h-[calc(100vh-80px)] flex items-center justify-center py-12 md:py-20">
@@ -13,16 +15,9 @@ export function Hero() {
             </p>
           </div>
 
-          {/* Character Placeholder */}
+          {/* Animated Stick Figure Character */}
           <div className="flex-shrink-0">
-            <div
-              className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-2xl bg-muted/50 border border-border flex items-center justify-center"
-              aria-label="Animated character placeholder"
-            >
-              <span className="text-muted-foreground text-sm">
-                Character Animation
-              </span>
-            </div>
+            <StickFigure className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96" />
           </div>
         </div>
       </div>
