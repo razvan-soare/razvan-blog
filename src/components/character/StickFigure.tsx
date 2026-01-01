@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { ThoughtBubble } from './ThoughtBubble';
 
 interface StickFigureProps {
   className?: string;
@@ -63,12 +64,14 @@ export function StickFigure({ className }: StickFigureProps) {
       style={{ cursor: 'pointer' }}
     >
       <svg
-        viewBox="0 0 200 340"
+        viewBox="0 -50 280 390"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-full"
         aria-label="Animated stick figure character floating on an island"
       >
+        {/* Thought Bubble */}
+        <ThoughtBubble />
         {/* Head */}
         <motion.circle
           cx="100"
