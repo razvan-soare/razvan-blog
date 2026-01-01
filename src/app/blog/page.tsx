@@ -9,11 +9,38 @@ import { cn } from '@/lib/utils';
 
 type FilterCategory = 'all' | PostCategory;
 
-const categories: { value: FilterCategory; label: string }[] = [
-  { value: 'all', label: 'All' },
-  { value: 'hooks', label: 'Hooks' },
-  { value: 'helpers', label: 'Helpers' },
-  { value: 'tips', label: 'Tips' },
+interface CategoryConfig {
+  value: FilterCategory;
+  label: string;
+  activeClass: string;
+  hoverClass: string;
+}
+
+const categories: CategoryConfig[] = [
+  {
+    value: 'all',
+    label: 'All',
+    activeClass: 'bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/25',
+    hoverClass: 'hover:border-primary/50',
+  },
+  {
+    value: 'hooks',
+    label: 'Hooks',
+    activeClass: 'bg-blue-500/20 text-blue-400 border-blue-500 shadow-lg shadow-blue-500/25',
+    hoverClass: 'hover:border-blue-500/50 hover:text-blue-400',
+  },
+  {
+    value: 'helpers',
+    label: 'Helpers',
+    activeClass: 'bg-green-500/20 text-green-400 border-green-500 shadow-lg shadow-green-500/25',
+    hoverClass: 'hover:border-green-500/50 hover:text-green-400',
+  },
+  {
+    value: 'tips',
+    label: 'Tips',
+    activeClass: 'bg-purple-500/20 text-purple-400 border-purple-500 shadow-lg shadow-purple-500/25',
+    hoverClass: 'hover:border-purple-500/50 hover:text-purple-400',
+  },
 ];
 
 const containerVariants = {
@@ -21,13 +48,35 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.4,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: -20,
+    scale: 0.95,
+    transition: {
+      duration: 0.2,
+    },
+  },
+};
+
+const headerVariants = {
+  hidden: { opacity: 0, y: -20 },
   visible: {
     opacity: 1,
     y: 0,
@@ -47,6 +96,13 @@ export default function BlogPage() {
     }
     return blogPosts.filter((post) => post.category === activeCategory);
   }, [activeCategory]);
+
+  const getCategoryCount = (category: FilterCategory): number => {
+    if (category === 'all') {
+      return blogPosts.length;
+    }
+    return blogPosts.filter((post) => post.category === category).length;
+  };
 
   return (
     <main className="min-h-screen bg-background text-foreground">
