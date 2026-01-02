@@ -5,14 +5,19 @@ import { QueryProvider } from "@/components/providers";
 import { siteConfig } from "@/lib/seo";
 import "./globals.css";
 
+// Optimize font loading with display swap to prevent invisible text during load
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap", // Show fallback font immediately, swap when custom font loads
+  preload: true,
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap", // Show fallback font immediately, swap when custom font loads
+  preload: true,
 });
 
 export const viewport: Viewport = {

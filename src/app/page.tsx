@@ -1,6 +1,7 @@
 import { Metadata } from "next";
-import { FeaturedProjects, Hero, RecentlyPublished } from "@/components/sections";
+import { Hero, FeaturedProjects, RecentlyPublished } from "@/components/sections";
 import { siteConfig, generateJsonLd } from "@/lib/seo";
+import { BelowFoldContent } from "@/components/sections/BelowFoldContent";
 
 export const metadata: Metadata = {
   title: siteConfig.title,
@@ -27,8 +28,10 @@ export default function Home() {
       />
       <main className="min-h-screen bg-background text-foreground">
         <Hero />
-        <FeaturedProjects />
-        <RecentlyPublished />
+        <BelowFoldContent>
+          <FeaturedProjects />
+          <RecentlyPublished />
+        </BelowFoldContent>
       </main>
     </>
   );

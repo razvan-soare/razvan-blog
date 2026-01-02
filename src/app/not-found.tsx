@@ -1,10 +1,23 @@
 'use client';
 
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { Home, ArrowLeft, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ConfusedStickFigure } from '@/components/character';
+
+// Dynamic import for code splitting - ConfusedStickFigure is a large animated component
+const ConfusedStickFigure = dynamic(
+  () => import('@/components/character/ConfusedStickFigure').then(mod => ({ default: mod.ConfusedStickFigure })),
+  {
+    loading: () => (
+      <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 flex items-center justify-center">
+        <div className="w-24 h-24 rounded-full border-4 border-muted-foreground/20 border-t-primary animate-spin" />
+      </div>
+    ),
+    ssr: false, // Disable SSR for animation-heavy component
+  }
+);
 
 const containerVariants = {
   hidden: { opacity: 0 },
