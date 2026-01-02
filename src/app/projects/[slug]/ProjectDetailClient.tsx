@@ -140,6 +140,7 @@ export function ProjectDetailClient({ slug }: ProjectDetailClientProps) {
           <motion.h1
             variants={itemVariants}
             className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+            style={{ viewTransitionName: `project-title-${project.slug}` }}
           >
             {project.title}
           </motion.h1>
@@ -156,6 +157,7 @@ export function ProjectDetailClient({ slug }: ProjectDetailClientProps) {
           <motion.div
             variants={heroImageVariants}
             className="relative aspect-video rounded-xl overflow-hidden bg-gradient-to-br from-primary/20 via-secondary/20 to-primary/10 border border-border/50"
+            style={{ viewTransitionName: `project-image-${project.slug}` }}
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <motion.div

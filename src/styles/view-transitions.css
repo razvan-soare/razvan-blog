@@ -1,0 +1,244 @@
+/* ============================================
+   View Transitions API Styles
+   ============================================ */
+
+/*
+ * These styles customize the View Transitions API animations.
+ * They are only applied in browsers that support the API (Chrome/Edge 111+).
+ *
+ * Note: These styles are also injected dynamically by ViewTransitionsProvider
+ * to avoid CSS parsing issues with Turbopack. This file serves as documentation
+ * and reference for the view transitions styles used in the application.
+ *
+ * The view-transition-name property on elements creates named transition groups
+ * that can morph between their old and new states during page navigation.
+ *
+ * Transition names used:
+ * - project-title-{slug}: Project card title to project detail hero title
+ * - project-image-{slug}: Project card thumbnail to project detail hero image
+ * - post-title-{slug}: Blog post card title to blog post detail title
+ * - post-category-{slug}: Blog post category badge transitions
+ */
+
+/* Root transition settings */
+::view-transition {
+  pointer-events: none;
+}
+
+/* Default page transition - crossfade with slide */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  animation-name: view-transition-fade-out;
+}
+
+::view-transition-new(root) {
+  animation-name: view-transition-fade-in;
+}
+
+@keyframes view-transition-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes view-transition-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   Project Title Transitions
+   Morph from card title to hero title
+   ============================================ */
+
+::view-transition-group(project-title-*) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(project-title-*),
+::view-transition-new(project-title-*) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
+  width: 100%;
+  object-fit: none;
+}
+
+::view-transition-old(project-title-*) {
+  animation-name: view-transition-title-out;
+}
+
+::view-transition-new(project-title-*) {
+  animation-name: view-transition-title-in;
+}
+
+@keyframes view-transition-title-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes view-transition-title-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   Project Image Transitions
+   Morph from card thumbnail to hero image
+   ============================================ */
+
+::view-transition-group(project-image-*) {
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(project-image-*),
+::view-transition-new(project-image-*) {
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  object-fit: cover;
+  overflow: hidden;
+}
+
+::view-transition-old(project-image-*) {
+  animation-name: view-transition-image-out;
+}
+
+::view-transition-new(project-image-*) {
+  animation-name: view-transition-image-in;
+}
+
+@keyframes view-transition-image-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes view-transition-image-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   Blog Post Title Transitions
+   ============================================ */
+
+::view-transition-group(post-title-*) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(post-title-*),
+::view-transition-new(post-title-*) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
+  width: 100%;
+}
+
+::view-transition-old(post-title-*) {
+  animation-name: view-transition-title-out;
+}
+
+::view-transition-new(post-title-*) {
+  animation-name: view-transition-title-in;
+}
+
+/* ============================================
+   Blog Post Category Badge Transitions
+   ============================================ */
+
+::view-transition-group(post-category-*) {
+  animation-duration: 300ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(post-category-*),
+::view-transition-new(post-category-*) {
+  animation-duration: 300ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(post-category-*) {
+  animation-name: view-transition-badge-out;
+}
+
+::view-transition-new(post-category-*) {
+  animation-name: view-transition-badge-in;
+}
+
+@keyframes view-transition-badge-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes view-transition-badge-in {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   Reduce motion for accessibility
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-old(project-title-*),
+  ::view-transition-new(project-title-*),
+  ::view-transition-old(project-image-*),
+  ::view-transition-new(project-image-*),
+  ::view-transition-old(post-title-*),
+  ::view-transition-new(post-title-*),
+  ::view-transition-old(post-category-*),
+  ::view-transition-new(post-category-*) {
+    animation-duration: 0.01ms !important;
+  }
+
+  ::view-transition-group(project-title-*),
+  ::view-transition-group(project-image-*),
+  ::view-transition-group(post-title-*),
+  ::view-transition-group(post-category-*) {
+    animation-duration: 0.01ms !important;
+  }
+}

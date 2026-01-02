@@ -258,3 +258,17 @@
 .mdx-content .mdx-table tr {
   @apply transition-colors hover:bg-muted/30;
 }
+
+/* ============================================
+   View Transitions API Styles
+   ============================================ */
+
+/*
+ * View Transitions CSS - these styles are applied via JavaScript
+ * using the View Transitions API when navigating between pages.
+ * The animations are defined here and applied automatically by the browser.
+ *
+ * Note: The ::view-transition pseudo-elements are only available
+ * in browsers that support the View Transitions API (Chrome/Edge).
+ * Firefox and Safari will gracefully fall back to regular navigation.
+ */

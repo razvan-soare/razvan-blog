@@ -1,12 +1,12 @@
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { ArrowLeft, Calendar, Clock, Tag } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { blogPosts, getPostBySlug, getRelatedPosts, PostCategory } from '@/lib/data/posts';
 import { parseContent } from '@/lib/mdx';
 import { TableOfContents } from '@/components/mdx';
-import { cn } from '@/lib/utils';
 import { RelatedPosts } from './RelatedPosts';
+import { BlogPostHeader } from './BlogPostHeader';
 import { siteConfig, generateJsonLd } from '@/lib/seo';
 
 interface BlogPostPageProps {
@@ -94,15 +94,6 @@ const categoryStyles: Record<PostCategory, { badge: string; text: string }> = {
   },
 };
 
-function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-}
-
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
@@ -146,43 +137,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-12">
           {/* Main Content */}
           <article>
-            {/* Header */}
-            <header className="mb-10">
-              {/* Category Badge */}
-              <div className="mb-4">
-                <span
-                  className={cn(
-                    'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border',
-                    categoryStyle.badge
-                  )}
-                >
-                  <Tag className="h-3 w-3" />
-                  {categoryStyle.text}
-                </span>
-              </div>
-
-              {/* Title */}
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-6">
-                {post.title}
-              </h1>
-
-              {/* Meta Info */}
-              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="h-4 w-4" />
-                  <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Clock className="h-4 w-4" />
-                  <span>{post.readingTime} min read</span>
-                </div>
-              </div>
-
-              {/* Excerpt */}
-              <p className="mt-6 text-lg text-muted-foreground leading-relaxed border-l-4 border-primary/50 pl-4">
-                {post.excerpt}
-              </p>
-            </header>
+            {/* Header with View Transitions support */}
+            <BlogPostHeader
+              slug={slug}
+              title={post.title}
+              excerpt={post.excerpt}
+              category={post.category}
+              categoryStyle={categoryStyle}
+              publishedAt={post.publishedAt}
+              readingTime={post.readingTime}
+            />
 
             {/* Content */}
             <div

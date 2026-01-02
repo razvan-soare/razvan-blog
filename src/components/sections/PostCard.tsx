@@ -1,10 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import { Clock, Calendar } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { TransitionLink } from '@/components/ui/transition-link';
 import type { BlogPost, PostCategory } from '@/lib/data/posts';
 
 export const categoryColors: Record<PostCategory, string> = {
@@ -36,7 +36,10 @@ export function PostCard({ post }: PostCardProps) {
       <Card className="h-full bg-card/50 border-border/50 hover:border-primary/50 transition-colors duration-300 group flex flex-col">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
-            <Badge className={`${categoryColors[post.category]} w-fit`}>
+            <Badge
+              className={`${categoryColors[post.category]} w-fit`}
+              style={{ viewTransitionName: `post-category-${post.slug}` }}
+            >
               {post.category}
             </Badge>
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
@@ -50,7 +53,10 @@ export function PostCard({ post }: PostCardProps) {
               </span>
             </div>
           </div>
-          <CardTitle className="text-lg leading-snug group-hover:text-primary transition-colors duration-300">
+          <CardTitle
+            className="text-lg leading-snug group-hover:text-primary transition-colors duration-300"
+            style={{ viewTransitionName: `post-title-${post.slug}` }}
+          >
             {post.title}
           </CardTitle>
         </CardHeader>
@@ -60,7 +66,7 @@ export function PostCard({ post }: PostCardProps) {
           </p>
         </CardContent>
         <CardFooter className="mt-auto">
-          <Link
+          <TransitionLink
             href={`/blog/${post.slug}`}
             className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group/link"
           >
@@ -83,7 +89,7 @@ export function PostCard({ post }: PostCardProps) {
               <path d="M5 12h14" />
               <path d="m12 5 7 7-7 7" />
             </motion.svg>
-          </Link>
+          </TransitionLink>
         </CardFooter>
       </Card>
     </motion.div>

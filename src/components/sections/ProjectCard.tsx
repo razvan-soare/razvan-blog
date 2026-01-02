@@ -1,9 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { TransitionLink } from '@/components/ui/transition-link';
 import type { Project } from '@/lib/data/projects';
 
 interface ProjectCardProps {
@@ -19,26 +19,39 @@ export function ProjectCard({ project }: ProjectCardProps) {
     >
       <Card className="h-full bg-card/50 border-border/50 hover:border-secondary/50 transition-all duration-300 group overflow-hidden">
         {/* Thumbnail placeholder */}
-        <div className="relative h-48 bg-gradient-to-br from-primary/20 via-secondary/20 to-primary/10 overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center">
+        <TransitionLink href={`/projects/${project.slug}`} className="block">
+          <div
+            className="relative h-48 bg-gradient-to-br from-primary/20 via-secondary/20 to-primary/10 overflow-hidden"
+            style={{ viewTransitionName: `project-image-${project.slug}` }}
+          >
+            <div className="absolute inset-0 flex items-center justify-center">
+              <motion.div
+                className="text-6xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"
+                whileHover={{ rotate: 5, scale: 1.1 }}
+              >
+                {project.category === 'Healthcare' && '🏥'}
+                {project.category === 'Lifestyle' && '🌿'}
+                {project.category === 'E-commerce' && '🛒'}
+                {project.category === 'Sports & Gaming' && '🎮'}
+                {project.category === 'Social Commerce' && '🤝'}
+                {!project.category && '💻'}
+              </motion.div>
+            </div>
+            {/* Hover overlay effect */}
             <motion.div
-              className="text-6xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"
-              whileHover={{ rotate: 5, scale: 1.1 }}
-            >
-              💻
-            </motion.div>
+              className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            />
+            {/* Decorative corner accent */}
+            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-primary/30 to-transparent" />
+            <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-secondary/30 to-transparent" />
           </div>
-          {/* Hover overlay effect */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          />
-          {/* Decorative corner accent */}
-          <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-primary/30 to-transparent" />
-          <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-secondary/30 to-transparent" />
-        </div>
+        </TransitionLink>
 
         <CardHeader className="pb-2">
-          <CardTitle className="text-xl leading-snug group-hover:text-secondary transition-colors duration-300">
+          <CardTitle
+            className="text-xl leading-snug group-hover:text-secondary transition-colors duration-300"
+            style={{ viewTransitionName: `project-title-${project.slug}` }}
+          >
             {project.title}
           </CardTitle>
         </CardHeader>
@@ -61,7 +74,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </CardContent>
 
         <CardFooter className="mt-auto pt-0">
-          <Link
+          <TransitionLink
             href={`/projects/${project.slug}`}
             className="inline-flex items-center gap-2 text-sm font-medium text-secondary hover:text-secondary/80 transition-colors group/link"
           >
@@ -83,7 +96,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
               <path d="M5 12h14" />
               <path d="m12 5 7 7-7 7" />
             </motion.svg>
-          </Link>
+          </TransitionLink>
         </CardFooter>
       </Card>
     </motion.div>

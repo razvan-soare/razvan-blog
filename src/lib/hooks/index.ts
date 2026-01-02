@@ -14,3 +14,8 @@ export {
   useRelatedPosts,
   postKeys,
 } from './use-posts';
+
+export {
+  useViewTransition,
+  supportsViewTransitions,
+} from './use-view-transition';

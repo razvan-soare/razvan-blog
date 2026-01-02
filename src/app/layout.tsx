@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Header, Footer } from "@/components/layout";
-import { QueryProvider } from "@/components/providers";
+import { QueryProvider, ViewTransitionsProvider } from "@/components/providers";
 import { siteConfig } from "@/lib/seo";
 import "./globals.css";
 
@@ -87,11 +87,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <QueryProvider>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
+          <ViewTransitionsProvider>
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+          </ViewTransitionsProvider>
         </QueryProvider>
       </body>
     </html>
