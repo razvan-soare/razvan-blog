@@ -7,6 +7,7 @@ import { parseContent } from '@/lib/mdx';
 import { TableOfContents } from '@/components/mdx';
 import { cn } from '@/lib/utils';
 import { RelatedPosts } from './RelatedPosts';
+import { siteConfig, generateJsonLd } from '@/lib/seo';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -25,12 +26,56 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   if (!post) {
     return {
       title: 'Post Not Found',
+      description: 'The requested blog post could not be found.',
     };
   }
 
+  const categoryKeywords: Record<PostCategory, string[]> = {
+    hooks: ['React hooks', 'custom hooks', 'React development'],
+    helpers: ['helper functions', 'utility functions', 'JavaScript helpers'],
+    tips: ['coding tips', 'development tips', 'best practices'],
+  };
+
+  const keywords = [
+    ...siteConfig.keywords,
+    ...categoryKeywords[post.category],
+    'tutorial',
+    'web development',
+  ];
+
   return {
-    title: `${post.title} | Blog`,
+    title: post.title,
     description: post.excerpt,
+    keywords,
+    authors: [{ name: siteConfig.author.name }],
+    openGraph: {
+      type: 'article',
+      title: `${post.title} | Razvan Soare`,
+      description: post.excerpt,
+      url: `${siteConfig.url}/blog/${post.slug}`,
+      siteName: siteConfig.name,
+      publishedTime: post.publishedAt,
+      authors: [siteConfig.author.name],
+      tags: [post.category, 'React', 'JavaScript', 'Web Development'],
+      images: [
+        {
+          url: siteConfig.ogImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${post.title} | Razvan Soare`,
+      description: post.excerpt,
+      images: [siteConfig.ogImage],
+      creator: siteConfig.twitterHandle,
+    },
+    alternates: {
+      canonical: `${siteConfig.url}/blog/${post.slug}`,
+    },
   };
 }
 
@@ -70,9 +115,25 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const relatedPosts = getRelatedPosts(slug, 3);
   const categoryStyle = categoryStyles[post.category];
 
+  const jsonLd = generateJsonLd('article', {
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    url: `${siteConfig.url}/blog/${post.slug}`,
+    image: siteConfig.ogImage,
+    wordCount: post.content.split(/\s+/).length,
+    articleSection: post.category,
+  });
+
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto max-w-7xl px-4 py-16 md:py-24">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <main className="min-h-screen bg-background text-foreground">
+        <div className="mx-auto max-w-7xl px-4 py-16 md:py-24">
         {/* Back Link */}
         <Link
           href="/blog"
@@ -143,7 +204,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <RelatedPosts posts={relatedPosts} />
           </section>
         )}
-      </div>
-    </main>
+        </div>
+      </main>
+    </>
   );
 }
