@@ -13,6 +13,17 @@
  * The view-transition-name property on elements creates named transition groups
  * that can morph between their old and new states during page navigation.
  *
+ * TRUE MORPHING ANIMATION:
+ * The View Transitions API uses a FLIP (First, Last, Invert, Play) technique.
+ * The ::view-transition-group pseudo-element automatically animates:
+ * - Position (from old element location to new element location)
+ * - Size (from old element dimensions to new element dimensions)
+ *
+ * To enable morphing, we:
+ * 1. Configure timing on ::view-transition-group (position/size animation)
+ * 2. Do NOT set fixed width/height on ::view-transition-old/new
+ * 3. Apply a subtle crossfade on old/new snapshots during the morph
+ *
  * Transition names used:
  * - project-title-{slug}: Project card title to project detail hero title
  * - project-image-{slug}: Project card thumbnail to project detail hero image
@@ -25,7 +36,7 @@
   pointer-events: none;
 }
 
-/* Default page transition - crossfade with slide */
+/* Default page transition - subtle crossfade for root */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 350ms;
@@ -34,14 +45,14 @@
 }
 
 ::view-transition-old(root) {
-  animation-name: view-transition-fade-out;
+  animation-name: vt-fade-out;
 }
 
 ::view-transition-new(root) {
-  animation-name: view-transition-fade-in;
+  animation-name: vt-fade-in;
 }
 
-@keyframes view-transition-fade-out {
+@keyframes vt-fade-out {
   from {
     opacity: 1;
   }
@@ -50,7 +61,7 @@
   }
 }
 
-@keyframes view-transition-fade-in {
+@keyframes vt-fade-in {
   from {
     opacity: 0;
   }
@@ -64,42 +75,48 @@
    Morph from card title to hero title
    ============================================ */
 
+/* Project titles - true morphing animation
+   The ::view-transition-group handles position/size morphing automatically.
+   We only configure timing and let the browser do the FLIP animation. */
 ::view-transition-group(project-title-*) {
-  animation-duration: 350ms;
+  animation-duration: 400ms;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Allow the old/new snapshots to crossfade smoothly during the morph.
+   The key is to NOT set fixed width/height so the browser can interpolate size. */
 ::view-transition-old(project-title-*),
 ::view-transition-new(project-title-*) {
-  animation-duration: 350ms;
+  animation-duration: 400ms;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  height: 100%;
-  width: 100%;
-  object-fit: none;
+  /* Let the browser handle size interpolation - no fixed dimensions */
+  mix-blend-mode: normal;
 }
 
+/* Crossfade the content during the morph for smoother text transition */
 ::view-transition-old(project-title-*) {
-  animation-name: view-transition-title-out;
+  animation-name: vt-morph-fade-out;
 }
 
 ::view-transition-new(project-title-*) {
-  animation-name: view-transition-title-in;
+  animation-name: vt-morph-fade-in;
 }
 
-@keyframes view-transition-title-out {
-  from {
+/* Subtle crossfade that complements the position/size morph */
+@keyframes vt-morph-fade-out {
+  0% {
     opacity: 1;
   }
-  to {
+  100% {
     opacity: 0;
   }
 }
 
-@keyframes view-transition-title-in {
-  from {
+@keyframes vt-morph-fade-in {
+  0% {
     opacity: 0;
   }
-  to {
+  100% {
     opacity: 1;
   }
 }
@@ -109,113 +126,86 @@
    Morph from card thumbnail to hero image
    ============================================ */
 
+/* Image container morphing - browser handles position/size interpolation */
 ::view-transition-group(project-image-*) {
-  animation-duration: 400ms;
+  animation-duration: 450ms;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Ensure overflow is visible during the morph */
+  overflow: clip;
 }
 
+/* Image snapshots - crossfade during the morph */
 ::view-transition-old(project-image-*),
 ::view-transition-new(project-image-*) {
-  animation-duration: 400ms;
+  animation-duration: 450ms;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  /* No fixed dimensions - let the browser interpolate */
   object-fit: cover;
-  overflow: hidden;
+  mix-blend-mode: normal;
 }
 
 ::view-transition-old(project-image-*) {
-  animation-name: view-transition-image-out;
+  animation-name: vt-morph-fade-out;
 }
 
 ::view-transition-new(project-image-*) {
-  animation-name: view-transition-image-in;
-}
-
-@keyframes view-transition-image-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes view-transition-image-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  animation-name: vt-morph-fade-in;
 }
 
 /* ============================================
    Blog Post Title Transitions
+   True morphing from card title to page header
    ============================================ */
 
+/* Post titles - browser handles position/size morphing automatically */
 ::view-transition-group(post-title-*) {
-  animation-duration: 350ms;
+  animation-duration: 400ms;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Allow old/new snapshots to crossfade during morph.
+   No fixed dimensions so browser can interpolate size. */
 ::view-transition-old(post-title-*),
 ::view-transition-new(post-title-*) {
-  animation-duration: 350ms;
+  animation-duration: 400ms;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  height: 100%;
-  width: 100%;
+  mix-blend-mode: normal;
 }
 
+/* Crossfade the text content during the morph */
 ::view-transition-old(post-title-*) {
-  animation-name: view-transition-title-out;
+  animation-name: vt-morph-fade-out;
 }
 
 ::view-transition-new(post-title-*) {
-  animation-name: view-transition-title-in;
+  animation-name: vt-morph-fade-in;
 }
 
 /* ============================================
    Blog Post Category Badge Transitions
+   Morph from card badge to page header badge
    ============================================ */
 
+/* Category badges - true position/size morphing */
 ::view-transition-group(post-category-*) {
-  animation-duration: 300ms;
+  animation-duration: 350ms;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Badge snapshots - crossfade during the morph */
 ::view-transition-old(post-category-*),
 ::view-transition-new(post-category-*) {
-  animation-duration: 300ms;
+  animation-duration: 350ms;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  mix-blend-mode: normal;
 }
 
 ::view-transition-old(post-category-*) {
-  animation-name: view-transition-badge-out;
+  animation-name: vt-morph-fade-out;
 }
 
 ::view-transition-new(post-category-*) {
-  animation-name: view-transition-badge-in;
-}
-
-@keyframes view-transition-badge-out {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-}
-
-@keyframes view-transition-badge-in {
-  from {
-    opacity: 0;
-    transform: scale(1.05);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  animation-name: vt-morph-fade-in;
 }
 
 /* ============================================
