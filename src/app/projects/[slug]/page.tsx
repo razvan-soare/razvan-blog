@@ -1,8 +1,14 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { projects, getProjectBySlug } from '@/lib/data/projects';
 import { siteConfig, generateJsonLd } from '@/lib/seo';
-import { ProjectDetailClient } from './ProjectDetailClient';
+
+// Dynamic import for code splitting - reduces initial bundle size
+const ProjectDetailClient = dynamic(
+  () => import('./ProjectDetailClient').then(mod => ({ default: mod.ProjectDetailClient })),
+  { ssr: true }
+);
 
 interface ProjectDetailPageProps {
   params: Promise<{ slug: string }>;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { ThoughtBubble } from './ThoughtBubble';
 
@@ -12,6 +12,7 @@ export function StickFigure({ className }: StickFigureProps) {
   const [isWaving, setIsWaving] = useState(false);
   const [eyeOffset, setEyeOffset] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
+  const lastUpdateRef = useRef(0);
 
   const handleInteraction = () => {
     if (!isWaving) {
@@ -20,32 +21,35 @@ export function StickFigure({ className }: StickFigureProps) {
     }
   };
 
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      if (!containerRef.current) return;
+  // Throttled mouse move handler - updates at most every 50ms (20fps)
+  const handleMouseMove = useCallback((event: MouseEvent) => {
+    const now = performance.now();
+    if (now - lastUpdateRef.current < 50) return;
+    lastUpdateRef.current = now;
 
-      const rect = containerRef.current.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height * 0.12; // Eyes position adjusted for new viewBox
+    if (!containerRef.current) return;
 
-      const deltaX = event.clientX - centerX;
-      const deltaY = event.clientY - centerY;
+    const rect = containerRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height * 0.12;
 
-      // Calculate distance for normalization
-      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-      const maxOffset = 3; // Maximum eye movement in SVG units
+    const deltaX = event.clientX - centerX;
+    const deltaY = event.clientY - centerY;
 
-      if (distance > 0) {
-        // Normalize and scale the offset
-        const normalizedX = (deltaX / distance) * Math.min(distance / 100, 1) * maxOffset;
-        const normalizedY = (deltaY / distance) * Math.min(distance / 100, 1) * maxOffset;
-        setEyeOffset({ x: normalizedX, y: normalizedY });
-      }
-    };
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    const maxOffset = 3;
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    if (distance > 0) {
+      const normalizedX = (deltaX / distance) * Math.min(distance / 100, 1) * maxOffset;
+      const normalizedY = (deltaY / distance) * Math.min(distance / 100, 1) * maxOffset;
+      setEyeOffset({ x: normalizedX, y: normalizedY });
+    }
   }, []);
+
+  useEffect(() => {
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [handleMouseMove]);
 
   return (
     <motion.div

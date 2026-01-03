@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { motion } from 'framer-motion';
 import { Home, ArrowLeft, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -19,53 +18,34 @@ const ConfusedStickFigure = dynamic(
   }
 );
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: 'easeOut' as const,
-    },
-  },
-};
-
 export default function NotFound() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-5xl px-4 py-16 md:py-24">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col items-center text-center"
-        >
+        <div className="flex flex-col items-center text-center animate-in fade-in duration-300">
           {/* Animated Character */}
-          <motion.div variants={itemVariants} className="mb-8">
+          <div
+            className="mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500"
+            style={{ animationDelay: '100ms', animationFillMode: 'both' }}
+          >
             <ConfusedStickFigure className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96" />
-          </motion.div>
+          </div>
 
           {/* 404 Title */}
-          <motion.div variants={itemVariants} className="mb-4">
+          <div
+            className="mb-4 animate-in fade-in slide-in-from-bottom-4 duration-500"
+            style={{ animationDelay: '200ms', animationFillMode: 'both' }}
+          >
             <h1 className="text-7xl md:text-9xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
               404
             </h1>
-          </motion.div>
+          </div>
 
           {/* Error Message */}
-          <motion.div variants={itemVariants} className="mb-6">
+          <div
+            className="mb-6 animate-in fade-in slide-in-from-bottom-4 duration-500"
+            style={{ animationDelay: '300ms', animationFillMode: 'both' }}
+          >
             <h2 className="text-2xl md:text-3xl font-semibold mb-2">
               Page Not Found
             </h2>
@@ -73,12 +53,12 @@ export default function NotFound() {
               Looks like this page got lost in the digital void.
               Don&apos;t worry, even the best developers take wrong turns sometimes!
             </p>
-          </motion.div>
+          </div>
 
           {/* Playful Message */}
-          <motion.div
-            variants={itemVariants}
-            className="mb-8 p-4 rounded-lg bg-muted/30 border border-border/50 max-w-md"
+          <div
+            className="mb-8 p-4 rounded-lg bg-muted/30 border border-border/50 max-w-md animate-in fade-in slide-in-from-bottom-4 duration-500"
+            style={{ animationDelay: '400ms', animationFillMode: 'both' }}
           >
             <code className="text-sm text-muted-foreground font-mono">
               <span className="text-destructive">Error:</span>{' '}
@@ -88,12 +68,12 @@ export default function NotFound() {
                 Try checking the URL or head back home.
               </span>
             </code>
-          </motion.div>
+          </div>
 
           {/* Action Buttons */}
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row gap-4"
+          <div
+            className="flex flex-col sm:flex-row gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500"
+            style={{ animationDelay: '500ms', animationFillMode: 'both' }}
           >
             <Link href="/">
               <Button size="lg" className="gap-2 w-full sm:w-auto">
@@ -110,12 +90,12 @@ export default function NotFound() {
               <ArrowLeft className="h-5 w-5" />
               Go Back
             </Button>
-          </motion.div>
+          </div>
 
           {/* Helpful Links */}
-          <motion.div
-            variants={itemVariants}
-            className="mt-12 pt-8 border-t border-border/50 w-full max-w-md"
+          <div
+            className="mt-12 pt-8 border-t border-border/50 w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-500"
+            style={{ animationDelay: '600ms', animationFillMode: 'both' }}
           >
             <p className="text-sm text-muted-foreground mb-4">
               Looking for something specific? Try these:
@@ -145,8 +125,8 @@ export default function NotFound() {
                 About
               </Link>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
     </main>
   );

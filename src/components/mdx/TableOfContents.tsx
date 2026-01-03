@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { List } from 'lucide-react';
 
@@ -78,14 +77,12 @@ export default function TableOfContents({ content, className }: TableOfContentsP
   }
 
   return (
-    <motion.nav
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
+    <nav
       className={cn(
-        'sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto',
+        'sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto animate-in fade-in slide-in-from-right-4 duration-500',
         className
       )}
+      style={{ animationDelay: '200ms', animationFillMode: 'both' }}
     >
       <div className="flex items-center gap-2 mb-4 text-sm font-medium text-foreground">
         <List className="h-4 w-4" />
@@ -111,6 +108,6 @@ export default function TableOfContents({ content, className }: TableOfContentsP
           </li>
         ))}
       </ul>
-    </motion.nav>
+    </nav>
   );
 }

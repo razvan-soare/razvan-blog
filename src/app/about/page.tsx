@@ -1,72 +1,42 @@
-'use client';
-
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Github, Linkedin, Instagram, Heart, Code2, BookOpen, Bike, Gamepad2, Wind } from 'lucide-react';
-import { StickFigure } from '@/components/character';
+import { AboutHeroCharacter } from './AboutClient';
 
 const socialLinks = [
-  { href: 'https://github.com/razvansoare', label: 'GitHub', icon: Github },
-  { href: 'https://linkedin.com/in/razvansoare', label: 'LinkedIn', icon: Linkedin },
-  { href: 'https://instagram.com/razvansoare', label: 'Instagram', icon: Instagram },
+  { href: 'https://github.com/razvansoare', label: 'GitHub', Icon: Github },
+  { href: 'https://linkedin.com/in/razvansoare', label: 'LinkedIn', Icon: Linkedin },
+  { href: 'https://instagram.com/razvansoare', label: 'Instagram', Icon: Instagram },
 ];
 
 const hobbies = [
   {
-    icon: BookOpen,
+    Icon: BookOpen,
     title: 'Reading Tech Articles',
     description: 'Staying up-to-date with the latest in web development, JavaScript ecosystem, and emerging technologies.',
   },
   {
-    icon: Bike,
+    Icon: Bike,
     title: 'Longboarding',
     description: 'Cruising around on my longboard and electric board - nothing beats the feeling of gliding through the streets.',
   },
   {
-    icon: Wind,
+    Icon: Wind,
     title: 'Running',
     description: 'Keeping active with regular runs. It helps clear my mind and keeps me energized for coding sessions.',
   },
   {
-    icon: Gamepad2,
+    Icon: Gamepad2,
     title: 'Video Gaming',
     description: 'Huge Assassin\'s Creed fan! Love immersing myself in open-world adventures and historical settings.',
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: 'easeOut' as const,
-    },
-  },
-};
-
 export default function AboutPage() {
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <motion.div
-        className="mx-auto max-w-4xl px-4 py-16 md:py-24"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
+      <div className="mx-auto max-w-4xl px-4 py-16 md:py-24 animate-in fade-in duration-300">
         {/* Hero Section with Greeting */}
-        <motion.section variants={itemVariants} className="mb-16 text-center">
+        <section className="mb-16 text-center animate-in fade-in slide-in-from-top-4 duration-300">
           <div className="flex flex-col items-center gap-8 lg:flex-row lg:justify-between lg:text-left">
             <div className="flex-1">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
@@ -77,13 +47,16 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="flex-shrink-0">
-              <StickFigure className="w-48 h-48 md:w-56 md:h-56" />
+              <AboutHeroCharacter />
             </div>
           </div>
-        </motion.section>
+        </section>
 
         {/* Personal Bio Section */}
-        <motion.section variants={itemVariants} className="mb-16">
+        <section
+          className="mb-16 animate-in fade-in slide-in-from-bottom-4 duration-300"
+          style={{ animationDelay: '100ms', animationFillMode: 'both' }}
+        >
           <div className="rounded-lg border border-border bg-card p-6 md:p-8">
             <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
               <Code2 className="h-6 w-6 text-primary" />
@@ -105,10 +78,13 @@ export default function AboutPage() {
               </p>
             </div>
           </div>
-        </motion.section>
+        </section>
 
         {/* Why I Love React Section */}
-        <motion.section variants={itemVariants} className="mb-16">
+        <section
+          className="mb-16 animate-in fade-in slide-in-from-bottom-4 duration-300"
+          style={{ animationDelay: '150ms', animationFillMode: 'both' }}
+        >
           <div className="rounded-lg border border-border bg-card p-6 md:p-8">
             <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
               <Heart className="h-6 w-6 text-primary" />
@@ -128,36 +104,39 @@ export default function AboutPage() {
               </p>
             </div>
           </div>
-        </motion.section>
+        </section>
 
         {/* Hobbies & Interests Section */}
-        <motion.section variants={itemVariants} className="mb-16">
+        <section
+          className="mb-16 animate-in fade-in slide-in-from-bottom-4 duration-300"
+          style={{ animationDelay: '200ms', animationFillMode: 'both' }}
+        >
           <h2 className="text-2xl font-bold mb-6 text-center">Hobbies & Interests</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {hobbies.map((hobby, index) => (
-              <motion.div
+              <div
                 key={hobby.title}
-                className="rounded-lg border border-border bg-card p-6 hover:border-primary/50 transition-colors"
-                variants={itemVariants}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.2 }}
+                className="rounded-lg border border-border bg-card p-6 hover:border-primary/50 hover:scale-[1.02] transition-all duration-200"
               >
                 <div className="flex items-start gap-4">
                   <div className="rounded-full bg-primary/10 p-3">
-                    <hobby.icon className="h-5 w-5 text-primary" />
+                    <hobby.Icon className="h-5 w-5 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">{hobby.title}</h3>
                     <p className="text-sm text-muted-foreground">{hobby.description}</p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.section>
+        </section>
 
         {/* Social Links Section */}
-        <motion.section variants={itemVariants} className="text-center">
+        <section
+          className="text-center animate-in fade-in slide-in-from-bottom-4 duration-300"
+          style={{ animationDelay: '250ms', animationFillMode: 'both' }}
+        >
           <h2 className="text-2xl font-bold mb-4">Let's Connect</h2>
           <p className="text-muted-foreground mb-6">
             Feel free to reach out! I'm always happy to chat about web development, React, or just say hello.
@@ -171,13 +150,13 @@ export default function AboutPage() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
               >
-                <social.icon className="h-5 w-5" />
+                <social.Icon className="h-5 w-5" />
                 <span>{social.label}</span>
               </Link>
             ))}
           </div>
-        </motion.section>
-      </motion.div>
+        </section>
+      </div>
     </main>
   );
 }

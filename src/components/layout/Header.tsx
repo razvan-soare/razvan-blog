@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -76,37 +75,32 @@ export function Header() {
           </button>
         </nav>
 
-        {/* Mobile Navigation Menu */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="md:hidden overflow-hidden"
-            >
-              <ul className="flex flex-col gap-4 pt-4 pb-2">
-                {navLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className={cn(
-                        'block text-sm font-medium transition-colors py-2',
-                        isActive(link.href)
-                          ? 'text-primary'
-                          : 'text-muted-foreground hover:text-foreground'
-                      )}
-                      onClick={closeMobileMenu}
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+        {/* Mobile Navigation Menu - CSS-based animation */}
+        <div
+          className={cn(
+            'md:hidden overflow-hidden transition-all duration-200 ease-out',
+            mobileMenuOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
           )}
-        </AnimatePresence>
+        >
+          <ul className="flex flex-col gap-4 pt-4 pb-2">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className={cn(
+                    'block text-sm font-medium transition-colors py-2',
+                    isActive(link.href)
+                      ? 'text-primary'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                  onClick={closeMobileMenu}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </header>
   );

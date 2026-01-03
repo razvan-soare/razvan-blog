@@ -1,7 +1,4 @@
-'use client';
-
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { ArrowRight, Clock, Tag } from 'lucide-react';
 import { BlogPost, PostCategory } from '@/lib/data/posts';
 import { cn } from '@/lib/utils';
@@ -22,45 +19,17 @@ const categoryLabels: Record<PostCategory, string> = {
   tips: 'Tips',
 };
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: 'easeOut' as const,
-    },
-  },
-};
-
 export function RelatedPosts({ posts }: RelatedPostsProps) {
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-50px' }}
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-    >
-      {posts.map((post) => (
-        <motion.article
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {posts.map((post, index) => (
+        <article
           key={post.id}
-          variants={itemVariants}
-          className="group relative"
+          className="group relative animate-in fade-in slide-in-from-bottom-4 duration-500"
+          style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'both' }}
         >
           <Link href={`/blog/${post.slug}`} className="block h-full">
-            <div className="h-full rounded-xl border border-border/50 bg-card/50 p-6 transition-all duration-300 hover:border-primary/50 hover:bg-card/80 hover:shadow-lg hover:shadow-primary/5">
+            <div className="h-full rounded-xl border border-border/50 bg-card/50 p-6 transition-all duration-200 hover:border-primary/50 hover:bg-card/80 hover:shadow-lg hover:shadow-primary/5">
               {/* Category Badge */}
               <div className="mb-3">
                 <span
@@ -97,8 +66,8 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
               </div>
             </div>
           </Link>
-        </motion.article>
+        </article>
       ))}
-    </motion.div>
+    </div>
   );
 }

@@ -1,7 +1,4 @@
-'use client';
-
-import { motion } from 'framer-motion';
-import { Clock, Calendar } from 'lucide-react';
+import { Clock, Calendar, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TransitionLink } from '@/components/ui/transition-link';
@@ -28,12 +25,8 @@ interface PostCardProps {
 
 export function PostCard({ post }: PostCardProps) {
   return (
-    <motion.div
-      whileHover={{ y: -8, scale: 1.02 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="h-full"
-    >
-      <Card className="h-full bg-card/50 border-border/50 hover:border-primary/50 transition-colors duration-300 group flex flex-col">
+    <div className="h-full transition-transform duration-200 ease-out hover:-translate-y-2 hover:scale-[1.02]">
+      <Card className="h-full bg-card/50 border-border/50 hover:border-primary/50 transition-colors duration-200 group flex flex-col">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
             <Badge
@@ -54,7 +47,7 @@ export function PostCard({ post }: PostCardProps) {
             </div>
           </div>
           <CardTitle
-            className="text-lg leading-snug group-hover:text-primary transition-colors duration-300"
+            className="text-lg leading-snug group-hover:text-primary transition-colors duration-200"
             style={{ viewTransitionName: `post-title-${post.slug}` }}
           >
             {post.title}
@@ -71,27 +64,10 @@ export function PostCard({ post }: PostCardProps) {
             className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group/link"
           >
             Read more
-            <motion.svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-foreground"
-              initial={{ x: 0 }}
-              whileHover={{ x: 4 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </motion.svg>
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/link:translate-x-1" />
           </TransitionLink>
         </CardFooter>
       </Card>
-    </motion.div>
+    </div>
   );
 }

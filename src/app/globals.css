@@ -264,11 +264,50 @@
    ============================================ */
 
 /*
- * View Transitions CSS - these styles are applied via JavaScript
- * using the View Transitions API when navigating between pages.
- * The animations are defined here and applied automatically by the browser.
+ * View Transitions CSS - these styles customize the View Transitions API animations.
+ * They are only applied in browsers that support the API (Chrome/Edge 111+).
  *
- * Note: The ::view-transition pseudo-elements are only available
- * in browsers that support the View Transitions API (Chrome/Edge).
- * Firefox and Safari will gracefully fall back to regular navigation.
+ * Note: Wildcard selectors for view-transition-group are not supported in all
+ * CSS parsers (including Turbopack), so we use the default browser animations
+ * for named view transitions. The view-transition-name properties on elements
+ * still enable morphing animations using the browser's built-in FLIP technique.
  */
+
+/* Root transition settings */
+::view-transition {
+  pointer-events: none;
+}
+
+/* Default page transition - fast crossfade for root */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 150ms;
+  animation-timing-function: ease-out;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  animation-name: vt-fade-out;
+}
+
+::view-transition-new(root) {
+  animation-name: vt-fade-in;
+}
+
+@keyframes vt-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.01ms !important;
+  }
+}

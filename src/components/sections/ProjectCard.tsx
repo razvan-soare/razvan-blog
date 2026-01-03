@@ -1,6 +1,4 @@
-'use client';
-
-import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TransitionLink } from '@/components/ui/transition-link';
@@ -10,14 +8,21 @@ interface ProjectCardProps {
   project: Project;
 }
 
+function getCategoryEmoji(category?: string): string {
+  switch (category) {
+    case 'Healthcare': return '🏥';
+    case 'Lifestyle': return '🌿';
+    case 'E-commerce': return '🛒';
+    case 'Sports & Gaming': return '🎮';
+    case 'Social Commerce': return '🤝';
+    default: return '💻';
+  }
+}
+
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <motion.div
-      whileHover={{ y: -8, scale: 1.02 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="h-full"
-    >
-      <Card className="h-full bg-card/50 border-border/50 hover:border-secondary/50 transition-all duration-300 group overflow-hidden">
+    <div className="h-full transition-transform duration-200 ease-out hover:-translate-y-2 hover:scale-[1.02]">
+      <Card className="h-full bg-card/50 border-border/50 hover:border-secondary/50 transition-colors duration-200 group overflow-hidden">
         {/* Thumbnail placeholder */}
         <TransitionLink href={`/projects/${project.slug}`} className="block">
           <div
@@ -25,22 +30,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
             style={{ viewTransitionName: `project-image-${project.slug}` }}
           >
             <div className="absolute inset-0 flex items-center justify-center">
-              <motion.div
-                className="text-6xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"
-                whileHover={{ rotate: 5, scale: 1.1 }}
-              >
-                {project.category === 'Healthcare' && '🏥'}
-                {project.category === 'Lifestyle' && '🌿'}
-                {project.category === 'E-commerce' && '🛒'}
-                {project.category === 'Sports & Gaming' && '🎮'}
-                {project.category === 'Social Commerce' && '🤝'}
-                {!project.category && '💻'}
-              </motion.div>
+              <div className="text-6xl opacity-30 group-hover:opacity-50 group-hover:rotate-[5deg] group-hover:scale-110 transition-all duration-200">
+                {getCategoryEmoji(project.category)}
+              </div>
             </div>
             {/* Hover overlay effect */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            />
+            <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
             {/* Decorative corner accent */}
             <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-primary/30 to-transparent" />
             <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-secondary/30 to-transparent" />
@@ -49,7 +44,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
         <CardHeader className="pb-2">
           <CardTitle
-            className="text-xl leading-snug group-hover:text-secondary transition-colors duration-300"
+            className="text-xl leading-snug group-hover:text-secondary transition-colors duration-200"
             style={{ viewTransitionName: `project-title-${project.slug}` }}
           >
             {project.title}
@@ -79,26 +74,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
             className="inline-flex items-center gap-2 text-sm font-medium text-secondary hover:text-secondary/80 transition-colors group/link"
           >
             View Project
-            <motion.svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              initial={{ x: 0 }}
-              whileHover={{ x: 4 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </motion.svg>
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/link:translate-x-1" />
           </TransitionLink>
         </CardFooter>
       </Card>
-    </motion.div>
+    </div>
   );
 }

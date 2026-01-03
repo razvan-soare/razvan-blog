@@ -17,6 +17,9 @@ export function supportsViewTransitions(): boolean {
 /**
  * Custom hook that provides navigation with View Transitions API support.
  * Falls back to regular navigation for browsers that don't support View Transitions.
+ *
+ * Optimized: Removed double requestAnimationFrame delays for faster navigation.
+ * The View Transitions API handles timing internally.
  */
 export function useViewTransition() {
   const router = useRouter();
@@ -33,17 +36,12 @@ export function useViewTransition() {
 
       if (supportsViewTransitions()) {
         // Use View Transitions API for smooth page transitions
+        // The API handles the timing internally - no need for RAF delays
         document.startViewTransition!(() => {
           router.push(href);
-          // Return a promise that resolves after a small delay to let React update
-          return new Promise<void>((resolve) => {
-            // Wait for the next frame to ensure the DOM has updated
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                resolve();
-              });
-            });
-          });
+          // Resolve immediately - the View Transitions API will capture
+          // the new state when React commits the DOM update
+          return Promise.resolve();
         });
       } else {
         // Fallback for browsers without View Transitions support (Safari, Firefox)
