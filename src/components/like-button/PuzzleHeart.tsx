@@ -10,54 +10,152 @@ interface PuzzleHeartProps {
   className?: string;
 }
 
-// 8 interlocking puzzle pieces that form a heart shape
+// Helper to create a puzzle connector (tab that sticks out or hole that goes in)
+// Creates a smooth bump or indent in the middle of a line segment
+const puzzleConnector = (
+  startX: number,
+  startY: number,
+  endX: number,
+  endY: number,
+  type: 'tab' | 'hole' | 'flat'
+): string => {
+  if (type === 'flat') {
+    return `L ${endX} ${endY}`;
+  }
+
+  const midX = (startX + endX) / 2;
+  const midY = (startY + endY) / 2;
+  const dx = endX - startX;
+  const dy = endY - startY;
+  const length = Math.sqrt(dx * dx + dy * dy);
+
+  // Unit perpendicular vector
+  const perpX = -dy / length;
+  const perpY = dx / length;
+
+  // Tab/hole dimensions - proportional to edge length
+  const size = length * 0.2;
+  const depth = type === 'tab' ? size : -size;
+
+  // Points along the edge where tab/hole connects (at 35% and 65%)
+  const p1X = startX + dx * 0.35;
+  const p1Y = startY + dy * 0.35;
+  const p2X = startX + dx * 0.65;
+  const p2Y = startY + dy * 0.65;
+
+  // Peak of the connector
+  const peakX = midX + perpX * depth;
+  const peakY = midY + perpY * depth;
+
+  // Control points for smooth bezier curves
+  const cp1X = p1X + perpX * depth * 0.6;
+  const cp1Y = p1Y + perpY * depth * 0.6;
+  const cp2X = p2X + perpX * depth * 0.6;
+  const cp2Y = p2Y + perpY * depth * 0.6;
+
+  return `L ${p1X} ${p1Y} C ${cp1X} ${cp1Y}, ${peakX - dx * 0.12} ${peakY - dy * 0.12}, ${peakX} ${peakY} C ${peakX + dx * 0.12} ${peakY + dy * 0.12}, ${cp2X} ${cp2Y}, ${p2X} ${p2Y} L ${endX} ${endY}`;
+};
+
+// 8 interlocking puzzle pieces forming a heart shape
+// The heart is divided into 2 columns (left/right at x=50) and 4 rows
+// Adjacent pieces interlock via tabs (outward bumps) and holes (inward indents)
+//
+// Heart shape key points:
+// - Top: y=20 (center dip)
+// - Lobes peak: y=6-10 (left around x=22, right around x=78)
+// - Widest: around y=38-50
+// - Row dividers: y=48, y=68, y=88
+// - Bottom tip: y=122 at x=50
+
 const heartPuzzlePieces = [
-  // Piece 1: Top left lobe
+  // PIECE 1: Top-left lobe
   {
     id: 1,
-    path: 'M 50 30 C 45 15 30 10 20 20 C 10 30 10 45 20 55 L 35 45 Q 42 38 50 30',
+    path: `M 50 20
+           C 46 10 35 4 22 6
+           C 8 8 2 22 4 38
+           L 4 48
+           ${puzzleConnector(4, 48, 50, 48, 'tab')}
+           ${puzzleConnector(50, 48, 50, 20, 'tab')}
+           Z`,
     delay: 0,
   },
-  // Piece 2: Top right lobe
+  // PIECE 2: Top-right lobe (mirror)
   {
     id: 2,
-    path: 'M 50 30 C 55 15 70 10 80 20 C 90 30 90 45 80 55 L 65 45 Q 58 38 50 30',
+    path: `M 50 20
+           C 54 10 65 4 78 6
+           C 92 8 98 22 96 38
+           L 96 48
+           ${puzzleConnector(96, 48, 50, 48, 'tab')}
+           ${puzzleConnector(50, 48, 50, 20, 'hole')}
+           Z`,
     delay: 0.05,
   },
-  // Piece 3: Upper left side
+  // PIECE 3: Upper-middle left
   {
     id: 3,
-    path: 'M 20 55 L 35 45 Q 42 52 50 58 L 35 72 L 20 55',
+    path: `M 4 48
+           C 5 55 10 62 18 68
+           L 18 68
+           ${puzzleConnector(18, 68, 50, 68, 'tab')}
+           ${puzzleConnector(50, 68, 50, 48, 'hole')}
+           ${puzzleConnector(50, 48, 4, 48, 'hole')}
+           Z`,
     delay: 0.1,
   },
-  // Piece 4: Upper right side
+  // PIECE 4: Upper-middle right (mirror)
   {
     id: 4,
-    path: 'M 80 55 L 65 45 Q 58 52 50 58 L 65 72 L 80 55',
+    path: `M 96 48
+           C 95 55 90 62 82 68
+           L 82 68
+           ${puzzleConnector(82, 68, 50, 68, 'tab')}
+           ${puzzleConnector(50, 68, 50, 48, 'tab')}
+           ${puzzleConnector(50, 48, 96, 48, 'hole')}
+           Z`,
     delay: 0.15,
   },
-  // Piece 5: Center piece
+  // PIECE 5: Lower-middle left
   {
     id: 5,
-    path: 'M 35 45 L 50 30 L 65 45 Q 58 52 50 58 Q 42 52 35 45',
+    path: `M 18 68
+           L 32 88
+           ${puzzleConnector(32, 88, 50, 88, 'tab')}
+           ${puzzleConnector(50, 88, 50, 68, 'hole')}
+           ${puzzleConnector(50, 68, 18, 68, 'hole')}
+           Z`,
     delay: 0.2,
   },
-  // Piece 6: Middle left
+  // PIECE 6: Lower-middle right (mirror)
   {
     id: 6,
-    path: 'M 20 55 L 35 72 L 50 58 L 42 78 L 25 65 L 20 55',
+    path: `M 82 68
+           L 68 88
+           ${puzzleConnector(68, 88, 50, 88, 'tab')}
+           ${puzzleConnector(50, 88, 50, 68, 'tab')}
+           ${puzzleConnector(50, 68, 82, 68, 'hole')}
+           Z`,
     delay: 0.25,
   },
-  // Piece 7: Middle right
+  // PIECE 7: Bottom-left tip
   {
     id: 7,
-    path: 'M 80 55 L 65 72 L 50 58 L 58 78 L 75 65 L 80 55',
+    path: `M 32 88
+           L 50 122
+           ${puzzleConnector(50, 122, 50, 88, 'hole')}
+           ${puzzleConnector(50, 88, 32, 88, 'hole')}
+           Z`,
     delay: 0.3,
   },
-  // Piece 8: Bottom tip
+  // PIECE 8: Bottom-right tip (mirror)
   {
     id: 8,
-    path: 'M 35 72 L 50 58 L 65 72 L 58 78 L 50 95 L 42 78 L 35 72',
+    path: `M 68 88
+           L 50 122
+           ${puzzleConnector(50, 122, 50, 88, 'tab')}
+           ${puzzleConnector(50, 88, 68, 88, 'hole')}
+           Z`,
     delay: 0.35,
   },
 ];
@@ -72,7 +170,7 @@ export function PuzzleHeart({
 
   return (
     <motion.svg
-      viewBox="0 0 100 100"
+      viewBox="0 0 100 128"
       className={cn('w-full h-full', className)}
       animate={
         isComplete
