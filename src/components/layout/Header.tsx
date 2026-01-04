@@ -74,33 +74,35 @@ export function Header() {
             )}
           </button>
         </nav>
+      </div>
 
-        {/* Mobile Navigation Menu - CSS-based animation */}
-        <div
-          className={cn(
-            'md:hidden overflow-hidden transition-all duration-200 ease-out',
-            mobileMenuOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
-          )}
-        >
-          <ul className="flex flex-col gap-4 pt-4 pb-2">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className={cn(
-                    'block text-sm font-medium transition-colors py-2',
-                    isActive(link.href)
-                      ? 'text-primary'
-                      : 'text-muted-foreground hover:text-foreground'
-                  )}
-                  onClick={closeMobileMenu}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+      {/* Mobile Navigation Menu - Absolute positioned to not affect document flow */}
+      <div
+        className={cn(
+          'md:hidden absolute left-0 right-0 bg-background/95 backdrop-blur-md border-b border-border overflow-hidden transition-all duration-200 ease-out',
+          mobileMenuOpen
+            ? 'max-h-60 opacity-100 pointer-events-auto'
+            : 'max-h-0 opacity-0 pointer-events-none border-b-0'
+        )}
+      >
+        <ul className="mx-auto max-w-5xl px-4 flex flex-col gap-4 py-4">
+          {navLinks.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className={cn(
+                  'block text-sm font-medium transition-colors py-2',
+                  isActive(link.href)
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
+                )}
+                onClick={closeMobileMenu}
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </header>
   );
