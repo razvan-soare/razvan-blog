@@ -76,10 +76,14 @@ export default function TableOfContents({ content, className }: TableOfContentsP
     return null;
   }
 
+  // Check if sticky should be applied (not when className contains 'static')
+  const isSticky = !className?.includes('static');
+
   return (
     <nav
       className={cn(
-        'sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto animate-in fade-in slide-in-from-right-4 duration-500',
+        isSticky && 'sticky top-24',
+        'max-h-[calc(100vh-8rem)] overflow-y-auto animate-in fade-in slide-in-from-right-4 duration-500',
         className
       )}
       style={{ animationDelay: '200ms', animationFillMode: 'both' }}
