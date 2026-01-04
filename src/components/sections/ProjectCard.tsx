@@ -44,10 +44,15 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
         <CardHeader className="pb-2">
           <CardTitle
-            className="text-xl leading-snug group-hover:text-secondary transition-colors duration-200"
+            className="text-xl leading-snug"
             style={{ viewTransitionName: `project-title-${project.slug}` }}
           >
-            {project.title}
+            <TransitionLink
+              href={`/projects/${project.slug}`}
+              className="hover:text-secondary transition-colors duration-200 cursor-pointer"
+            >
+              {project.title}
+            </TransitionLink>
           </CardTitle>
         </CardHeader>
 

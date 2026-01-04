@@ -47,10 +47,15 @@ export function PostCard({ post }: PostCardProps) {
             </div>
           </div>
           <CardTitle
-            className="text-lg leading-snug group-hover:text-primary transition-colors duration-200"
+            className="text-lg leading-snug"
             style={{ viewTransitionName: `post-title-${post.slug}` }}
           >
-            {post.title}
+            <TransitionLink
+              href={`/blog/${post.slug}`}
+              className="hover:text-primary transition-colors duration-200 cursor-pointer"
+            >
+              {post.title}
+            </TransitionLink>
           </CardTitle>
         </CardHeader>
         <CardContent className="pb-4 flex-1">
