@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState, ReactNode } from 'react';
-import { ProjectCardSkeleton } from './ProjectCardSkeleton';
 import { PostCardSkeleton } from './PostCardSkeleton';
 
 interface BelowFoldContentProps {
@@ -42,21 +41,6 @@ export function BelowFoldContent({ children }: BelowFoldContentProps) {
   if (!isVisible) {
     return (
       <div ref={sectionRef}>
-        {/* Placeholder for FeaturedProjects */}
-        <section className="py-16 md:py-24">
-          <div className="mx-auto max-w-5xl px-4 w-full">
-            <div className="mb-10">
-              <div className="h-10 w-64 bg-muted/50 rounded animate-pulse mb-3" />
-              <div className="h-6 w-96 bg-muted/50 rounded animate-pulse" />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <ProjectCardSkeleton />
-              <ProjectCardSkeleton />
-              <ProjectCardSkeleton />
-            </div>
-          </div>
-        </section>
-
         {/* Placeholder for RecentlyPublished */}
         <section className="py-16 md:py-24">
           <div className="mx-auto max-w-5xl px-4 w-full">

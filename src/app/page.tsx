@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Hero, FeaturedProjects, RecentlyPublished } from "@/components/sections";
+import { Hero, RecentlyPublished } from "@/components/sections";
 import { siteConfig, generateJsonLd } from "@/lib/seo";
 import { BelowFoldContent } from "@/components/sections/BelowFoldContent";
 
@@ -29,7 +29,6 @@ export default function Home() {
       <main className="min-h-screen bg-background text-foreground">
         <Hero />
         <BelowFoldContent>
-          <FeaturedProjects />
           <RecentlyPublished />
         </BelowFoldContent>
       </main>
