@@ -3,6 +3,7 @@ export interface Project {
   title: string;
   description: string;
   fullDescription?: string;
+  content?: string; // MDX content for rich project pages
   technologies: string[];
   thumbnail?: string;
   slug: string;
@@ -23,6 +24,101 @@ export const projects: Project[] = [
 The system features a robust patient management module that allows practitioners to quickly access medical histories, treatment plans, and billing information. The tap-based note-taking interface was designed specifically for dental professionals, enabling them to document procedures without interrupting their workflow.
 
 Key achievements include reducing average documentation time by 40%, implementing HIPAA-compliant data storage, and integrating with major dental imaging systems. The application serves over 50 dental practices and has processed more than 100,000 patient records.`,
+    content: `## The Challenge
+
+Dental practices face a unique challenge: maintaining detailed patient records while providing hands-on care. Traditional documentation methods interrupt clinical workflow and reduce time with patients.
+
+<Quote author="Dr. Sarah Chen" source="Lead Dentist, Bright Smile Clinic">
+Before Aura Tapnote, I spent nearly 30% of my day on documentation. Now I can focus on what matters most - my patients.
+</Quote>
+
+## Our Solution
+
+We developed an innovative **tap-based interface** specifically designed for clinical environments. The system allows practitioners to:
+
+- Document procedures with minimal interruption
+- Access complete patient histories instantly
+- Schedule appointments seamlessly
+- Generate HIPAA-compliant reports
+
+<Callout type="success" title="Impact Metrics">
+After implementing Aura Tapnote, practices reported a 40% reduction in documentation time and 25% increase in patient throughput.
+</Callout>
+
+## Technical Architecture
+
+The application is built on a modern stack optimized for healthcare environments:
+
+\`\`\`typescript{lineNumbers=true,filename=patient-service.ts}
+interface PatientRecord {
+  id: string;
+  demographics: Demographics;
+  medicalHistory: MedicalHistory[];
+  appointments: Appointment[];
+  notes: ClinicalNote[];
+}
+
+async function getPatientRecord(id: string): Promise<PatientRecord> {
+  const record = await db.patients.findUnique({
+    where: { id },
+    include: {
+      medicalHistory: true,
+      appointments: { orderBy: { date: 'desc' } },
+      notes: { orderBy: { createdAt: 'desc' } }
+    }
+  });
+  return record;
+}
+\`\`\`
+
+The architecture follows a **microservices pattern** with dedicated services for:
+
+1. Patient Management
+2. Appointment Scheduling
+3. Clinical Documentation
+4. Billing Integration
+
+<Video url="https://www.youtube.com/watch?v=dQw4w9WgXcQ" title="Aura Dental Tapnote Demo" />
+
+## Key Features
+
+### Real-time Sync
+
+All data synchronizes in real-time across devices, ensuring practitioners always have access to the latest information.
+
+### HIPAA Compliance
+
+Security is paramount in healthcare. Our system implements:
+
+- End-to-end encryption
+- Role-based access control
+- Complete audit logging
+- Automatic session management
+
+<Callout type="warning" title="Security Note">
+All patient data is encrypted at rest and in transit using AES-256 encryption standards.
+</Callout>
+
+## Results
+
+The implementation has been transformative for dental practices:
+
+| Metric | Before | After | Improvement |
+|--------|--------|-------|-------------|
+| Documentation Time | 2.5 hrs/day | 1.5 hrs/day | 40% reduction |
+| Patient Throughput | 12 patients/day | 15 patients/day | 25% increase |
+| Data Entry Errors | 5% | 0.5% | 90% reduction |
+
+<LinkCard href="https://auradental.io" title="Try Aura Dental Tapnote" description="Schedule a demo and see how we can transform your practice" />
+
+## What's Next
+
+We're continuously improving based on practitioner feedback. Upcoming features include:
+
+- AI-powered treatment suggestions
+- Voice-to-text documentation
+- Enhanced imaging integration
+- Multi-location support`,
     technologies: ['React', 'TypeScript', 'Node.js', 'PostgreSQL'],
     slug: 'aura-dental-tapnote',
     featured: true,

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ExternalLink, Github, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { getProjectBySlug, getRelatedProjects } from '@/lib/data/projects';
 import { ProjectCard } from '@/components/sections/ProjectCard';
-import { cn } from '@/lib/utils';
+import { parseProjectContent, ParsedProjectContent } from '@/lib/project-mdx';
+import { ProjectMDXWithComponents } from '@/components/mdx/ProjectMDXRenderer';
 
 interface ProjectDetailClientProps {
   slug: string;
@@ -19,6 +20,38 @@ export function ProjectDetailClient({ slug }: ProjectDetailClientProps) {
   const relatedProjects = getRelatedProjects(slug, 3);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [parsedContent, setParsedContent] = useState<ParsedProjectContent | null>(null);
+  const [isParsingContent, setIsParsingContent] = useState(!!project?.content);
+  const hasStartedParsingRef = useRef(false);
+
+  // Parse MDX content if available
+  useEffect(() => {
+    // Only run once per content
+    if (!project?.content || hasStartedParsingRef.current) {
+      return;
+    }
+
+    hasStartedParsingRef.current = true;
+    let cancelled = false;
+
+    parseProjectContent(project.content)
+      .then((result) => {
+        if (!cancelled) {
+          setParsedContent(result);
+          setIsParsingContent(false);
+        }
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          console.error('Failed to parse project content:', error);
+          setIsParsingContent(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [project?.content]);
 
   if (!project) {
     return (
@@ -27,7 +60,7 @@ export function ProjectDetailClient({ slug }: ProjectDetailClientProps) {
           <div className="text-center animate-in fade-in duration-300">
             <h1 className="text-4xl font-bold mb-4">Project Not Found</h1>
             <p className="text-muted-foreground mb-8">
-              The project you're looking for doesn't exist or has been removed.
+              The project you&apos;re looking for doesn&apos;t exist or has been removed.
             </p>
             <Link href="/projects">
               <Button variant="outline" className="gap-2">
@@ -42,6 +75,7 @@ export function ProjectDetailClient({ slug }: ProjectDetailClientProps) {
   }
 
   const gallery = project.gallery || [];
+  const hasRichContent = !!project.content && !!parsedContent;
 
   const openLightbox = (index: number) => {
     setLightboxIndex(index);
@@ -173,32 +207,51 @@ export function ProjectDetailClient({ slug }: ProjectDetailClientProps) {
           </div>
         </section>
 
-        {/* Full Description */}
+        {/* Rich MDX Content or Fallback Description */}
         <section
           className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-300"
           style={{ animationDelay: '150ms', animationFillMode: 'both' }}
         >
-          <h2 className="text-2xl font-semibold mb-4">About the Project</h2>
-          <Card className="bg-card/50 border-border/50">
-            <CardContent className="pt-6">
-              <div className="prose prose-invert max-w-none">
-                {(project.fullDescription || project.description)
-                  .split('\n\n')
-                  .map((paragraph, index) => (
-                    <p
-                      key={index}
-                      className="text-muted-foreground leading-relaxed mb-4 last:mb-0"
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
-              </div>
-            </CardContent>
-          </Card>
+          {hasRichContent ? (
+            // Render rich MDX content
+            <ProjectMDXWithComponents html={parsedContent.html} />
+          ) : isParsingContent ? (
+            // Loading state
+            <Card className="bg-card/50 border-border/50">
+              <CardContent className="pt-6">
+                <div className="animate-pulse space-y-4">
+                  <div className="h-4 bg-muted rounded w-3/4"></div>
+                  <div className="h-4 bg-muted rounded w-1/2"></div>
+                  <div className="h-4 bg-muted rounded w-5/6"></div>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            // Fallback to simple description
+            <>
+              <h2 className="text-2xl font-semibold mb-4">About the Project</h2>
+              <Card className="bg-card/50 border-border/50">
+                <CardContent className="pt-6">
+                  <div className="prose prose-invert max-w-none">
+                    {(project.fullDescription || project.description)
+                      .split('\n\n')
+                      .map((paragraph, index) => (
+                        <p
+                          key={index}
+                          className="text-muted-foreground leading-relaxed mb-4 last:mb-0"
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
         </section>
 
-        {/* Gallery Section */}
-        {gallery.length > 0 && (
+        {/* Gallery Section - Only show if no rich content or if gallery is explicitly provided */}
+        {!hasRichContent && gallery.length > 0 && (
           <section
             className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-300"
             style={{ animationDelay: '200ms', animationFillMode: 'both' }}
