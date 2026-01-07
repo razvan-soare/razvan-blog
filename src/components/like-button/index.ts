@@ -3,3 +3,4 @@ export { PuzzleHeart } from './PuzzleHeart';
 export { Confetti } from './Confetti';
 export { HeartSVG, HeartSVGMaterial, HeartSVGCompact, COMPACT_HEART_PATH } from './HeartSVG';
 export { HeartLikeButton } from './HeartLikeButton';
+export { SiteLikeButton } from './SiteLikeButton';

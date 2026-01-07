@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Github, Linkedin, Instagram } from 'lucide-react';
+import { SiteLikeButton } from '@/components/like-button';
 
 const socialLinks = [
   { href: 'https://github.com/razvansoare', label: 'GitHub', icon: Github },
@@ -13,11 +14,14 @@ export function Footer() {
   return (
     <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-5xl px-4 py-8">
-        <div className="flex flex-col items-center gap-4 md:flex-row md:justify-between">
+        <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
           {/* Copyright */}
           <p className="text-sm text-muted-foreground">
             © {currentYear} Razvan Soare. All rights reserved.
           </p>
+
+          {/* Site Like Button */}
+          <SiteLikeButton />
 
           {/* Social Links */}
           <div className="flex items-center gap-4">
