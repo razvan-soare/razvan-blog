@@ -1,3 +1,19 @@
+/**
+ * StickFigure Component
+ *
+ * ORIGINAL ARTWORK - Created specifically for this portfolio project.
+ * This animated stick figure character is an original design and is not
+ * derived from any third-party source.
+ *
+ * Features:
+ * - Eye-tracking that follows the user's cursor
+ * - Waving animation on hover/click interaction
+ * - Floating animation with gentle bobbing
+ * - Floating island base with grass, flowers, and rock layers
+ *
+ * License: MIT (as part of this project)
+ * Author: Razvan
+ */
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';

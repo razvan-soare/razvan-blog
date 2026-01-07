@@ -1,3 +1,25 @@
+/**
+ * PuzzleHeart Component
+ *
+ * ORIGINAL ARTWORK - Created specifically for this portfolio project.
+ * This puzzle-piece heart SVG is an original design and is not derived
+ * from any third-party source.
+ *
+ * Features:
+ * - Heart shape divided into 8 interlocking puzzle pieces
+ * - Authentic puzzle connector geometry (tabs and holes)
+ * - Progressive fill animation based on like count
+ * - Pulse/glow animation when all pieces are filled
+ * - Gradient fill effect for visual appeal
+ *
+ * Technical Details:
+ * - Uses mathematical bezier curves for puzzle connectors
+ * - Pieces interlock with complementary tab/hole pairs
+ * - Supports variable piece count and fill state
+ *
+ * License: MIT (as part of this project)
+ * Author: Razvan
+ */
 'use client';
 
 import { motion } from 'framer-motion';

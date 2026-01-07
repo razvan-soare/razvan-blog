@@ -1,3 +1,20 @@
+/**
+ * ThoughtBubble Component
+ *
+ * ORIGINAL ARTWORK - Created specifically for this portfolio project.
+ * This animated thought bubble is an original design and is not derived
+ * from any third-party source.
+ *
+ * Features:
+ * - Animated connector circles leading to the bubble
+ * - Rotating messages with fade transitions
+ * - Monospace font styling for code-like appearance
+ *
+ * Used as a companion element to the StickFigure character.
+ *
+ * License: MIT (as part of this project)
+ * Author: Razvan
+ */
 'use client';
 
 import { useState, useEffect } from 'react';

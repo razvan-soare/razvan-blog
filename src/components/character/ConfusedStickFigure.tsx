@@ -1,3 +1,22 @@
+/**
+ * ConfusedStickFigure Component
+ *
+ * ORIGINAL ARTWORK - Created specifically for this portfolio project.
+ * This animated confused stick figure character is an original design
+ * and is not derived from any third-party source.
+ *
+ * Features:
+ * - Confused expression with asymmetric eyebrows
+ * - Head tilting and searching animation
+ * - Rotating thought bubble with confused messages
+ * - Scratching head and shading eyes gestures
+ * - Floating island with crack damage and "404" signpost
+ *
+ * Used on the 404 Not Found error page.
+ *
+ * License: MIT (as part of this project)
+ * Author: Razvan
+ */
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
