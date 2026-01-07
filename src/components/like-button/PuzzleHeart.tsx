@@ -22,7 +22,7 @@
  */
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 interface PuzzleHeartProps {
@@ -189,20 +189,21 @@ export function PuzzleHeart({
   className,
 }: PuzzleHeartProps) {
   const pieces = heartPuzzlePieces.slice(0, totalPieces);
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <motion.svg
       viewBox="0 0 100 128"
       className={cn('w-full h-full', className)}
       animate={
-        isComplete
+        isComplete && !prefersReducedMotion
           ? {
               scale: [1, 1.15, 1],
             }
           : {}
       }
       transition={
-        isComplete
+        isComplete && !prefersReducedMotion
           ? {
               duration: 0.8,
               repeat: Infinity,
@@ -249,12 +250,12 @@ export function PuzzleHeart({
               }}
               transition={{
                 fill: {
-                  duration: 0.5,
+                  duration: prefersReducedMotion ? 0 : 0.5,
                   ease: 'easeOut',
-                  delay: isFilled ? piece.delay : 0,
+                  delay: prefersReducedMotion ? 0 : (isFilled ? piece.delay : 0),
                 },
                 opacity: {
-                  duration: 0.3,
+                  duration: prefersReducedMotion ? 0 : 0.3,
                 },
               }}
               className={cn(

@@ -24,7 +24,7 @@
  */
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 interface HeartSVGProps {
@@ -68,6 +68,9 @@ export function HeartSVG({
   size = 60,
   className,
 }: HeartSVGProps) {
+  const prefersReducedMotion = useReducedMotion();
+  const shouldAnimate = animate && !prefersReducedMotion;
+
   return (
     <motion.svg
       viewBox="0 0 24 24"
@@ -75,14 +78,14 @@ export function HeartSVG({
       height={size}
       className={cn('transition-colors', className)}
       animate={
-        animate && isActive
+        shouldAnimate && isActive
           ? {
               scale: [1, 1.1, 1, 1.1, 1],
             }
           : {}
       }
       transition={
-        animate && isActive
+        shouldAnimate && isActive
           ? {
               duration: 0.6,
               ease: 'easeInOut',
@@ -106,7 +109,7 @@ export function HeartSVG({
         }}
         transition={{
           fill: {
-            duration: 0.3,
+            duration: prefersReducedMotion ? 0 : 0.3,
             ease: 'easeOut',
           },
         }}
@@ -127,6 +130,9 @@ export function HeartSVGMaterial({
   size = 60,
   className,
 }: HeartSVGProps) {
+  const prefersReducedMotion = useReducedMotion();
+  const shouldAnimate = animate && !prefersReducedMotion;
+
   return (
     <motion.svg
       viewBox="0 0 24 24"
@@ -134,14 +140,14 @@ export function HeartSVGMaterial({
       height={size}
       className={cn('transition-colors', className)}
       animate={
-        animate && isActive
+        shouldAnimate && isActive
           ? {
               scale: [1, 1.1, 1, 1.1, 1],
             }
           : {}
       }
       transition={
-        animate && isActive
+        shouldAnimate && isActive
           ? {
               duration: 0.6,
               ease: 'easeInOut',
@@ -165,7 +171,7 @@ export function HeartSVGMaterial({
         }}
         transition={{
           fill: {
-            duration: 0.3,
+            duration: prefersReducedMotion ? 0 : 0.3,
             ease: 'easeOut',
           },
         }}
@@ -189,6 +195,9 @@ export function HeartSVGCompact({
   size = 60,
   className,
 }: HeartSVGProps) {
+  const prefersReducedMotion = useReducedMotion();
+  const shouldAnimate = animate && !prefersReducedMotion;
+
   return (
     <motion.svg
       viewBox="0 0 17 17"
@@ -196,14 +205,14 @@ export function HeartSVGCompact({
       height={size}
       className={cn('transition-colors', className)}
       animate={
-        animate && isActive
+        shouldAnimate && isActive
           ? {
               scale: [1, 1.1, 1, 1.1, 1],
             }
           : {}
       }
       transition={
-        animate && isActive
+        shouldAnimate && isActive
           ? {
               duration: 0.6,
               ease: 'easeInOut',
@@ -226,7 +235,7 @@ export function HeartSVGCompact({
         }}
         transition={{
           fill: {
-            duration: 0.3,
+            duration: prefersReducedMotion ? 0 : 0.3,
             ease: 'easeOut',
           },
         }}

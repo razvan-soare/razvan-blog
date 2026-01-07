@@ -16,7 +16,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { HeartSVG } from './HeartSVG';
 
@@ -52,6 +52,7 @@ export function HeartLikeButton({
   const [isLiked, setIsLiked] = useState(initialLiked);
   const [likeCount, setLikeCount] = useState(initialCount);
   const [isPressed, setIsPressed] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   const handleClick = useCallback(() => {
     const newLikedState = !isLiked;
@@ -92,16 +93,24 @@ export function HeartLikeButton({
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
           'transition-transform'
         )}
-        animate={{
-          scale: isPressed ? 0.9 : 1,
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: 400,
-          damping: 17,
-        }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        animate={
+          prefersReducedMotion
+            ? {}
+            : {
+                scale: isPressed ? 0.9 : 1,
+              }
+        }
+        transition={
+          prefersReducedMotion
+            ? {}
+            : {
+                type: 'spring',
+                stiffness: 400,
+                damping: 17,
+              }
+        }
+        whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+        whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
         aria-label={isLiked ? 'Unlike this' : 'Like this'}
         aria-pressed={isLiked}
       >
@@ -119,9 +128,9 @@ export function HeartLikeButton({
         <AnimatePresence mode="wait">
           <motion.span
             key={likeCount}
-            initial={{ opacity: 0, y: -5 }}
+            initial={prefersReducedMotion ? {} : { opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 5 }}
+            exit={prefersReducedMotion ? {} : { opacity: 0, y: 5 }}
             className="text-sm font-medium"
             style={{ color: inactiveColor }}
           >

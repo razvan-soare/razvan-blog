@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useArticleLikes } from '@/lib/hooks/use-article-likes';
 import { PuzzleHeart } from './PuzzleHeart';
@@ -17,6 +17,7 @@ export function LikeButton({ articleSlug, className }: LikeButtonProps) {
   const [showConfetti, setShowConfetti] = useState(false);
   const [confettiSeed, setConfettiSeed] = useState(0);
   const [isPressed, setIsPressed] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   const handleClick = useCallback(() => {
     if (isComplete) {
@@ -80,16 +81,24 @@ export function LikeButton({ articleSlug, className }: LikeButtonProps) {
           'transition-transform',
           isComplete && 'cursor-default'
         )}
-        animate={{
-          scale: isPressed ? 0.9 : 1,
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: 400,
-          damping: 17,
-        }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        animate={
+          prefersReducedMotion
+            ? {}
+            : {
+                scale: isPressed ? 0.9 : 1,
+              }
+        }
+        transition={
+          prefersReducedMotion
+            ? {}
+            : {
+                type: 'spring',
+                stiffness: 400,
+                damping: 17,
+              }
+        }
+        whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+        whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
         aria-label={
           isComplete
             ? 'Heart complete! Thank you for all the likes'
@@ -109,9 +118,9 @@ export function LikeButton({ articleSlug, className }: LikeButtonProps) {
         <AnimatePresence mode="wait">
           <motion.span
             key={likes}
-            initial={{ opacity: 0, y: -5 }}
+            initial={prefersReducedMotion ? {} : { opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 5 }}
+            exit={prefersReducedMotion ? {} : { opacity: 0, y: 5 }}
             className="text-sm font-medium text-foreground"
           >
             {likes}/{maxLikes}
@@ -126,9 +135,9 @@ export function LikeButton({ articleSlug, className }: LikeButtonProps) {
       <AnimatePresence>
         {isComplete && (
           <motion.p
-            initial={{ opacity: 0, height: 0 }}
+            initial={prefersReducedMotion ? {} : { opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
+            exit={prefersReducedMotion ? {} : { opacity: 0, height: 0 }}
             className="text-xs text-center text-rose-400 font-medium mt-1"
           >
             Thank you!

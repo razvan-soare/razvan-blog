@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useSiteLikes } from '@/lib/hooks/use-site-likes';
 import { HeartSVG } from './HeartSVG';
@@ -12,6 +12,7 @@ interface SiteLikeButtonProps {
 
 export function SiteLikeButton({ className }: SiteLikeButtonProps) {
   const { isLiked, toggleLike } = useSiteLikes();
+  const prefersReducedMotion = useReducedMotion();
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
@@ -40,8 +41,8 @@ export function SiteLikeButton({ className }: SiteLikeButtonProps) {
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
           'transition-transform'
         )}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={prefersReducedMotion ? {} : { scale: 1.1 }}
+        whileTap={prefersReducedMotion ? {} : { scale: 0.9 }}
         aria-label={isLiked ? 'Unlike this site' : 'Like this site'}
         aria-pressed={isLiked}
       >
@@ -57,9 +58,9 @@ export function SiteLikeButton({ className }: SiteLikeButtonProps) {
       <AnimatePresence mode="wait">
         <motion.span
           key={isLiked ? 'liked' : 'not-liked'}
-          initial={{ opacity: 0, x: -5 }}
+          initial={prefersReducedMotion ? {} : { opacity: 0, x: -5 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 5 }}
+          exit={prefersReducedMotion ? {} : { opacity: 0, x: 5 }}
           className="text-sm text-muted-foreground"
         >
           {isLiked ? 'Thanks!' : 'Like this site'}
