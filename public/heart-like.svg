@@ -1,0 +1,37 @@
+<!--
+  Heart-like SVG Button
+
+  Extracted and adapted from soarerazvan.com
+
+  Original Source Analysis:
+  - CSS class: .heart-path
+  - Styling: fill: none, stroke: #fff200, stroke-miterlimit: 10
+  - Dimensions: 60px × 60px
+  - Animation: heartbeat keyframe animation (scale 1 → 1.1)
+  - Used as an interactive like button on article pages
+
+  This SVG uses a standard heart shape with the styling properties
+  observed on the original website.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="60" height="60">
+  <style>
+    .heart-path {
+      fill: none;
+      stroke: #fff200;
+      stroke-width: 1.5;
+      stroke-miterlimit: 10;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      25%, 75% { transform: scale(1.1); }
+      50% { transform: scale(1); }
+    }
+    .heart-path.animate {
+      animation: heartbeat 0.6s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+  </style>
+  <path class="heart-path" d="M12 4.248c-3.148-5.402-12-3.825-12 2.944 0 4.661 5.571 9.427 12 15.808 6.43-6.381 12-11.147 12-15.808 0-6.792-8.875-8.306-12-2.944z"/>
+</svg>
