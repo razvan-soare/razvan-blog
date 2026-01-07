@@ -11,6 +11,7 @@
  * - Rotating thought bubble with confused messages
  * - Scratching head and shading eyes gestures
  * - Floating island with crack damage and "404" signpost
+ * - Respects prefers-reduced-motion accessibility setting
  *
  * Used on the 404 Not Found error page.
  *
@@ -20,7 +21,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
 
 interface ConfusedStickFigureProps {
   className?: string;
@@ -41,24 +42,28 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
   const [messageIndex, setMessageIndex] = useState(0);
   const [lookDirection, setLookDirection] = useState<'left' | 'right'>('left');
   const containerRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
-  // Cycle through confused messages
+  // Cycle through confused messages - 4s interval for better readability
   useEffect(() => {
     const interval = setInterval(() => {
       setMessageIndex((prev) => (prev + 1) % CONFUSED_MESSAGES.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Searching animation - look left and right (3s for natural feel, synced with head tilt)
+  useEffect(() => {
+    // Skip looking animation if reduced motion is preferred
+    if (prefersReducedMotion) return;
+
+    const interval = setInterval(() => {
+      setLookDirection((prev) => (prev === 'left' ? 'right' : 'left'));
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
-
-  // Searching animation - look left and right
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLookDirection((prev) => (prev === 'left' ? 'right' : 'left'));
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
+  }, [prefersReducedMotion]);
 
   const eyeOffsetX = lookDirection === 'left' ? -3 : 3;
 
@@ -66,14 +71,23 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
     <motion.div
       ref={containerRef}
       className={className}
-      animate={{
-        y: [0, -8, 0],
-      }}
-      transition={{
-        duration: 3,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      }}
+      animate={
+        prefersReducedMotion
+          ? {}
+          : {
+              y: [0, -6, -1, -8, 0],
+            }
+      }
+      transition={
+        prefersReducedMotion
+          ? {}
+          : {
+              duration: 4,
+              repeat: Infinity,
+              ease: [0.45, 0.05, 0.55, 0.95],
+              times: [0, 0.35, 0.5, 0.75, 1],
+            }
+      }
     >
       <svg
         viewBox="0 -60 280 400"
@@ -84,7 +98,7 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
       >
         {/* Thought Bubble with confused messages */}
         <g>
-          {/* Small trailing circles (thought bubble connectors) */}
+          {/* Small trailing circles (thought bubble connectors) - staggered pulse */}
           <motion.circle
             cx="145"
             cy="65"
@@ -92,8 +106,8 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
             fill="currentColor"
             className="text-foreground"
             initial={{ opacity: 0.6 }}
-            animate={{ opacity: [0.6, 0.8, 0.6] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            animate={prefersReducedMotion ? { opacity: 0.7 } : { opacity: [0.6, 0.85, 0.6], scale: [1, 1.05, 1] }}
+            transition={prefersReducedMotion ? {} : { duration: 3, repeat: Infinity, ease: [0.4, 0, 0.6, 1] }}
           />
           <motion.circle
             cx="155"
@@ -102,8 +116,8 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
             fill="currentColor"
             className="text-foreground"
             initial={{ opacity: 0.7 }}
-            animate={{ opacity: [0.7, 0.9, 0.7] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+            animate={prefersReducedMotion ? { opacity: 0.8 } : { opacity: [0.7, 0.95, 0.7], scale: [1, 1.05, 1] }}
+            transition={prefersReducedMotion ? {} : { duration: 3, repeat: Infinity, ease: [0.4, 0, 0.6, 1], delay: 0.25 }}
           />
           <motion.circle
             cx="168"
@@ -112,15 +126,15 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
             fill="currentColor"
             className="text-foreground"
             initial={{ opacity: 0.8 }}
-            animate={{ opacity: [0.8, 1, 0.8] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
+            animate={prefersReducedMotion ? { opacity: 0.9 } : { opacity: [0.8, 1, 0.8], scale: [1, 1.05, 1] }}
+            transition={prefersReducedMotion ? {} : { duration: 3, repeat: Infinity, ease: [0.4, 0, 0.6, 1], delay: 0.5 }}
           />
 
           {/* Main thought bubble */}
           <motion.g
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={prefersReducedMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
+            transition={prefersReducedMotion ? {} : { duration: 0.5, ease: 'easeOut' }}
           >
             {/* Bubble background */}
             <rect
@@ -150,34 +164,49 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
             />
 
             {/* Message text with fade transition */}
-            <motion.text
-              key={messageIndex}
-              x="205"
-              y="-15"
-              textAnchor="middle"
-              dominantBaseline="middle"
-              fill="currentColor"
-              className="text-foreground"
-              style={{
-                fontSize: '10px',
-                fontFamily: 'var(--font-mono), monospace',
-              }}
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -5 }}
-              transition={{ duration: 0.4, ease: 'easeInOut' }}
-            >
-              {CONFUSED_MESSAGES[messageIndex]}
-            </motion.text>
+            <AnimatePresence mode="wait">
+              <motion.text
+                key={messageIndex}
+                x="205"
+                y="-15"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fill="currentColor"
+                className="text-foreground"
+                style={{
+                  fontSize: '10px',
+                  fontFamily: 'var(--font-mono), monospace',
+                }}
+                initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: -5 }}
+                transition={prefersReducedMotion ? {} : { duration: 0.5, ease: 'easeInOut' }}
+              >
+                {CONFUSED_MESSAGES[messageIndex]}
+              </motion.text>
+            </AnimatePresence>
           </motion.g>
         </g>
 
-        {/* Head - slight tilt for confused look */}
+        {/* Head - slight tilt for confused look with spring physics */}
         <motion.g
-          animate={{
-            rotate: lookDirection === 'left' ? -5 : 5,
-          }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
+          animate={
+            prefersReducedMotion
+              ? {}
+              : {
+                  rotate: lookDirection === 'left' ? -6 : 6,
+                }
+          }
+          transition={
+            prefersReducedMotion
+              ? {}
+              : {
+                  type: 'spring',
+                  stiffness: 120,
+                  damping: 15,
+                  mass: 0.8,
+                }
+          }
           style={{ transformOrigin: '100px 45px' }}
         >
           <motion.circle
@@ -190,31 +219,57 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
             className="text-foreground"
           />
 
-          {/* Eyes - looking around (searching) */}
+          {/* Eyes - looking around (searching) with spring physics */}
           <motion.circle
-            cx={88 + eyeOffsetX}
+            cx={88 + (prefersReducedMotion ? 0 : eyeOffsetX)}
             cy={40}
             r="4"
             fill="currentColor"
             className="text-foreground"
-            animate={{
-              cx: 88 + eyeOffsetX,
-            }}
-            transition={{ duration: 0.5, ease: 'easeInOut' }}
+            animate={
+              prefersReducedMotion
+                ? {}
+                : {
+                    cx: 88 + eyeOffsetX,
+                  }
+            }
+            transition={
+              prefersReducedMotion
+                ? {}
+                : {
+                    type: 'spring',
+                    stiffness: 180,
+                    damping: 18,
+                    mass: 0.6,
+                  }
+            }
           />
           <motion.circle
-            cx={112 + eyeOffsetX}
+            cx={112 + (prefersReducedMotion ? 0 : eyeOffsetX)}
             cy={40}
             r="4"
             fill="currentColor"
             className="text-foreground"
-            animate={{
-              cx: 112 + eyeOffsetX,
-            }}
-            transition={{ duration: 0.5, ease: 'easeInOut' }}
+            animate={
+              prefersReducedMotion
+                ? {}
+                : {
+                    cx: 112 + eyeOffsetX,
+                  }
+            }
+            transition={
+              prefersReducedMotion
+                ? {}
+                : {
+                    type: 'spring',
+                    stiffness: 180,
+                    damping: 18,
+                    mass: 0.6,
+                  }
+            }
           />
 
-          {/* Confused eyebrows - raised and asymmetric */}
+          {/* Confused eyebrows - raised and asymmetric with spring physics */}
           <motion.line
             x1="78"
             y1="28"
@@ -224,11 +279,23 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
             strokeWidth="3"
             strokeLinecap="round"
             className="text-foreground"
-            animate={{
-              y1: lookDirection === 'left' ? 26 : 28,
-              y2: lookDirection === 'left' ? 23 : 27,
-            }}
-            transition={{ duration: 0.5 }}
+            animate={
+              prefersReducedMotion
+                ? {}
+                : {
+                    y1: lookDirection === 'left' ? 25 : 29,
+                    y2: lookDirection === 'left' ? 22 : 27,
+                  }
+            }
+            transition={
+              prefersReducedMotion
+                ? {}
+                : {
+                    type: 'spring',
+                    stiffness: 200,
+                    damping: 20,
+                  }
+            }
           />
           <motion.line
             x1="105"
@@ -239,11 +306,23 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
             strokeWidth="3"
             strokeLinecap="round"
             className="text-foreground"
-            animate={{
-              y1: lookDirection === 'right' ? 23 : 27,
-              y2: lookDirection === 'right' ? 26 : 28,
-            }}
-            transition={{ duration: 0.5 }}
+            animate={
+              prefersReducedMotion
+                ? {}
+                : {
+                    y1: lookDirection === 'right' ? 22 : 27,
+                    y2: lookDirection === 'right' ? 25 : 29,
+                  }
+            }
+            transition={
+              prefersReducedMotion
+                ? {}
+                : {
+                    type: 'spring',
+                    stiffness: 200,
+                    damping: 20,
+                  }
+            }
           />
 
           {/* Confused expression - wavy mouth */}
@@ -258,15 +337,23 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
 
           {/* Question mark above head */}
           <motion.g
-            animate={{
-              y: [0, -3, 0],
-              opacity: [0.7, 1, 0.7],
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
+            animate={
+              prefersReducedMotion
+                ? { opacity: 0.85 }
+                : {
+                    y: [0, -3, 0],
+                    opacity: [0.7, 1, 0.7],
+                  }
+            }
+            transition={
+              prefersReducedMotion
+                ? {}
+                : {
+                    duration: 1.8,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }
+            }
           >
             <text
               x="125"
@@ -298,14 +385,22 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
 
         {/* Left Arm - scratching head */}
         <motion.g
-          animate={{
-            rotate: [-10, 0, -10],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+          animate={
+            prefersReducedMotion
+              ? {}
+              : {
+                  rotate: [-8, 2, -8],
+                }
+          }
+          transition={
+            prefersReducedMotion
+              ? {}
+              : {
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: [0.4, 0, 0.6, 1],
+                }
+          }
           style={{ transformOrigin: '100px 100px' }}
         >
           <line
@@ -318,16 +413,25 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
             strokeLinecap="round"
             className="text-foreground"
           />
-          {/* Hand near head */}
+          {/* Hand near head - scratching motion */}
           <motion.g
-            animate={{
-              x: [0, 2, 0, -2, 0],
-            }}
-            transition={{
-              duration: 0.5,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
+            animate={
+              prefersReducedMotion
+                ? {}
+                : {
+                    x: [0, 2.5, 0, -2.5, 0],
+                    y: [0, -1, 0, -1, 0],
+                  }
+            }
+            transition={
+              prefersReducedMotion
+                ? {}
+                : {
+                    duration: 0.6,
+                    repeat: Infinity,
+                    ease: [0.4, 0, 0.6, 1],
+                  }
+            }
           >
             <circle
               cx="50"
@@ -343,10 +447,23 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
 
         {/* Right Arm - hand shading eyes (searching) */}
         <motion.g
-          animate={{
-            rotate: lookDirection === 'left' ? -5 : 5,
-          }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
+          animate={
+            prefersReducedMotion
+              ? {}
+              : {
+                  rotate: lookDirection === 'left' ? -6 : 6,
+                }
+          }
+          transition={
+            prefersReducedMotion
+              ? {}
+              : {
+                  type: 'spring',
+                  stiffness: 120,
+                  damping: 15,
+                  mass: 0.8,
+                }
+          }
           style={{ transformOrigin: '100px 100px' }}
         >
           <line
@@ -384,14 +501,22 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
 
         {/* Legs - slight shuffle animation */}
         <motion.g
-          animate={{
-            x: [0, 2, 0, -2, 0],
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+          animate={
+            prefersReducedMotion
+              ? {}
+              : {
+                  x: [0, 1.5, 0, -1.5, 0],
+                }
+          }
+          transition={
+            prefersReducedMotion
+              ? {}
+              : {
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: [0.4, 0, 0.6, 1],
+                }
+          }
         >
           {/* Left Leg */}
           <line
@@ -486,14 +611,22 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
             strokeWidth="2"
             strokeLinecap="round"
             fill="none"
-            animate={{
-              opacity: [0.5, 0.8, 0.5],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
+            animate={
+              prefersReducedMotion
+                ? { opacity: 0.65 }
+                : {
+                    opacity: [0.5, 0.8, 0.5],
+                  }
+            }
+            transition={
+              prefersReducedMotion
+                ? {}
+                : {
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }
+            }
           />
 
           {/* Small plants/grass tufts - some wilted */}
@@ -515,14 +648,22 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
 
           {/* Broken signpost with 404 */}
           <motion.g
-            animate={{
-              rotate: [-2, 2, -2],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
+            animate={
+              prefersReducedMotion
+                ? {}
+                : {
+                    rotate: [-2.5, 2.5, -2.5],
+                  }
+            }
+            transition={
+              prefersReducedMotion
+                ? {}
+                : {
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: [0.4, 0, 0.6, 1],
+                  }
+            }
             style={{ transformOrigin: '45px 280px' }}
           >
             {/* Post */}
@@ -570,15 +711,23 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
           fill="currentColor"
           className="text-muted-foreground"
           style={{ fontSize: '16px', opacity: 0.3 }}
-          animate={{
-            y: [100, 90, 100],
-            opacity: [0.2, 0.4, 0.2],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+          animate={
+            prefersReducedMotion
+              ? { opacity: 0.3 }
+              : {
+                  y: [100, 88, 100],
+                  opacity: [0.2, 0.45, 0.2],
+                }
+          }
+          transition={
+            prefersReducedMotion
+              ? {}
+              : {
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: [0.4, 0, 0.6, 1],
+                }
+          }
         >
           ?
         </motion.text>
@@ -588,16 +737,24 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
           fill="currentColor"
           className="text-muted-foreground"
           style={{ fontSize: '14px', opacity: 0.3 }}
-          animate={{
-            y: [150, 140, 150],
-            opacity: [0.15, 0.35, 0.15],
-          }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 0.5,
-          }}
+          animate={
+            prefersReducedMotion
+              ? { opacity: 0.25 }
+              : {
+                  y: [150, 138, 150],
+                  opacity: [0.15, 0.4, 0.15],
+                }
+          }
+          transition={
+            prefersReducedMotion
+              ? {}
+              : {
+                  duration: 3.5,
+                  repeat: Infinity,
+                  ease: [0.4, 0, 0.6, 1],
+                  delay: 0.8,
+                }
+          }
         >
           ?
         </motion.text>

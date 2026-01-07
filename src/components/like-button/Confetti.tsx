@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useMemo, useEffect } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 interface ConfettiPiece {
   id: number;
@@ -72,6 +72,8 @@ function ConfettiShape({
 }
 
 export function Confetti({ isActive, seed, onComplete }: ConfettiProps) {
+  const prefersReducedMotion = useReducedMotion();
+
   const pieces = useMemo(() => {
     if (!isActive || seed === 0) return [];
     return Array.from({ length: 24 }, (_, i) => generateConfettiPiece(i, seed));
@@ -80,6 +82,20 @@ export function Confetti({ isActive, seed, onComplete }: ConfettiProps) {
   const handleAnimationComplete = () => {
     onComplete?.();
   };
+
+  // Skip confetti animation entirely for users who prefer reduced motion
+  // Instead, just call onComplete immediately
+  useEffect(() => {
+    if (prefersReducedMotion && isActive) {
+      const timer = setTimeout(() => onComplete?.(), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [prefersReducedMotion, isActive, onComplete]);
+
+  // Don't render confetti for reduced motion users
+  if (prefersReducedMotion) {
+    return null;
+  }
 
   return (
     <AnimatePresence>
@@ -101,15 +117,15 @@ export function Confetti({ isActive, seed, onComplete }: ConfettiProps) {
               }}
               animate={{
                 x: piece.x,
-                y: [0, piece.y - 80, piece.y + 100],
-                scale: [0, piece.scale, piece.scale * 0.5],
+                y: [0, piece.y - 70, piece.y + 90],
+                scale: [0, piece.scale * 1.1, piece.scale * 0.4],
                 rotate: piece.rotation,
                 opacity: [1, 1, 0],
               }}
               transition={{
-                duration: 1.5,
-                ease: [0.25, 0.46, 0.45, 0.94],
-                times: [0, 0.4, 1],
+                duration: 1.4,
+                ease: [0.22, 0.61, 0.36, 1],
+                times: [0, 0.35, 1],
               }}
               onAnimationComplete={
                 index === pieces.length - 1 ? handleAnimationComplete : undefined

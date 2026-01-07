@@ -9,6 +9,7 @@
  * - Animated connector circles leading to the bubble
  * - Rotating messages with fade transitions
  * - Monospace font styling for code-like appearance
+ * - Respects prefers-reduced-motion accessibility setting
  *
  * Used as a companion element to the StickFigure character.
  *
@@ -18,7 +19,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 const THOUGHT_MESSAGES = [
   'Thinking about React...',
@@ -35,7 +36,7 @@ const THOUGHT_MESSAGES = [
   'CSS is fun... right?',
 ];
 
-const MESSAGE_DURATION = 4000; // Duration each message is displayed (ms)
+const MESSAGE_DURATION = 4800; // Duration each message is displayed (ms) - refined for optimal readability
 
 interface ThoughtBubbleProps {
   className?: string;
@@ -43,6 +44,7 @@ interface ThoughtBubbleProps {
 
 export function ThoughtBubble({ className }: ThoughtBubbleProps) {
   const [messageIndex, setMessageIndex] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -54,7 +56,7 @@ export function ThoughtBubble({ className }: ThoughtBubbleProps) {
 
   return (
     <g className={className}>
-      {/* Small trailing circles (thought bubble connectors) */}
+      {/* Small trailing circles (thought bubble connectors) - staggered pulse for natural feel */}
       <motion.circle
         cx="145"
         cy="65"
@@ -62,8 +64,8 @@ export function ThoughtBubble({ className }: ThoughtBubbleProps) {
         fill="currentColor"
         className="text-foreground"
         initial={{ opacity: 0.6 }}
-        animate={{ opacity: [0.6, 0.8, 0.6] }}
-        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+        animate={prefersReducedMotion ? { opacity: 0.7 } : { opacity: [0.6, 0.85, 0.6], scale: [1, 1.05, 1] }}
+        transition={prefersReducedMotion ? {} : { duration: 3, repeat: Infinity, ease: [0.4, 0, 0.6, 1] }}
       />
       <motion.circle
         cx="155"
@@ -72,8 +74,8 @@ export function ThoughtBubble({ className }: ThoughtBubbleProps) {
         fill="currentColor"
         className="text-foreground"
         initial={{ opacity: 0.7 }}
-        animate={{ opacity: [0.7, 0.9, 0.7] }}
-        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+        animate={prefersReducedMotion ? { opacity: 0.8 } : { opacity: [0.7, 0.95, 0.7], scale: [1, 1.05, 1] }}
+        transition={prefersReducedMotion ? {} : { duration: 3, repeat: Infinity, ease: [0.4, 0, 0.6, 1], delay: 0.25 }}
       />
       <motion.circle
         cx="168"
@@ -82,15 +84,15 @@ export function ThoughtBubble({ className }: ThoughtBubbleProps) {
         fill="currentColor"
         className="text-foreground"
         initial={{ opacity: 0.8 }}
-        animate={{ opacity: [0.8, 1, 0.8] }}
-        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
+        animate={prefersReducedMotion ? { opacity: 0.9 } : { opacity: [0.8, 1, 0.8], scale: [1, 1.05, 1] }}
+        transition={prefersReducedMotion ? {} : { duration: 3, repeat: Infinity, ease: [0.4, 0, 0.6, 1], delay: 0.5 }}
       />
 
       {/* Main thought bubble */}
       <motion.g
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={prefersReducedMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
+        transition={prefersReducedMotion ? {} : { duration: 0.5, ease: 'easeOut' }}
       >
         {/* Bubble background - rounded rectangle with organic shape */}
         <rect
@@ -119,7 +121,7 @@ export function ThoughtBubble({ className }: ThoughtBubbleProps) {
           className="text-foreground"
         />
 
-        {/* Message text with fade transition */}
+        {/* Message text with smooth fade transition */}
         <AnimatePresence mode="wait">
           <motion.text
             key={messageIndex}
@@ -133,10 +135,10 @@ export function ThoughtBubble({ className }: ThoughtBubbleProps) {
               fontSize: '10px',
               fontFamily: 'var(--font-mono), monospace',
             }}
-            initial={{ opacity: 0, y: 5 }}
+            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -5 }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: -6 }}
+            transition={prefersReducedMotion ? {} : { duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
           >
             {THOUGHT_MESSAGES[messageIndex]}
           </motion.text>

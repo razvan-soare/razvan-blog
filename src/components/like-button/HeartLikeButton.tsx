@@ -97,7 +97,7 @@ export function HeartLikeButton({
           prefersReducedMotion
             ? {}
             : {
-                scale: isPressed ? 0.9 : 1,
+                scale: isPressed ? 0.88 : 1,
               }
         }
         transition={
@@ -105,12 +105,13 @@ export function HeartLikeButton({
             ? {}
             : {
                 type: 'spring',
-                stiffness: 400,
-                damping: 17,
+                stiffness: 350,
+                damping: 15,
+                mass: 0.8,
               }
         }
-        whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-        whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
+        whileHover={prefersReducedMotion ? {} : { scale: 1.08 }}
+        whileTap={prefersReducedMotion ? {} : { scale: 0.92 }}
         aria-label={isLiked ? 'Unlike this' : 'Like this'}
         aria-pressed={isLiked}
       >

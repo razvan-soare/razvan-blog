@@ -10,6 +10,7 @@
  * - Waving animation on hover/click interaction
  * - Floating animation with gentle bobbing
  * - Floating island base with grass, flowers, and rock layers
+ * - Respects prefers-reduced-motion accessibility setting
  *
  * License: MIT (as part of this project)
  * Author: Razvan
@@ -17,7 +18,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ThoughtBubble } from './ThoughtBubble';
 
 interface StickFigureProps {
@@ -29,6 +30,7 @@ export function StickFigure({ className }: StickFigureProps) {
   const [eyeOffset, setEyeOffset] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   const lastUpdateRef = useRef(0);
+  const prefersReducedMotion = useReducedMotion();
 
   const handleInteraction = () => {
     if (!isWaving) {
@@ -37,10 +39,14 @@ export function StickFigure({ className }: StickFigureProps) {
     }
   };
 
-  // Throttled mouse move handler - updates at most every 50ms (20fps)
+  // Throttled mouse move handler - updates at most every 24ms (~42fps) for smoother tracking
+  // Using a slightly higher frame rate for more responsive eye movement
   const handleMouseMove = useCallback((event: MouseEvent) => {
+    // Skip eye tracking if user prefers reduced motion
+    if (prefersReducedMotion) return;
+
     const now = performance.now();
-    if (now - lastUpdateRef.current < 50) return;
+    if (now - lastUpdateRef.current < 24) return;
     lastUpdateRef.current = now;
 
     if (!containerRef.current) return;
@@ -56,11 +62,13 @@ export function StickFigure({ className }: StickFigureProps) {
     const maxOffset = 3;
 
     if (distance > 0) {
-      const normalizedX = (deltaX / distance) * Math.min(distance / 100, 1) * maxOffset;
-      const normalizedY = (deltaY / distance) * Math.min(distance / 100, 1) * maxOffset;
+      // Use eased distance for more natural feel - eyes move faster when cursor is closer
+      const easedDistance = Math.min(distance / 80, 1);
+      const normalizedX = (deltaX / distance) * easedDistance * maxOffset;
+      const normalizedY = (deltaY / distance) * easedDistance * maxOffset;
       setEyeOffset({ x: normalizedX, y: normalizedY });
     }
-  }, []);
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -71,14 +79,23 @@ export function StickFigure({ className }: StickFigureProps) {
     <motion.div
       ref={containerRef}
       className={className}
-      animate={{
-        y: [0, -10, 0],
-      }}
-      transition={{
-        duration: 4,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      }}
+      animate={
+        prefersReducedMotion
+          ? {}
+          : {
+              y: [0, -8, -2, -10, 0],
+            }
+      }
+      transition={
+        prefersReducedMotion
+          ? {}
+          : {
+              duration: 4.5,
+              repeat: Infinity,
+              ease: [0.45, 0.05, 0.55, 0.95], // Custom cubic-bezier for organic feel
+              times: [0, 0.35, 0.5, 0.75, 1],
+            }
+      }
       onHoverStart={handleInteraction}
       onClick={handleInteraction}
       style={{ cursor: 'pointer' }}
@@ -103,7 +120,7 @@ export function StickFigure({ className }: StickFigureProps) {
           className="text-foreground"
         />
 
-        {/* Eyes - with tracking */}
+        {/* Eyes - with smooth tracking using spring physics for natural feel */}
         <motion.circle
           cx={88 + eyeOffset.x}
           cy={40 + eyeOffset.y}
@@ -114,7 +131,12 @@ export function StickFigure({ className }: StickFigureProps) {
             cx: 88 + eyeOffset.x,
             cy: 40 + eyeOffset.y,
           }}
-          transition={{ duration: 0.1, ease: 'easeOut' }}
+          transition={{
+            type: 'spring',
+            stiffness: 300,
+            damping: 25,
+            mass: 0.5,
+          }}
         />
         <motion.circle
           cx={112 + eyeOffset.x}
@@ -126,7 +148,12 @@ export function StickFigure({ className }: StickFigureProps) {
             cx: 112 + eyeOffset.x,
             cy: 40 + eyeOffset.y,
           }}
-          transition={{ duration: 0.1, ease: 'easeOut' }}
+          transition={{
+            type: 'spring',
+            stiffness: 300,
+            damping: 25,
+            mass: 0.5,
+          }}
         />
 
         {/* Smile */}
@@ -167,19 +194,20 @@ export function StickFigure({ className }: StickFigureProps) {
         <motion.g
           style={{ originX: '100px', originY: '100px' }}
           animate={
-            isWaving
+            isWaving && !prefersReducedMotion
               ? {
-                  rotate: [0, -20, -60, -20, -60, -20, 0],
+                  rotate: [0, -25, -55, -25, -55, -25, 0],
                 }
               : { rotate: 0 }
           }
           transition={
-            isWaving
+            isWaving && !prefersReducedMotion
               ? {
-                  duration: 1.2,
-                  ease: 'easeInOut',
+                  duration: 1.3,
+                  ease: [0.25, 0.1, 0.25, 1], // Smoother cubic-bezier
+                  times: [0, 0.15, 0.35, 0.55, 0.75, 0.9, 1],
                 }
-              : { duration: 0.3 }
+              : { type: 'spring', stiffness: 200, damping: 20 }
           }
         >
           {/* Upper arm */}
@@ -196,19 +224,20 @@ export function StickFigure({ className }: StickFigureProps) {
           {/* Forearm/hand */}
           <motion.g
             animate={
-              isWaving
+              isWaving && !prefersReducedMotion
                 ? {
-                    rotate: [0, 15, -15, 15, -15, 15, 0],
+                    rotate: [0, 18, -18, 18, -18, 18, 0],
                   }
                 : { rotate: 0 }
             }
             transition={
-              isWaving
+              isWaving && !prefersReducedMotion
                 ? {
-                    duration: 1.2,
-                    ease: 'easeInOut',
+                    duration: 1.3,
+                    ease: [0.25, 0.1, 0.25, 1],
+                    times: [0, 0.15, 0.35, 0.55, 0.75, 0.9, 1],
                   }
-                : { duration: 0.3 }
+                : { type: 'spring', stiffness: 200, damping: 20 }
             }
             style={{ originX: '145px', originY: '80px' }}
           >

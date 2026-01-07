@@ -80,17 +80,19 @@ export function HeartSVG({
       animate={
         shouldAnimate && isActive
           ? {
-              scale: [1, 1.1, 1, 1.1, 1],
+              // Natural heartbeat rhythm: strong beat followed by softer beat with pause
+              scale: [1, 1.15, 0.98, 1.08, 1],
             }
           : {}
       }
       transition={
         shouldAnimate && isActive
           ? {
-              duration: 0.6,
-              ease: 'easeInOut',
+              duration: 0.75,
+              ease: [0.25, 0.1, 0.25, 1],
+              times: [0, 0.15, 0.35, 0.55, 1],
               repeat: Infinity,
-              repeatDelay: 1,
+              repeatDelay: 1.0,
             }
           : {}
       }
@@ -110,7 +112,7 @@ export function HeartSVG({
         transition={{
           fill: {
             duration: prefersReducedMotion ? 0 : 0.3,
-            ease: 'easeOut',
+            ease: [0.25, 0.1, 0.25, 1],
           },
         }}
       />
@@ -142,17 +144,19 @@ export function HeartSVGMaterial({
       animate={
         shouldAnimate && isActive
           ? {
-              scale: [1, 1.1, 1, 1.1, 1],
+              // Natural heartbeat rhythm: strong beat followed by softer beat with pause
+              scale: [1, 1.15, 0.98, 1.08, 1],
             }
           : {}
       }
       transition={
         shouldAnimate && isActive
           ? {
-              duration: 0.6,
-              ease: 'easeInOut',
+              duration: 0.75,
+              ease: [0.25, 0.1, 0.25, 1],
+              times: [0, 0.15, 0.35, 0.55, 1],
               repeat: Infinity,
-              repeatDelay: 1,
+              repeatDelay: 1.0,
             }
           : {}
       }
@@ -172,7 +176,7 @@ export function HeartSVGMaterial({
         transition={{
           fill: {
             duration: prefersReducedMotion ? 0 : 0.3,
-            ease: 'easeOut',
+            ease: [0.25, 0.1, 0.25, 1],
           },
         }}
       />
@@ -207,17 +211,19 @@ export function HeartSVGCompact({
       animate={
         shouldAnimate && isActive
           ? {
-              scale: [1, 1.1, 1, 1.1, 1],
+              // Natural heartbeat rhythm: strong beat followed by softer beat with pause
+              scale: [1, 1.15, 0.98, 1.08, 1],
             }
           : {}
       }
       transition={
         shouldAnimate && isActive
           ? {
-              duration: 0.6,
-              ease: 'easeInOut',
+              duration: 0.75,
+              ease: [0.25, 0.1, 0.25, 1],
+              times: [0, 0.15, 0.35, 0.55, 1],
               repeat: Infinity,
-              repeatDelay: 1,
+              repeatDelay: 1.0,
             }
           : {}
       }
@@ -236,7 +242,7 @@ export function HeartSVGCompact({
         transition={{
           fill: {
             duration: prefersReducedMotion ? 0 : 0.3,
-            ease: 'easeOut',
+            ease: [0.25, 0.1, 0.25, 1],
           },
         }}
       />
