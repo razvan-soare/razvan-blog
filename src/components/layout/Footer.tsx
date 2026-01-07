@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Github, Linkedin, Instagram } from 'lucide-react';
+import { Github, Linkedin, Instagram, MessageSquarePlus } from 'lucide-react';
 import { SiteLikeButton } from '@/components/like-button';
 
 const socialLinks = [
@@ -20,8 +20,17 @@ export function Footer() {
             © {currentYear} Razvan Soare. All rights reserved.
           </p>
 
-          {/* Site Like Button */}
-          <SiteLikeButton />
+          {/* Center Section: Like & Feedback */}
+          <div className="flex items-center gap-4">
+            <SiteLikeButton />
+            <Link
+              href="/feedback"
+              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              <MessageSquarePlus className="h-4 w-4" />
+              <span>Feedback</span>
+            </Link>
+          </div>
 
           {/* Social Links */}
           <div className="flex items-center gap-4">

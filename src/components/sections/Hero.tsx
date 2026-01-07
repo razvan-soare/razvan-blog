@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { FeedbackPrompt } from '@/components/feedback';
 
 // Dynamic import for code splitting - StickFigure is a large animated component
 const StickFigure = dynamic(
@@ -36,6 +37,13 @@ export function Hero() {
           </div>
         </div>
       </div>
+
+      {/* Floating Feedback Prompt */}
+      <FeedbackPrompt
+        variant="floating"
+        message="Like the stick figure? Share your thoughts on the animations!"
+        delay={8000}
+      />
     </section>
   );
 }

@@ -19,3 +19,9 @@ export {
   useViewTransition,
   supportsViewTransitions,
 } from './use-view-transition';
+
+export {
+  useFeedback,
+  downloadFeedbackAsJson,
+  downloadFeedbackAsCsv,
+} from './use-feedback';

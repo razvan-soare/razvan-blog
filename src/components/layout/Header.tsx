@@ -11,6 +11,7 @@ const navLinks = [
   { href: '/about', label: 'About' },
   { href: '/projects', label: 'Projects' },
   { href: '/blog', label: 'Blog' },
+  { href: '/feedback', label: 'Feedback' },
 ];
 
 export function Header() {
@@ -81,7 +82,7 @@ export function Header() {
         className={cn(
           'md:hidden absolute left-0 right-0 bg-background/95 backdrop-blur-md border-b border-border overflow-hidden transition-all duration-200 ease-out',
           mobileMenuOpen
-            ? 'max-h-60 opacity-100 pointer-events-auto'
+            ? 'max-h-80 opacity-100 pointer-events-auto'
             : 'max-h-0 opacity-0 pointer-events-none border-b-0'
         )}
       >
