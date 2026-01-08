@@ -11,7 +11,14 @@
  * - Rotating thought bubble with confused messages
  * - Scratching head and shading eyes gestures
  * - Floating island with crack damage and "404" signpost
+ * - Floating animation with gentle bobbing (4s duration, ±10px vertical, ease-in-out)
  * - Respects prefers-reduced-motion accessibility setting
+ *
+ * Animation Specifications:
+ * - Updown animation: translateY between 10px and -10px
+ * - Duration: 4 seconds
+ * - Timing: ease-in-out
+ * - Keyframes: 0% (10px), 50% (-10px), 100% (10px)
  *
  * Used on the 404 Not Found error page.
  *
@@ -75,7 +82,7 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
         prefersReducedMotion
           ? {}
           : {
-              y: [0, -6, -1, -8, 0],
+              y: [10, -10, 10],
             }
       }
       transition={
@@ -84,8 +91,8 @@ export function ConfusedStickFigure({ className }: ConfusedStickFigureProps) {
           : {
               duration: 4,
               repeat: Infinity,
-              ease: [0.45, 0.05, 0.55, 0.95],
-              times: [0, 0.35, 0.5, 0.75, 1],
+              ease: 'easeInOut',
+              times: [0, 0.5, 1],
             }
       }
     >
