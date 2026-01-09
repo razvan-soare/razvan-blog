@@ -1,10 +1,33 @@
 import Link from 'next/link';
-import { Github, Linkedin, Instagram, Code2, BookOpen, Bike, Gamepad2, Wind } from 'lucide-react';
+import { Github, Linkedin, Instagram, Code2, BookOpen, Bike, Gamepad2, Wind, Heart, Layers, Zap, Users, Sparkles } from 'lucide-react';
 
 const socialLinks = [
   { href: 'https://linkedin.com/in/razvansoare', label: 'LinkedIn', Icon: Linkedin },
   { href: 'https://github.com/razvansoare', label: 'GitHub', Icon: Github },
   { href: 'https://instagram.com/razvansoare', label: 'Instagram', Icon: Instagram },
+];
+
+const reactReasons = [
+  {
+    Icon: Layers,
+    title: 'Component Architecture',
+    description: 'Building reusable, composable UI pieces that snap together like LEGO blocks. Clean separation of concerns makes code a joy to maintain.',
+  },
+  {
+    Icon: Zap,
+    title: 'Developer Experience',
+    description: 'Hot reloading, excellent tooling, and intuitive debugging. React makes the development process smooth and productive.',
+  },
+  {
+    Icon: Users,
+    title: 'Vibrant Community',
+    description: 'An incredible ecosystem of libraries, tools, and passionate developers sharing knowledge and pushing boundaries.',
+  },
+  {
+    Icon: Sparkles,
+    title: 'Declarative Magic',
+    description: 'Describing what the UI should look like, not how to update it. State changes flow naturally through the component tree.',
+  },
 ];
 
 const hobbies = [
@@ -65,10 +88,46 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Hobbies & Interests Section */}
+        {/* Why I Love React Section */}
         <section
           className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-300"
           style={{ animationDelay: '150ms', animationFillMode: 'both' }}
+        >
+          <div className="rounded-lg border border-border bg-card p-6 md:p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="rounded-full bg-[#61dafb]/10 p-2">
+                <Heart className="h-5 w-5 text-[#61dafb]" />
+              </div>
+              <h2 className="text-xl font-semibold">Why I Love React</h2>
+            </div>
+            <p className="text-muted-foreground mb-6 leading-relaxed">
+              React isn't just a library to me—it's the <span className="text-[#61dafb] font-medium">foundation of how I think about building user interfaces</span>. Here's what makes it special:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {reactReasons.map((reason) => (
+                <div
+                  key={reason.title}
+                  className="group rounded-lg border border-border/50 bg-background/50 p-4 hover:border-[#61dafb]/50 hover:bg-[#61dafb]/5 transition-all duration-200"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-full bg-[#61dafb]/10 p-2 group-hover:bg-[#61dafb]/20 transition-colors duration-200">
+                      <reason.Icon className="h-4 w-4 text-[#61dafb]" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium mb-1">{reason.title}</h3>
+                      <p className="text-sm text-muted-foreground">{reason.description}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Hobbies & Interests Section */}
+        <section
+          className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-300"
+          style={{ animationDelay: '200ms', animationFillMode: 'both' }}
         >
           <h2 className="text-xl font-semibold mb-4">When I'm Not Coding</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -94,7 +153,7 @@ export default function AboutPage() {
         {/* Social Links Section */}
         <section
           className="animate-in fade-in slide-in-from-bottom-4 duration-300"
-          style={{ animationDelay: '200ms', animationFillMode: 'both' }}
+          style={{ animationDelay: '250ms', animationFillMode: 'both' }}
         >
           <h2 className="text-xl font-semibold mb-4">Connect With Me</h2>
           <div className="flex flex-wrap gap-3">
