@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, ReactNode } from 'react';
 import { PostCardSkeleton } from './PostCardSkeleton';
+import { ProjectCardSkeleton } from './ProjectCardSkeleton';
 
 interface BelowFoldContentProps {
   children: ReactNode;
@@ -52,6 +53,24 @@ export function BelowFoldContent({ children }: BelowFoldContentProps) {
               <PostCardSkeleton />
               <PostCardSkeleton />
               <PostCardSkeleton />
+            </div>
+          </div>
+        </section>
+
+        {/* Placeholder for FeaturedProjects */}
+        <section className="py-16 md:py-24">
+          <div className="mx-auto max-w-5xl px-4 w-full">
+            <div className="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+              <div>
+                <div className="h-10 w-56 bg-muted/50 rounded animate-pulse mb-3" />
+                <div className="h-6 w-72 bg-muted/50 rounded animate-pulse" />
+              </div>
+              <div className="h-6 w-36 bg-muted/50 rounded animate-pulse" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <ProjectCardSkeleton />
+              <ProjectCardSkeleton />
+              <ProjectCardSkeleton />
             </div>
           </div>
         </section>

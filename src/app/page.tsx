@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Hero, RecentlyPublished } from "@/components/sections";
+import { Hero, RecentlyPublished, FeaturedProjects } from "@/components/sections";
 import { siteConfig, generateJsonLd } from "@/lib/seo";
 import { BelowFoldContent } from "@/components/sections/BelowFoldContent";
 
@@ -30,6 +30,7 @@ export default function Home() {
         <Hero />
         <BelowFoldContent>
           <RecentlyPublished />
+          <FeaturedProjects />
         </BelowFoldContent>
       </main>
     </>
