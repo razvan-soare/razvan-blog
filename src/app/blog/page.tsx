@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useMemo, useRef } from 'react';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Search, X } from 'lucide-react';
 import { PostCard } from '@/components/sections/PostCard';
 import { blogPosts, PostCategory } from '@/lib/data/posts';
 import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
 
 type FilterCategory = 'all' | PostCategory;
 
@@ -44,19 +45,34 @@ const categories: CategoryConfig[] = [
 
 export default function BlogPage() {
   const [activeCategory, setActiveCategory] = useState<FilterCategory>('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const isInitialMount = useRef(true);
 
-  // Sort posts by publish date (newest first) and filter by category
+  // Sort posts by publish date (newest first) and filter by category and search query
   const filteredPosts = useMemo(() => {
     const sorted = [...blogPosts].sort(
       (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
     );
 
-    if (activeCategory === 'all') {
-      return sorted;
+    let filtered = sorted;
+
+    // Filter by category
+    if (activeCategory !== 'all') {
+      filtered = filtered.filter((post) => post.category === activeCategory);
     }
-    return sorted.filter((post) => post.category === activeCategory);
-  }, [activeCategory]);
+
+    // Filter by search query (title, excerpt, content)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter((post) =>
+        post.title.toLowerCase().includes(query) ||
+        post.excerpt.toLowerCase().includes(query) ||
+        post.content.toLowerCase().includes(query)
+      );
+    }
+
+    return filtered;
+  }, [activeCategory, searchQuery]);
 
   const getCategoryCount = (category: FilterCategory): number => {
     if (category === 'all') {
@@ -93,6 +109,32 @@ export default function BlogPage() {
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Useful React hooks, helper functions, and development tips to level up your coding workflow.
           </p>
+        </section>
+
+        {/* Search Bar */}
+        <section className={cn(
+          "mb-6",
+          shouldAnimate && "animate-in fade-in slide-in-from-top-4 duration-300 delay-75"
+        )}>
+          <div className="relative max-w-md mx-auto">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+            <Input
+              type="text"
+              placeholder="Search posts by title, description, or content..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 pr-10 h-11 rounded-full bg-card/50 border-border/50 focus-visible:border-primary focus-visible:ring-primary/50"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-muted/50 hover:bg-muted flex items-center justify-center transition-colors"
+                aria-label="Clear search"
+              >
+                <X className="h-3 w-3 text-muted-foreground" />
+              </button>
+            )}
+          </div>
         </section>
 
         {/* Category Filter */}
@@ -155,8 +197,18 @@ export default function BlogPage() {
         {filteredPosts.length === 0 && (
           <div className="text-center py-12 animate-in fade-in duration-200">
             <p className="text-muted-foreground">
-              No posts found in this category.
+              {searchQuery
+                ? `No posts found matching "${searchQuery}"${activeCategory !== 'all' ? ` in ${activeCategory}` : ''}.`
+                : 'No posts found in this category.'}
             </p>
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="mt-4 text-sm text-primary hover:underline"
+              >
+                Clear search
+              </button>
+            )}
           </div>
         )}
       </div>
