@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { blogPosts, getPostBySlug, getRelatedPosts, PostCategory } from '@/lib/data/posts';
 import { parseContent } from '@/lib/mdx';
 import { TableOfContents } from '@/components/mdx';
+import { HeartLikeButton } from '@/components/like-button';
 import { RelatedPosts } from './RelatedPosts';
 import { BlogPostHeader } from './BlogPostHeader';
 import { siteConfig, generateJsonLd } from '@/lib/seo';
@@ -153,11 +154,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               className="mdx-content prose prose-invert max-w-none"
               dangerouslySetInnerHTML={{ __html: html }}
             />
+
+            {/* Mobile Like Button - shown at end of article on small screens */}
+            <div className="mt-12 flex justify-center lg:hidden">
+              <HeartLikeButton articleSlug={slug} />
+            </div>
           </article>
 
-          {/* Sidebar - Table of Contents */}
+          {/* Sidebar - Like Button & Table of Contents */}
           <aside className="hidden lg:block">
-            <div className="sticky top-24">
+            <div className="sticky top-24 space-y-6">
+              <HeartLikeButton articleSlug={slug} />
               <TableOfContents content={post.content} className="static" />
             </div>
           </aside>

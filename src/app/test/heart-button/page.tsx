@@ -21,6 +21,7 @@
 
 import { useState, useEffect } from 'react';
 import { HeartLikeButton } from '@/components/like-button/HeartLikeButton';
+import { HeartLikeSVG } from '@/components/like-button/HeartLikeSVG';
 import { HeartSVG, HeartSVGMaterial, HeartSVGCompact } from '@/components/like-button/HeartSVG';
 import { SiteLikeButton } from '@/components/like-button/SiteLikeButton';
 import { LikeButton } from '@/components/like-button/LikeButton';
@@ -48,6 +49,9 @@ export default function HeartButtonTestPage() {
     { name: 'Reduced motion', description: 'Respects prefers-reduced-motion', status: 'pending' },
     { name: 'ARIA labels', description: 'Screen reader announces correctly', status: 'pending' },
   ]);
+
+  // State for demonstrating HeartLikeSVG at different fill levels
+  const [demoFillLevel, setDemoFillLevel] = useState(0);
 
   useEffect(() => {
     const updateWidth = () => setViewportWidth(window.innerWidth);
@@ -183,100 +187,107 @@ export default function HeartButtonTestPage() {
 
         {/* Component Tests */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* HeartLikeButton Tests */}
+          {/* HeartLikeButton Tests (New - with lighting system) */}
           <section className="p-4 bg-card rounded-lg border border-border">
-            <h2 className="text-lg font-semibold mb-4">HeartLikeButton</h2>
+            <h2 className="text-lg font-semibold mb-4">HeartLikeButton (Lighting System)</h2>
+            <p className="text-sm text-muted-foreground mb-4">
+              Uses the exact heart SVG from soarerazvan.com. Click to fill one section at a time.
+            </p>
 
-            {/* Default Size */}
+            {/* Demo with different article slugs */}
             <div className="mb-6">
               <h3 className="text-sm font-medium text-muted-foreground mb-2">
-                Default (60px)
+                Article Like Button
               </h3>
               <div className="flex justify-center p-4 bg-background rounded">
-                <HeartLikeButton />
+                <HeartLikeButton articleSlug="test-article-1" />
               </div>
             </div>
 
-            {/* Various Sizes */}
+            {/* Multiple instances */}
             <div className="mb-6">
               <h3 className="text-sm font-medium text-muted-foreground mb-2">
-                Size Variations
+                Multiple Articles (each has separate state)
               </h3>
-              <div className="flex items-end justify-center gap-4 p-4 bg-background rounded flex-wrap">
-                <div className="text-center">
-                  <HeartLikeButton size={24} showCount={false} />
-                  <span className="text-xs text-muted-foreground block mt-1">24px</span>
-                </div>
-                <div className="text-center">
-                  <HeartLikeButton size={40} showCount={false} />
-                  <span className="text-xs text-muted-foreground block mt-1">40px</span>
-                </div>
-                <div className="text-center">
-                  <HeartLikeButton size={60} showCount={false} />
-                  <span className="text-xs text-muted-foreground block mt-1">60px</span>
-                </div>
-                <div className="text-center">
-                  <HeartLikeButton size={80} showCount={false} />
-                  <span className="text-xs text-muted-foreground block mt-1">80px</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Color Variations */}
-            <div className="mb-6">
-              <h3 className="text-sm font-medium text-muted-foreground mb-2">
-                Color Variations
-              </h3>
-              <div className="flex items-center justify-center gap-4 p-4 bg-background rounded flex-wrap">
-                <div className="text-center">
-                  <HeartLikeButton
-                    size={40}
-                    showCount={false}
-                    inactiveColor="#fff200"
-                    activeColor="#fff200"
-                  />
-                  <span className="text-xs text-muted-foreground block mt-1">Yellow</span>
-                </div>
-                <div className="text-center">
-                  <HeartLikeButton
-                    size={40}
-                    showCount={false}
-                    inactiveColor="#e60067"
-                    activeColor="#e60067"
-                  />
-                  <span className="text-xs text-muted-foreground block mt-1">Pink #e60067</span>
-                </div>
-                <div className="text-center">
-                  <HeartLikeButton
-                    size={40}
-                    showCount={false}
-                    inactiveColor="#f43f5e"
-                    activeColor="#f43f5e"
-                  />
-                  <span className="text-xs text-muted-foreground block mt-1">Rose</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Pre-liked State */}
-            <div className="mb-6">
-              <h3 className="text-sm font-medium text-muted-foreground mb-2">
-                Initial States
-              </h3>
-              <div className="flex items-center justify-center gap-8 p-4 bg-background rounded">
-                <div className="text-center">
-                  <HeartLikeButton initialLiked={false} initialCount={0} />
-                  <span className="text-xs text-muted-foreground block mt-1">Not liked</span>
-                </div>
-                <div className="text-center">
-                  <HeartLikeButton initialLiked={true} initialCount={42} />
-                  <span className="text-xs text-muted-foreground block mt-1">Pre-liked</span>
-                </div>
+              <div className="flex justify-center gap-4 p-4 bg-background rounded flex-wrap">
+                <HeartLikeButton articleSlug="test-article-2" />
+                <HeartLikeButton articleSlug="test-article-3" />
               </div>
             </div>
           </section>
 
-          {/* HeartSVG Variants */}
+          {/* HeartLikeSVG Demo (SVG only, without button) */}
+          <section className="p-4 bg-card rounded-lg border border-border">
+            <h2 className="text-lg font-semibold mb-4">HeartLikeSVG (Raw SVG)</h2>
+            <p className="text-sm text-muted-foreground mb-4">
+              The underlying SVG component showing the lighting fill effect.
+            </p>
+
+            {/* Interactive demo */}
+            <div className="mb-6">
+              <h3 className="text-sm font-medium text-muted-foreground mb-2">
+                Fill Level Demo: {demoFillLevel}/8
+              </h3>
+              <div className="flex items-center gap-4 p-4 bg-background rounded">
+                <div className="w-16 h-16">
+                  <HeartLikeSVG
+                    filledSections={demoFillLevel}
+                    totalSections={8}
+                    isComplete={demoFillLevel >= 8}
+                  />
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  <button
+                    onClick={() => setDemoFillLevel(Math.max(0, demoFillLevel - 1))}
+                    className="px-3 py-1 bg-muted hover:bg-muted/80 rounded text-sm"
+                  >
+                    -
+                  </button>
+                  <button
+                    onClick={() => setDemoFillLevel(Math.min(8, demoFillLevel + 1))}
+                    className="px-3 py-1 bg-muted hover:bg-muted/80 rounded text-sm"
+                  >
+                    +
+                  </button>
+                  <button
+                    onClick={() => setDemoFillLevel(0)}
+                    className="px-3 py-1 bg-muted hover:bg-muted/80 rounded text-sm"
+                  >
+                    Reset
+                  </button>
+                  <button
+                    onClick={() => setDemoFillLevel(8)}
+                    className="px-3 py-1 bg-yellow-500 text-black hover:bg-yellow-400 rounded text-sm"
+                  >
+                    Fill All
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Static states */}
+            <div className="mb-6">
+              <h3 className="text-sm font-medium text-muted-foreground mb-2">
+                Fill Progression
+              </h3>
+              <div className="flex items-center justify-center gap-2 p-4 bg-background rounded flex-wrap">
+                {[0, 2, 4, 6, 8].map((fill) => (
+                  <div key={fill} className="text-center">
+                    <div className="w-10 h-10">
+                      <HeartLikeSVG
+                        filledSections={fill}
+                        totalSections={8}
+                        isComplete={fill >= 8}
+                      />
+                    </div>
+                    <span className="text-xs text-muted-foreground block mt-1">{fill}/8</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* HeartSVG Variants (Original simple variants) */}
           <section className="p-4 bg-card rounded-lg border border-border">
             <h2 className="text-lg font-semibold mb-4">HeartSVG Variants</h2>
 
@@ -348,10 +359,10 @@ export default function HeartButtonTestPage() {
             <h2 className="text-lg font-semibold mb-4">LikeButton (PuzzleHeart)</h2>
             <div className="p-4 bg-background rounded">
               <p className="text-sm text-muted-foreground mb-4">
-                Used on article pages. 8 pieces, persists to localStorage.
+                Alternative design with puzzle pieces. 8 pieces, persists to localStorage.
               </p>
               <div className="flex justify-center">
-                <LikeButton articleSlug="test-article" />
+                <LikeButton articleSlug="test-article-puzzle" />
               </div>
             </div>
           </section>
@@ -367,9 +378,9 @@ export default function HeartButtonTestPage() {
                 Tab to each button below and press Enter or Space to toggle:
               </p>
               <div className="flex items-center gap-4 p-4 bg-background rounded flex-wrap">
-                <HeartLikeButton size={40} showCount={false} />
-                <HeartLikeButton size={40} showCount={false} />
-                <HeartLikeButton size={40} showCount={false} />
+                <HeartLikeButton articleSlug="a11y-test-1" />
+                <HeartLikeButton articleSlug="a11y-test-2" />
+                <HeartLikeButton articleSlug="a11y-test-3" />
               </div>
             </div>
 
@@ -378,8 +389,8 @@ export default function HeartButtonTestPage() {
               <p className="text-sm text-muted-foreground mb-2">
                 Focus ring should be clearly visible when tabbing:
               </p>
-              <div className="p-4 bg-background rounded">
-                <HeartLikeButton size={60} />
+              <div className="p-4 bg-background rounded flex justify-center">
+                <HeartLikeButton articleSlug="focus-test" />
               </div>
             </div>
 
@@ -389,7 +400,7 @@ export default function HeartButtonTestPage() {
                 ARIA attributes present:
               </p>
               <ul className="list-disc list-inside text-sm text-muted-foreground ml-4 mt-2">
-                <li>aria-label: &quot;Like this&quot; / &quot;Unlike this&quot;</li>
+                <li>aria-label: Dynamic based on fill state</li>
                 <li>aria-pressed: true/false based on state</li>
                 <li>Button role: implicit from &lt;button&gt; element</li>
                 <li>SVG has aria-hidden=&quot;true&quot;</li>
@@ -404,15 +415,9 @@ export default function HeartButtonTestPage() {
           <p className="text-sm text-muted-foreground mb-4">
             Button should not overflow these constrained containers:
           </p>
-          <div className="flex flex-wrap gap-4">
-            <div className="w-20 h-20 border-2 border-dashed border-border flex items-center justify-center overflow-hidden">
-              <HeartLikeButton size={50} showCount={false} />
-            </div>
-            <div className="w-16 h-16 border-2 border-dashed border-border flex items-center justify-center overflow-hidden">
-              <HeartLikeButton size={40} showCount={false} />
-            </div>
-            <div className="w-12 h-12 border-2 border-dashed border-border flex items-center justify-center overflow-hidden">
-              <HeartLikeButton size={32} showCount={false} />
+          <div className="flex flex-wrap gap-4 justify-center">
+            <div className="border-2 border-dashed border-border p-2 rounded">
+              <HeartLikeButton articleSlug="overflow-test" />
             </div>
           </div>
         </section>
@@ -440,12 +445,14 @@ export default function HeartButtonTestPage() {
             <ul className="list-disc list-inside space-y-1">
               <li>SVG heart renders with correct proportions</li>
               <li>Yellow color matches #fff200</li>
-              <li>Fill animation is smooth (not jerky)</li>
-              <li>Heartbeat animation loops correctly</li>
+              <li>Fill animation fills from bottom to top</li>
+              <li>Each click fills one section</li>
+              <li>Heartbeat animation on complete state</li>
               <li>Hover scale works on desktop (not mobile)</li>
-              <li>Click/tap changes state immediately</li>
+              <li>Click/tap increments state immediately</li>
               <li>Like count animates when changing</li>
               <li>localStorage persists across refreshes</li>
+              <li>Confetti on completion</li>
               <li>No hydration mismatches (check console)</li>
               <li>Enable &quot;Reduce motion&quot; and verify animations stop</li>
             </ul>
