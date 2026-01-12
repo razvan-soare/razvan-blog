@@ -25,3 +25,6 @@ export {
   downloadFeedbackAsJson,
   downloadFeedbackAsCsv,
 } from './use-feedback';
+
+export { useTheme, initializeTheme } from './use-theme';
+export type { Theme } from './use-theme';
