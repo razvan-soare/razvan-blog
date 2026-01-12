@@ -6,6 +6,7 @@ import { blogPosts, getPostBySlug, getRelatedPosts, PostCategory } from '@/lib/d
 import { parseContent } from '@/lib/mdx';
 import { TableOfContents } from '@/components/mdx';
 import { HeartLikeButton } from '@/components/like-button';
+import { ShareButtons } from '@/components/share-buttons';
 import { RelatedPosts } from './RelatedPosts';
 import { BlogPostHeader } from './BlogPostHeader';
 import { siteConfig, generateJsonLd } from '@/lib/seo';
@@ -106,6 +107,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { html } = await parseContent(post.content);
   const relatedPosts = getRelatedPosts(slug, 3);
   const categoryStyle = categoryStyles[post.category];
+  const articleUrl = `${siteConfig.url}/blog/${post.slug}`;
 
   const jsonLd = generateJsonLd('article', {
     headline: post.title,
@@ -155,16 +157,39 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               dangerouslySetInnerHTML={{ __html: html }}
             />
 
+            {/* Share Buttons - end of article */}
+            <div className="mt-12 pt-8 border-t border-border/50">
+              <p className="text-sm text-muted-foreground mb-4">
+                Enjoyed this article? Share it with others!
+              </p>
+              <ShareButtons
+                url={articleUrl}
+                title={post.title}
+                description={post.excerpt}
+                variant="inline"
+              />
+            </div>
+
             {/* Mobile Like Button - shown at end of article on small screens */}
-            <div className="mt-12 flex justify-center lg:hidden">
+            <div className="mt-8 flex justify-center lg:hidden">
               <HeartLikeButton articleSlug={slug} />
             </div>
           </article>
 
-          {/* Sidebar - Like Button & Table of Contents */}
+          {/* Sidebar - Like Button, Share Buttons & Table of Contents */}
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-6">
               <HeartLikeButton articleSlug={slug} />
+              <div className="p-4 rounded-xl bg-card/50 border border-border/50 backdrop-blur-sm">
+                <p className="text-xs text-muted-foreground mb-3 text-center">Share</p>
+                <ShareButtons
+                  url={articleUrl}
+                  title={post.title}
+                  description={post.excerpt}
+                  variant="sidebar"
+                  className="items-center"
+                />
+              </div>
               <TableOfContents content={post.content} className="static" />
             </div>
           </aside>
