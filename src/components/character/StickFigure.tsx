@@ -7,6 +7,7 @@
  *
  * Features:
  * - Eye-tracking that follows the user's cursor
+ * - Parallax movement - entire character subtly shifts toward cursor position
  * - Waving animation on hover/click interaction
  * - Floating animation with gentle bobbing (4s duration, ±10px vertical, ease-in-out)
  * - Floating island base with grass, flowers, and rock layers
@@ -17,6 +18,7 @@
  * - Duration: 4 seconds
  * - Timing: ease-in-out
  * - Keyframes: 0% (10px), 50% (-10px), 100% (10px)
+ * - Parallax: max ±4px offset with spring physics (stiffness: 150, damping: 20)
  *
  * License: MIT (as part of this project)
  * Author: Razvan
@@ -34,6 +36,7 @@ interface StickFigureProps {
 export function StickFigure({ className }: StickFigureProps) {
   const [isWaving, setIsWaving] = useState(false);
   const [eyeOffset, setEyeOffset] = useState({ x: 0, y: 0 });
+  const [parallaxOffset, setParallaxOffset] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   const lastUpdateRef = useRef(0);
   const prefersReducedMotion = useReducedMotion();
@@ -48,7 +51,7 @@ export function StickFigure({ className }: StickFigureProps) {
   // Throttled mouse move handler - updates at most every 24ms (~42fps) for smoother tracking
   // Using a slightly higher frame rate for more responsive eye movement
   const handleMouseMove = useCallback((event: MouseEvent) => {
-    // Skip eye tracking if user prefers reduced motion
+    // Skip tracking if user prefers reduced motion
     if (prefersReducedMotion) return;
 
     const now = performance.now();
@@ -65,15 +68,28 @@ export function StickFigure({ className }: StickFigureProps) {
     const deltaY = event.clientY - centerY;
 
     const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    const maxOffset = 3;
 
+    // Eye tracking - max 3px offset
+    const maxEyeOffset = 3;
     if (distance > 0) {
       // Use eased distance for more natural feel - eyes move faster when cursor is closer
       const easedDistance = Math.min(distance / 80, 1);
-      const normalizedX = (deltaX / distance) * easedDistance * maxOffset;
-      const normalizedY = (deltaY / distance) * easedDistance * maxOffset;
+      const normalizedX = (deltaX / distance) * easedDistance * maxEyeOffset;
+      const normalizedY = (deltaY / distance) * easedDistance * maxEyeOffset;
       setEyeOffset({ x: normalizedX, y: normalizedY });
     }
+
+    // Parallax effect - subtle character shift toward cursor (max 4px)
+    const maxParallaxOffset = 4;
+    // Use viewport dimensions for parallax calculation for smoother movement
+    const viewportCenterX = window.innerWidth / 2;
+    const viewportCenterY = window.innerHeight / 2;
+    const parallaxDeltaX = event.clientX - viewportCenterX;
+    const parallaxDeltaY = event.clientY - viewportCenterY;
+    // Normalize based on viewport size for consistent feel across screen sizes
+    const parallaxX = (parallaxDeltaX / viewportCenterX) * maxParallaxOffset;
+    const parallaxY = (parallaxDeltaY / viewportCenterY) * maxParallaxOffset;
+    setParallaxOffset({ x: parallaxX, y: parallaxY });
   }, [prefersReducedMotion]);
 
   useEffect(() => {
@@ -106,12 +122,26 @@ export function StickFigure({ className }: StickFigureProps) {
       onClick={handleInteraction}
       style={{ cursor: 'pointer' }}
     >
-      <svg
+      <motion.svg
         viewBox="0 -50 280 390"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-full"
         aria-label="Animated stick figure character floating on an island"
+        animate={
+          prefersReducedMotion
+            ? {}
+            : {
+                x: parallaxOffset.x,
+                y: parallaxOffset.y,
+              }
+        }
+        transition={{
+          type: 'spring',
+          stiffness: 150,
+          damping: 20,
+          mass: 0.8,
+        }}
       >
         {/* Thought Bubble */}
         <ThoughtBubble />
@@ -377,7 +407,7 @@ export function StickFigure({ className }: StickFigureProps) {
           <circle cx="130" cy="277" r="2.5" fill="#FF69B4" />
           <circle cx="95" cy="279" r="2" fill="#87CEEB" />
         </g>
-      </svg>
+      </motion.svg>
     </motion.div>
   );
 }
