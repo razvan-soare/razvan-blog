@@ -7,6 +7,7 @@ import { parseContent } from '@/lib/mdx';
 import { TableOfContents } from '@/components/mdx';
 import { HeartLikeButton } from '@/components/like-button';
 import { ShareButtons } from '@/components/share-buttons';
+import { ReadingProgressBar } from '@/components/blog';
 import { RelatedPosts } from './RelatedPosts';
 import { BlogPostHeader } from './BlogPostHeader';
 import { siteConfig, generateJsonLd } from '@/lib/seo';
@@ -126,6 +127,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <ReadingProgressBar contentSelector="article" />
       <main className="min-h-screen bg-background text-foreground">
         <div className="mx-auto max-w-7xl px-4 py-16 md:py-24">
         {/* Back Link */}
