@@ -18,41 +18,78 @@
  */
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { EASING, DURATION } from '@/lib/animation';
 
 const THOUGHT_MESSAGES = [
-  'Thinking about React...',
-  'Coffee break?',
-  'Bug hunting!',
-  'Learning new things!',
+  // Developer jokes & code humor
+  'I ❤️ React!',
+  'Coffee → Code → Repeat',
+  'Clean code is happy code',
   'const life = "good";',
   'npm install happiness',
-  'Debugging dreams...',
-  'Code. Sleep. Repeat.',
-  'Building something cool!',
-  '404: Sleep not found',
   'git commit -m "magic"',
+  '// TODO: sleep more',
+  'while(alive) { code(); }',
+  'return <Awesome />;',
+  'async/await for coffee...',
+
+  // Playful thoughts
+  'Thinking in components...',
+  'Bug hunting season!',
+  'Debugging dreams...',
+  '404: Sleep not found',
   'CSS is fun... right?',
+  'Building something cool!',
+  'Learning never stops!',
+  'Making pixels dance!',
+
+  // Motivational
+  'Ship it! 🚀',
+  'One bug at a time...',
+  'Progress > Perfection',
+  'Keep calm and code on',
+
+  // Tech humor
+  'Works on my machine™',
+  'Is it deployed yet?',
+  'Merge conflicts ahead!',
+  "console.log('here');",
+  'Stack Overflow to rescue!',
+  'Types are my friends',
 ];
 
-const MESSAGE_DURATION = 4800; // Duration each message is displayed (ms) - refined for optimal readability
+const MESSAGE_DURATION = DURATION.message; // Duration each message is displayed (ms)
 
 interface ThoughtBubbleProps {
   className?: string;
+}
+
+// Shuffle array using Fisher-Yates algorithm
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
 }
 
 export function ThoughtBubble({ className }: ThoughtBubbleProps) {
   const [messageIndex, setMessageIndex] = useState(0);
   const prefersReducedMotion = useReducedMotion();
 
+  // Shuffle messages once on mount for variety across sessions
+  const shuffledMessages = useMemo(() => shuffleArray(THOUGHT_MESSAGES), []);
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setMessageIndex((prev) => (prev + 1) % THOUGHT_MESSAGES.length);
+      setMessageIndex((prev) => (prev + 1) % shuffledMessages.length);
     }, MESSAGE_DURATION);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [shuffledMessages.length]);
 
   return (
     <g className={className}>
@@ -65,7 +102,7 @@ export function ThoughtBubble({ className }: ThoughtBubbleProps) {
         className="text-foreground"
         initial={{ opacity: 0.6 }}
         animate={prefersReducedMotion ? { opacity: 0.7 } : { opacity: [0.6, 0.85, 0.6], scale: [1, 1.05, 1] }}
-        transition={prefersReducedMotion ? {} : { duration: 3, repeat: Infinity, ease: [0.4, 0, 0.6, 1] }}
+        transition={prefersReducedMotion ? {} : { duration: DURATION.pulse, repeat: Infinity, ease: EASING.smooth }}
       />
       <motion.circle
         cx="155"
@@ -75,7 +112,7 @@ export function ThoughtBubble({ className }: ThoughtBubbleProps) {
         className="text-foreground"
         initial={{ opacity: 0.7 }}
         animate={prefersReducedMotion ? { opacity: 0.8 } : { opacity: [0.7, 0.95, 0.7], scale: [1, 1.05, 1] }}
-        transition={prefersReducedMotion ? {} : { duration: 3, repeat: Infinity, ease: [0.4, 0, 0.6, 1], delay: 0.25 }}
+        transition={prefersReducedMotion ? {} : { duration: DURATION.pulse, repeat: Infinity, ease: EASING.smooth, delay: 0.25 }}
       />
       <motion.circle
         cx="168"
@@ -85,14 +122,14 @@ export function ThoughtBubble({ className }: ThoughtBubbleProps) {
         className="text-foreground"
         initial={{ opacity: 0.8 }}
         animate={prefersReducedMotion ? { opacity: 0.9 } : { opacity: [0.8, 1, 0.8], scale: [1, 1.05, 1] }}
-        transition={prefersReducedMotion ? {} : { duration: 3, repeat: Infinity, ease: [0.4, 0, 0.6, 1], delay: 0.5 }}
+        transition={prefersReducedMotion ? {} : { duration: DURATION.pulse, repeat: Infinity, ease: EASING.smooth, delay: 0.5 }}
       />
 
       {/* Main thought bubble */}
       <motion.g
         initial={prefersReducedMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={prefersReducedMotion ? {} : { duration: 0.5, ease: 'easeOut' }}
+        transition={prefersReducedMotion ? {} : { duration: DURATION.slow, ease: 'easeOut' }}
       >
         {/* Bubble background - rounded rectangle with organic shape */}
         <rect
@@ -121,7 +158,7 @@ export function ThoughtBubble({ className }: ThoughtBubbleProps) {
           className="text-foreground"
         />
 
-        {/* Message text with smooth fade transition */}
+        {/* Message text with smooth fade and slide transition */}
         <AnimatePresence mode="wait">
           <motion.text
             key={messageIndex}
@@ -135,12 +172,20 @@ export function ThoughtBubble({ className }: ThoughtBubbleProps) {
               fontSize: '10px',
               fontFamily: 'var(--font-mono), monospace',
             }}
-            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: -6 }}
-            transition={prefersReducedMotion ? {} : { duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
+            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 8, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: -8, scale: 0.95 }}
+            transition={
+              prefersReducedMotion
+                ? {}
+                : {
+                    duration: DURATION.normal,
+                    ease: EASING.smooth,
+                    opacity: { duration: DURATION.fast },
+                  }
+            }
           >
-            {THOUGHT_MESSAGES[messageIndex]}
+            {shuffledMessages[messageIndex]}
           </motion.text>
         </AnimatePresence>
       </motion.g>
