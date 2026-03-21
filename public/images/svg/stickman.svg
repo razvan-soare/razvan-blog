@@ -1,0 +1,43 @@
+<svg 
+  id="Layer_2" 
+  data-name="Layer 2" 
+  xmlns="http://www.w3.org/2000/svg" 
+  viewBox="0 0 251.89 272.79">
+  <defs>
+    <style>
+      .stick-man-cls-1 { 
+        fill:none;
+      }
+      .stick-man-cls-1,.stick-man-cls-2 {
+        stroke:#231f20;
+        stroke-miterlimit:10;
+        stroke-width:3px;
+      }
+      .stick-man-cls-2 {
+        fill:#231f20;
+      }
+    </style>
+  </defs>
+  <title>Stick man</title>
+  <!-- Eyes -->
+  <path class="stick-man-cls-1" d="M140.2,91.44a42.14,42.14,0,1,1-9.73-26.92A42.14,42.14,0,0,1,140.2,91.44Z" transform="translate(-32.39 -47.81)"/>
+  <path class="stick-man-cls-1" d="M256.74,91.44a42.15,42.15,0,0,1-33.15,41.17,41.55,41.55,0,0,1-9,1,42.14,42.14,0,1,1,42.14-42.14Z" transform="translate(-32.39 -47.81)"/>
+  <!-- Eye center -->
+  <circle class="stick-man-cls-2" id="left-eye" cx="66.11" cy="43" r="8"/>
+  <circle class="stick-man-cls-2" id="right-eye" cx="183.86" cy="43" r="8"/>
+  <!-- Left Hand -->
+  <path class="stick-man-cls-1" d="M85.78,179.8a1.67,1.67,0,0,1-.32,0c-8.48,0-15.47,8.69-17.8,11-5.44,5.43-11.87,16.74-18,21.83S32.9,212.88,34,202.5s7.84-25,22.68-36.45c14.27-11,28.12-10.88,29.14-10.85" transform="translate(-32.39 -47.81)"/>
+  <!-- Right Hand -->
+  <path class="stick-man-cls-1" id="rest-hand" d="M230.89,155.2c1,0,14.87-.17,29.14,10.85,14.84,11.44,21.62,26.06,22.68,36.45s-9.54,15.25-15.68,10.17-12.58-16.4-18-21.83c-2.33-2.33-9.32-11-17.8-11a1.67,1.67,0,0,1-.32,0" transform="translate(-32.39 -47.81)"/>
+  <path class="stick-man-cls-1" id="wave-hand" d="M230.89,155.09a1.67,1.67,0,0,1,.32,0c8.48,0,15.47-8.69,17.8-11,5.44-5.43,11.87-16.74,18-21.83s16.74-.21,15.68,10.17-7.84,25-22.68,36.45c-14.27,11-28.12,10.88-29.14,10.85" transform="translate(-32.39 -47.81)"/>
+  <!-- Right Leg -->
+  <path class="stick-man-cls-1" d="M210.08,273.23,210.8,299a2.33,2.33,0,0,0,1.7,1.91c2.14.66,5.27.89,8.54,2.14,11.66,4.45,4.81,13.88,2.35,15.23s-6.48.78-20.31.58-13-9.12-13-9.12l.62-29.83v-.47" transform="translate(-32.39 -47.81)"/>
+  <!-- Left Leg -->
+  <path class="stick-man-cls-1" d="M125,279.41v.47l.62,29.83s.8,8.93-13,9.12-17.93.72-20.31-.58S83,307.47,94.65,303c3.27-1.25,6.4-1.48,8.54-2.14a2.33,2.33,0,0,0,1.7-1.91l.72-25.74" transform="translate(-32.39 -47.81)"/>
+  <!-- Mouth -->
+  <path class="stick-man-cls-1" d="M146.21,148.78c-1.73,26.16,26.6,21.62,22.49-.22" transform="translate(-32.39 -47.81)"/>
+  <!-- Body -->
+  <path class="stick-man-cls-1" d="M84.43,131.59V235.93a43,43,0,0,0,43,43h60.22a43,43,0,0,0,43-43V131" transform="translate(-32.39 -47.81)"/>
+  <line class="stick-man-cls-1" x1="155.15" y1="11.55" x2="93.18" y2="11.55"/>
+  
+</svg>

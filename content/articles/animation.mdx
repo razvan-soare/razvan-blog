@@ -1,0 +1,95 @@
+---
+title: On scroll animation
+date: 2021-01-05
+tags: [React]
+type: 'articles'
+excerpt: If you wondered how some websited use animations that are triggered by the scroll position, then we will have a look on how to implement one and some little tricks to keep in mind when implementing an animation
+---
+
+Another project, another animation to implement. I assume every FE developer knows that feeling when he sees for the first time what "CREATIVE" ideas your designer has for this project. For me it is always a combination of "hmm interesting" and "oh hell no". 
+
+This new project came with a new challenge for me. We wanted to add a cool scrolling animation.  Wondering what is the difference between the normal animations you see on every website and a scrolling animation ? Well this one would get triggered by the scroll position on page. If you scroll down the animation will start playing and when you scroll back up it will go in reverse. Nice idea, but nevertheless full of interesting things that could and would go wrong.
+
+There are not that many examples using this idea but we had a few ideas. First we tried to have the animation as a movie and change the frames based on scroll position. Well it kinda worked but not really... Browser wasn't able to render the frames fast enough and we would get a choppy experience. Not good, we left this behind and moved on.  Next we tried to use sprite images to store the image. At the beginning it worked and actually pretty good, we were really happy with the tiny test but ... creating the sprite with bigger images and using more frames was a pain and would give some massive file and also problematic with scaling on different resolutions.
+
+At this point we needed something so the next good thing was to create the whole animation from scratch. So what is an animation; "the technique of photographing successive drawings or models to create an illusion of movement when the film is shown as a sequence". We had the frames, we had the scroll position, all we needed was to determine how to show the images one at the time without having 100+ image tags always present on dom. This can be achieved by creating only one image tag and changing it's source (src).
+
+```jsx
+componentDidMount() => {
+	window.addEventListener('scroll', this.scrollAnimation);
+}
+
+getScrollTop = () => {
+  return (
+    window.pageYOffset ||
+    (document.documentElement && document.documentElement.scrollTop)
+  );
+};
+
+scrollAnimation = () => {
+	const image = document.getElementById('image');
+	const scrollPos = this.getScrollTop();
+
+	image.src = images[scrollPos].src;
+}
+```
+
+Well it was a success, the animation was working but... as always when something works there are 5 things that don't. First problem (I assume you are yelling at your screen right now), the animation is only working within the first 100 steps of the scroll. Well this is way too low and having limited frames we need to rethink how we change the frames.
+
+A simple linear regression algorithm would solve this problem. Using a free online calculator ([`https://www.graphpad.com/quickcalcs/linear2/`](https://www.graphpad.com/quickcalcs/linear2/)) we have: initial scroll value and initial frame value on the first row and the final scroll value with the final frame value. Initial for both would be 0 and we estimated that at around scrollpos 1000 we would like to display the 120th frame. Entering these values in our calculator we get the formula `Y = 0.1200*X - 0.0`. So here is the updated functions:
+
+```jsx
+getScrollIndex = scrollpos => {
+  const scrollIndex = parseInt(scrollpos * 0.12, 10);
+
+  if (scrollIndex <= 0) {
+    return 0;
+  } else if (scrollIndex > 0 && scrollIndex < frames) {
+    return scrollIndex;
+  }
+  return frames;
+};
+
+scrollAnimation = () => {
+	const image = document.getElementById('image');
+	const scrollPos = this.getScrollTop();
+	const scrollIndex = this.getScrollIndex(scrollPos);
+
+	image.src = images[scrollIndex].src;
+}
+```
+
+Perfect 🎉 But this solved only one problem. We noticed that the animation will cut from time to time, especially if you scroll faster. Everything was perfect on a slow/normal scroll 🤔. After a few investigations we realised that every time we changed the image source, we actually did a new request for the new image 🤦‍♂️. Not good. Also if the user would have a slow internet it would take a while to download the images so this would ruin the whole experience.
+
+A few examples we saw used a low quality, blurry image while the actual image was downloaded in background and just swapped them when the big image was available. This wasn't really an option for us because it would break the animation flow. The solution for these two issues was caching the images. In order to do this we would create an array with all images like so:
+
+```jsx
+componentDidMount() {
+	for (i = 0; i <= frames; i += 1) {
+    this.createImage(i);
+  }
+}
+
+createImage = number => {
+  const img = new Image();
+ 
+  img.setAttribute('src', number);
+
+  images.push(img);
+};
+```
+
+By doing this, we make sure we have all images when the user sees our animation. No loading blurry image, no choppiness.
+
+<VideoGifImg type="video" path="bryant-dental/video1.mp4"/> 
+
+Now combining all we learned we can add various other scroll animations as you can see on [https://bryant.dental/](https://bryant.dental/). Same kind of linear progression algorithms can be used to get values for left positions on text or even the actual images, so you can have the image slowly moving to the centre of the screen while changing frames. These are only a few examples, possibilities are infinite, you can create whatever you want just be creative.
+
+I would like to remind you of a few points that I consider really important.
+
+- Make sure you don't use too many or big images. You may not realise, but the user might need to download a big chunk of data in order to see your animation.
+- Serve different sizes for images based on the device the user is using.
+- Play with the number of frames, it will greatly affect the animation's performance.
+- Be aware that some users use mouse scroll and the animations might get choppy or finish before the user can see anything.
+
+Thank you for reading.

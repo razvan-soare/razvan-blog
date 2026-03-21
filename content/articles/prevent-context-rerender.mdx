@@ -1,0 +1,203 @@
+---
+title: Prevent your React Context from re-rendering everything
+date: 2021-01-15
+tags: [React]
+type: 'articles'
+excerpt: Application getting slower? Let's have a look on how to optimise it and discover a few design patterns that will help your component from rendering unnecessary
+---
+
+
+## Introduction
+
+Writing code is easy, writing good code is hard. The term `good code` is vague and everyone has it's own definition for it. In this post we will have a look on a more unique and not really straight forward way to optimise React performance.
+
+React provides a bunch of built in [optimisations](https://reactjs.org/docs/optimizing-performance.html), but that does not mean your application will run smoothly. The performance of your application will depend on how the app is structured and how well you understand the way React operates. As a rule of thumb, you should never optimise if you don't have a problem. Functions like [useCallback](https://reactjs.org/docs/hooks-reference.html#usecallback) and memo can be really powerful, but can also hurt. They use memoization which adds up to the memory and also the functions themselves take time to run and have overheads like the prop comparison.
+
+## Understand how React works
+
+On the initial load, React will build the DOM tree of components and with every data change in the DOM tree, React will trigger a re-render on the affected components. However with every component re-render, all it's children will re-render too. This will result in longer loading time, wasted time, and even wasted CPU resources.
+
+The first thing that we should do whenever the application starts feeling slow and laggy, we should start our friend `Profiler` and run a test on the specific part that feels slow.
+
+<VideoGifImg type="img" path="prevent-context-rerender/profiler1.png"/> 
+
+### Save the day with useCallback and memo
+
+These two functions use the concept of Memoization. Memoization in React development is caching. But “caching” is a general term, and memoization is a specific form of caching. It is an optimisation technique, which speeds up apps by caching the results of function calls and returning the stored result when the same arguments are supplied again.
+
+```jsx
+const Parent = () => {
+  const [clickCnt, setClickCnt] = useState(0);
+  console.log("Parent rendered", clickCnt);
+
+  const handleClick = () => {
+    setClickCnt((e) => e + 1);
+  };
+  return (
+    <Child handleClick={handleClick} />
+  );
+};
+
+const Child = ({ handleClick }) => {
+  console.log("Child rendered");
+
+  <div>
+    <button onClick={handleClick}>Click Me</button>
+    <p>i am the child</p>
+  </div>
+};
+```
+
+<VideoGifImg type="gif" path="prevent-context-rerender/application1.gif"/> 
+
+As we can see every time the parent component updates the state, the child component updates as well, even tho the state in parent does not change the child in any way. As we said earlier this happens because once a component gets updated, all its children will re-render too. React gives us a few ways of fixing this problem. 
+
+Memo will be our first help in this situation, we can wrap the children in Memo and prevent it from rendering if the Parent state updates.
+
+```jsx
+const Child = memo(({ handleClick }) => {
+  console.log("Child rendered");
+  <div>
+    <button onClick={handleClick}>Click Me</button>
+    <p>i am the child</p>
+  </div>
+});
+```
+
+By running this example we will realise that nothing changed. The child renders as well with every click on the button. This happens because we are passing the `handleClick` function, as an anonymous function. During each render of Parent component, the function will get a new value. During the child props comparison the function references wont match so it will trigger a re-render. Don't worry we have a solution for this too, using `useCallback`.
+
+```jsx:title=Parent.js
+const Parent = () => {
+  const [clickCnt, setClickCnt] = useState(0);
+  console.log("Parent rendered", clickCnt);
+
+  const handleClick = useCallback(() => {
+    setClickCnt((e) => e + 1);
+  }, []);
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: "20px auto 0",
+        width: 100,
+      }}
+    >
+      <Child handleClick={handleClick} />
+    </div>
+  );
+};
+```
+
+By wrapping the handleClick function with useCallback we will memoize the function reference achieving our goal.
+
+<VideoGifImg type="gif" path="prevent-context-rerender/application2.gif"/> 
+
+## Prevent re-render on global state update
+
+Now that we know how React renders our components let's check a more advanced example. With all mid to complex React applications, we will need to implement some type of state management system. The most commons are Redux, mobx and context. In this article we will have a look over Context, creating a basic example of `Cart` being stored in our global store. To keep it short we wont be focusing on designing the components but feel free to modify the project as you wish. 
+
+<Info>
+  If you want to follow along you can do that <a target="_blank" href="https://github.com/razvan-soare/react-context-rerender">cloning this repo</a>. There are two branches; first one will be the starting template and the final one `container-pattern` will include the final result.
+</Info>
+
+Let's add a few items in our global store, starting with the cart and an user. Inside `src/store/provider.js` we can see the cart that is an empty array at the beginning and the user that will be  "Razvan". 
+
+ 
+
+```jsx:title=provider.js
+this.state = {
+  user: {
+    id: 0,
+    name: "Razvan",
+  },
+  cart: [],
+};
+```
+
+Moving to our Homepage (`src/pages/homepage/index.js`) we will render 3 components. A header that will display the connected user, an add to cart button and the cart list. The button component can be either a CTA button or an item cart with image and description or anything that our application requires. 
+
+By clicking the button we can see that another book is added to the cart list exactly as we expected. Everything runs nice and smooth, but let's run the Profiler and see if there is anything wrong with our application. When we are adding a new book we can see that our context provider updates and also every component including the Header. 
+
+<VideoGifImg type="img" path="prevent-context-rerender/profiler2.png"/> 
+
+This does not look good, our header has nothing to do with the cart items, but gets re-rendered anyway. I hope that you are looking at this behaviour and you are screaming "Add react memo to prevent the re-render". Ok ok I hear you, let's give it a try.  
+
+```jsx:title=Header.js
+import React, { memo } from "react";
+import useStore from "../store/useStore";
+
+const Header = () => {
+  const { user } = useStore();
+  return <h1>{user.name}</h1>;
+};
+
+export default memo(Header, () => true);
+```
+
+Even if we wrap our Header component with memo and pass the custom check function returning true (meaning it does not need to re-render) we can still see that our header renders. This happens because we are using the global state from react context, and with every update, all components that are using the state will trigger another render to make sure the component is up to date.
+
+<VideoGifImg type="img" path="prevent-context-rerender/profiler3.png"/> 
+
+## Presentational and Container Components
+
+Just like all problems, there is a solution. Maybe not always obvious, but there is a way of fixing the problem. In order to prevent our components to re-render we should use a code design pattern, most common known as `Container Components Pattern` 
+
+This pattern is not a must and should not be enforced if there is no need for it. The idea is to split your react component into two parts, Logical and Presentational. The logical part, or the Container, will handle all data manipulation, grabbing info from an API or changing the state based on the users inputs. The presentational component, as the name suggests, will contain the looks, the html tags, the colors, the style etc. This separation of concerns will come in super handy if we need to change the styles of our component. You can have two developers working simultaneous on the same component, probably a more experienced developer doing the logical part, while the intern will handle the looks. 
+
+Why is this a good idea? 
+
+- Better separation of concerns. Clear difference between where the logic is stored and where we adding the UI.
+- Reusability. You can use the same presentational component with different state source.
+- Update the UI only if the state changes
+
+## Implement the Container patter
+
+With all this new information in mind, let's rewrite our component using container pattern. We will have the container to get the state from our global store, while our header component will just take care on how we want to display the name. 
+
+```jsx:title=Header.js
+import React, { memo } from "react";
+
+const Header = ({ user }) => {
+  return <h1>{user.name}</h1>;
+};
+
+const isSame = (prevProps, nextProps) => {
+  if (prevProps.user.name === nextProps.user.name) {
+    return true;
+  }
+  return false;
+};
+
+export default memo(Header, isSame);
+```
+
+```jsx:title=HeaderContainer.js
+import React, { memo } from "react";
+import useStore from "../../../store/useStore";
+import Header from "./Header";
+
+const HeaderContainer = () => {
+  const { user } = useStore();
+  return <Header user={user} />;
+};
+
+export default HeaderContainer;
+```
+
+Our presentational component can use memo to decide if a re-render is necessary, by doing a check if the user changed or not. By running the profiler again we can see exactly what we expected, the container will render and process all the data and we prevented the header from rendering since the user never changed. 🎉
+
+<VideoGifImg type="img" path="prevent-context-rerender/profiler4.png"/> 
+
+## Conclusion
+
+There are many optimisation strategies that can be used, we just need to choose the one that fits the best. Keep in mind that useCallback and Memo are strong helpers and can reduce our unnecessary renders, but can also harm us if they are used when they are not needed.
+
+Design patterns are not mandatory, but can help you organise the project, keep components consistent  and most likely help new developers to understand easier your project.
+
+The code from this article can be found [on my bitbucket, here](https://github.com/razvan-soare/react-context-rerender). Thank you for reading and if you enjoyed and learned something new make sure to hit the like button. Somehow is very  satisfying. 
+
+Thank you for reading.

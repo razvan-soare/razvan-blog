@@ -1,102 +1,89 @@
-import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Header, Footer } from "@/components/layout";
-import { QueryProvider, ViewTransitionsProvider, ThemeProvider } from "@/components/providers";
-import { siteConfig } from "@/lib/seo";
-import "./globals.css";
-
-// Optimize font loading with display swap to prevent invisible text during load
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  display: "swap", // Show fallback font immediately, swap when custom font loads
-  preload: true,
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap", // Show fallback font immediately, swap when custom font loads
-  preload: true,
-});
-
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  themeColor: '#000000',
-};
+import type { Metadata } from 'next';
+import StyledComponentsRegistry from '@/lib/StyledComponentsRegistry';
+import { ThemeProvider } from '@/lib/ThemeContext';
+import GlobalStyles from '@/lib/GlobalStyles';
+import Header from '@/components/Header';
+import ReportIssue from '@/components/ReportIssue';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: {
-    default: siteConfig.title,
-    template: `%s | ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  keywords: siteConfig.keywords,
-  authors: [{ name: siteConfig.author.name }],
-  creator: siteConfig.author.name,
-  publisher: siteConfig.author.name,
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
+  title: 'Razvan Soare',
+  description: 'React developer and technology enthusiast',
   openGraph: {
+    title: 'Razvan Soare',
+    description: 'React developer and technology enthusiast',
+    url: 'https://soarerazvan.com',
+    siteName: 'Razvan Soare',
     type: 'website',
-    locale: siteConfig.locale,
-    url: siteConfig.url,
-    siteName: siteConfig.name,
-    title: siteConfig.title,
-    description: siteConfig.description,
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.name,
-      },
-    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: siteConfig.title,
-    description: siteConfig.description,
-    images: [siteConfig.ogImage],
-    creator: siteConfig.twitterHandle,
-  },
-  icons: {
-    icon: '/favicon.ico',
+    title: 'Razvan Soare',
+    description: 'React developer and technology enthusiast',
   },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <QueryProvider>
+    <html lang="en">
+      <head>
+        <link rel="preload" href="/fonts/Wotfard-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/Wotfard-Medium.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <style dangerouslySetInnerHTML={{ __html: `
+          @font-face {
+            font-family: 'Wotfard';
+            src: url('/fonts/Wotfard-Regular.woff2') format('woff2');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+          }
+          @font-face {
+            font-family: 'Wotfard';
+            src: url('/fonts/Wotfard-Medium.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+          }
+          @font-face {
+            font-family: 'Wotfard';
+            src: url('/fonts/Wotfard-SemiBold.woff2') format('woff2');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+          }
+          @font-face {
+            font-family: 'Wotfard';
+            src: url('/fonts/Wotfard-Bold.woff2') format('woff2');
+            font-weight: 600;
+            font-style: normal;
+            font-display: swap;
+          }
+          @font-face {
+            font-family: 'Sriracha';
+            src: url('/fonts/sriracha-latin-400.0b3278b3dc419ca5a6b5e56f0eac466f.woff2') format('woff2');
+            font-display: swap;
+          }
+          @font-face {
+            font-family: 'Reenie';
+            src: url('/fonts/ReenieBeanie-Regular.ttf') format('truetype');
+            font-display: swap;
+          }
+        `}} />
+      </head>
+      <body>
+        <StyledComponentsRegistry>
           <ThemeProvider>
-            <ViewTransitionsProvider>
-              <div className="flex min-h-screen flex-col">
-                <Header />
-                <main className="flex-1">{children}</main>
-                <Footer />
-              </div>
-            </ViewTransitionsProvider>
+            <GlobalStyles />
+            <Header title="Razvan Soare" />
+            <main className="layout">
+              {children}
+            </main>
+            <ReportIssue />
           </ThemeProvider>
-        </QueryProvider>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );

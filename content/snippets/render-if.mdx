@@ -1,0 +1,43 @@
+---
+title: Conditional Rendering
+date: 2021-01-19
+tags: [Helper]
+type: "snippets"
+excerpt: Clean up your code with this little trick
+---
+
+Have you ever wanted to render a component only if a condition is true?
+
+Usually you would use a ternary operator, but that's not very readable. This helper is a solution to that.
+
+
+```jsx
+...
+  {displayText ? <TextComponent /> : null}
+...
+```
+
+Altho there is nothing wrong with this syntax in a big code it will make the readability of the code worse.
+
+We can create a custom helper component like this:
+  
+```jsx:title=helpers/RenderIf.jsx
+const RenderIf = ({ isTrue = false, children }) => {
+  if (!isTrue) return null;
+
+  return children;
+};
+
+export default RenderIf;
+
+```
+
+Now we can use it like this:
+
+```jsx
+import RenderIf from 'helpers/RenderIf'
+...
+<RenderIf isTrue={displayText}>
+  <h1>Hello There 👋</h1>
+</RenderIf>
+```

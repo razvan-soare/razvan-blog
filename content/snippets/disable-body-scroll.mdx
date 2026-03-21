@@ -1,0 +1,21 @@
+---
+title: Disable body scroll hook
+date: 2021-01-19
+tags: [Hooks]
+type: "snippets"
+# excerpt: How to implement on scroll animation
+---
+
+```jsx
+import { useEffect } from "react";
+
+export const useDisableBodyScroll = (open) => {
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [open]);
+};
+```

@@ -1,0 +1,40 @@
+---
+title: Testing React Components
+date: 2021-01-19
+tags: [Tests]
+type: "snippets"
+excerpt: A bunch of little snippets to test your application
+draft: true
+---
+
+
+
+## Render with provider
+
+If you want to test a component that uses Context Api you will most likely need to render
+your function inside the Provider. Having a little helper function that can be called 
+whenever we need to mock a provider function will help up increase our confidence in our tests.
+
+We can just send the mocked functions or spy functions inside the store object as we would have them
+in the context state.
+
+```jsx:title=renderWithProvier
+import React from 'react';
+import { render } from '@testing-library/react';
+import { Provider } from '../store/provider';
+
+export const renderWithProvier = (element, store = {}) => {
+  return render(<Provider value={store}>{element}</Provider>);
+};
+```
+
+```jsx
+  it('should call update function on button click', () => {
+    const update = jest.fn();
+    const wrapper = renderWithProvier(<Subscribe />, { update });
+
+    wrapper.find('button').simulate('click');
+    expect(update).toHaveBeenCalled();
+  });
+};
+```
