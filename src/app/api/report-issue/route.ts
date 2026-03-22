@@ -15,7 +15,11 @@ async function loginToPaperclip(apiUrl: string): Promise<string | null> {
 
   const response = await fetch(`${apiUrl}/api/auth/sign-in/email`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Origin: apiUrl,
+      Referer: apiUrl,
+    },
     body: JSON.stringify({ email, password }),
   });
 
@@ -42,6 +46,8 @@ async function createIssue(
 ) {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
+    Origin: apiUrl,
+    Referer: apiUrl,
   };
 
   if (cookie) {
