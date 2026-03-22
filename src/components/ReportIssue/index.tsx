@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 const fadeIn = keyframes`
@@ -219,15 +219,39 @@ const HiddenFileInput = styled.input`
   display: none;
 `;
 
+const ADMIN_STORAGE_KEY = 'razvan-admin';
+const PASSWORD_STORAGE_KEY = 'razvan-report-password';
+
 export default function ReportIssue() {
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [password, setPassword] = useState('');
   const [images, setImages] = useState<string[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [resultMessage, setResultMessage] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') === 'true') {
+      localStorage.setItem(ADMIN_STORAGE_KEY, 'true');
+      setIsAdmin(true);
+      // Clean the URL
+      const url = new URL(window.location.href);
+      url.searchParams.delete('admin');
+      window.history.replaceState({}, '', url.toString());
+    } else if (localStorage.getItem(ADMIN_STORAGE_KEY) === 'true') {
+      setIsAdmin(true);
+    }
+
+    const savedPassword = localStorage.getItem(PASSWORD_STORAGE_KEY);
+    if (savedPassword) {
+      setPassword(savedPassword);
+    }
+  }, []);
 
   const addImages = useCallback((files: FileList | File[]) => {
     Array.from(files).forEach((file) => {
@@ -274,7 +298,7 @@ export default function ReportIssue() {
   );
 
   const handleSubmit = async () => {
-    if (!title.trim() || !description.trim()) return;
+    if (!title.trim() || !description.trim() || !password.trim()) return;
 
     setStatus('submitting');
 
@@ -287,12 +311,14 @@ export default function ReportIssue() {
           description: description.trim(),
           page: window.location.pathname,
           images,
+          password: password.trim(),
         }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
+        localStorage.setItem(PASSWORD_STORAGE_KEY, password.trim());
         setStatus('success');
         setResultMessage(`Issue ${data.identifier} created successfully!`);
         setTitle('');
@@ -314,7 +340,7 @@ export default function ReportIssue() {
     setResultMessage('');
   };
 
-  if (process.env.NODE_ENV !== 'development') {
+  if (!isAdmin) {
     return null;
   }
 
@@ -357,6 +383,15 @@ export default function ReportIssue() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Describe what you see and what you expected..."
+                />
+
+                <Label htmlFor="report-password">Password</Label>
+                <Input
+                  id="report-password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Admin password"
                 />
 
                 <AttachmentSection>
@@ -414,7 +449,7 @@ export default function ReportIssue() {
                 <Button
                   $variant="primary"
                   onClick={handleSubmit}
-                  disabled={!title.trim() || !description.trim() || status === 'submitting'}
+                  disabled={!title.trim() || !description.trim() || !password.trim() || status === 'submitting'}
                 >
                   {status === 'submitting' ? 'Submitting...' : 'Submit'}
                 </Button>

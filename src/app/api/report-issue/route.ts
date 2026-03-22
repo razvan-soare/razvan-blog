@@ -14,8 +14,16 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const reportPassword = process.env.REPORT_PASSWORD;
   const body = await request.json();
-  const { title, description, images } = body;
+  const { title, description, images, password } = body;
+
+  if (reportPassword && password !== reportPassword) {
+    return NextResponse.json(
+      { error: 'Invalid password' },
+      { status: 401 }
+    );
+  }
 
   if (!title || !description) {
     return NextResponse.json(
