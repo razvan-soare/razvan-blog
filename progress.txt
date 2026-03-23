@@ -22,3 +22,12 @@
 - Added matching `viewTransitionName` on article titles in BlogList (homepage) and ArticlePage (article).
 - The browser animates the title from its list position to the article header (and back) during navigation.
 - Uses only browser APIs — no JS animation libraries needed.
+
+## 2026-03-23 — [RAZ-8] Page speed performance improvements
+- Replaced `uuid` with native `crypto.randomUUID()` (~4KB bundle savings)
+- Replaced `date-fns` with native `Intl.DateTimeFormat` (~13KB bundle savings)
+- Throttled StickMan eye-tracking mouse listener with `requestAnimationFrame` (reduces CPU)
+- Added `stale-while-revalidate` cache headers to likes API GET endpoint
+- All content pages already static (SSG) with `generateStaticParams` — no changes needed
+- Next.js `Link` already prefetches article pages on viewport entry in production
+- Known follow-up: styled-components runtime could be replaced with CSS Modules for further gains
