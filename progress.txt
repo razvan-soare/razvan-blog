@@ -16,3 +16,9 @@
 
 ## 2026-03-23 — [RAZ-5] Report issue password localStorage
 - Feature was already implemented. Password saved to localStorage on successful submission and loaded on mount.
+
+## 2026-03-23 — [RAZ-9] Title animation between homepage and article
+- Implemented using the CSS View Transitions API with Next.js experimental `viewTransition` support.
+- Added matching `viewTransitionName` on article titles in BlogList (homepage) and ArticlePage (article).
+- The browser animates the title from its list position to the article header (and back) during navigation.
+- Uses only browser APIs — no JS animation libraries needed.
