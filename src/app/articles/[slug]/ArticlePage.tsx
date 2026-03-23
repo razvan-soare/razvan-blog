@@ -305,7 +305,7 @@ export default function ArticlePage({ mdxContent, frontmatter, slug }: ArticlePa
           <TagsWrapperCss>
             {frontmatter.tags?.map((tag, i) => <p key={i}>{tag}</p>)}
           </TagsWrapperCss>
-          <PostTitleCss>{frontmatter.title}</PostTitleCss>
+          <PostTitleCss style={{ viewTransitionName: `article-title-${slug}` }}>{frontmatter.title}</PostTitleCss>
           {mdxContent}
         </PostsWrapperCss>
 

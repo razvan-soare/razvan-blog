@@ -77,7 +77,7 @@ export default function BlogList({ posts }: { posts: Post[] }) {
       {posts.map(post => (
         <Link href={`/articles/${post.slug}`} key={post.slug} style={{ textDecoration: 'none' }}>
           <PostCss>
-            <PostTitleCss>{post.frontmatter.title}</PostTitleCss>
+            <PostTitleCss style={{ viewTransitionName: `article-title-${post.slug}` }}>{post.frontmatter.title}</PostTitleCss>
             <PostDescriptionCss>
               {truncate(post.frontmatter.excerpt, 180)}
             </PostDescriptionCss>
