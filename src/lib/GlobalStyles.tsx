@@ -41,6 +41,7 @@ const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    transition: color 350ms ease 0s, background-color 350ms ease 0s, border-color 350ms ease 0s, box-shadow 350ms ease 0s, fill 350ms ease 0s, stroke 350ms ease 0s;
   }
 
   body {
