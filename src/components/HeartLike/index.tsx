@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import styled, { css } from 'styled-components';
-import { v4 as getID } from 'uuid';
+
 
 const HeartWrapperCss = styled.div<{ $activePieces: number[]; $totalPieces: number; $animate: boolean }>`
   outline: none;
@@ -92,7 +92,7 @@ function getUserId(): string {
   if (typeof window === 'undefined') return '';
   let userId = localStorage.getItem('userId');
   if (!userId) {
-    userId = getID();
+    userId = crypto.randomUUID();
     localStorage.setItem('userId', userId);
   }
   return userId;

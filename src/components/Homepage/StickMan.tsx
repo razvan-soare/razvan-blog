@@ -124,37 +124,46 @@ export default function StickMan() {
 
     const maxOffset = 27;
 
+    let rafId: number | null = null;
+
     function moveEyes(e: MouseEvent) {
-      if (!leftEye || !rightEye) return;
-      const mouseX = e.pageX;
-      const mouseY = e.pageY;
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        if (!leftEye || !rightEye) return;
+        const mouseX = e.pageX;
+        const mouseY = e.pageY;
 
-      const pageScrollOffset = window.scrollY;
-      const valuesLeftEye = leftEye.getBoundingClientRect();
-      const centerLeftEye = {
-        x: valuesLeftEye.x + valuesLeftEye.width / 2,
-        y: valuesLeftEye.y + pageScrollOffset + valuesLeftEye.height / 2,
-      };
-      const valuesRightEye = rightEye.getBoundingClientRect();
-      const centerRightEye = {
-        x: valuesRightEye.x + valuesRightEye.width / 2,
-        y: valuesRightEye.y + pageScrollOffset + valuesRightEye.height / 2,
-      };
+        const pageScrollOffset = window.scrollY;
+        const valuesLeftEye = leftEye.getBoundingClientRect();
+        const centerLeftEye = {
+          x: valuesLeftEye.x + valuesLeftEye.width / 2,
+          y: valuesLeftEye.y + pageScrollOffset + valuesLeftEye.height / 2,
+        };
+        const valuesRightEye = rightEye.getBoundingClientRect();
+        const centerRightEye = {
+          x: valuesRightEye.x + valuesRightEye.width / 2,
+          y: valuesRightEye.y + pageScrollOffset + valuesRightEye.height / 2,
+        };
 
-      let offsetX = (mouseX - (centerRightEye.x + centerLeftEye.x) / 2) / 10;
-      if (offsetX < -maxOffset) offsetX = -maxOffset;
-      else if (offsetX > maxOffset) offsetX = maxOffset;
+        let offsetX = (mouseX - (centerRightEye.x + centerLeftEye.x) / 2) / 10;
+        if (offsetX < -maxOffset) offsetX = -maxOffset;
+        else if (offsetX > maxOffset) offsetX = maxOffset;
 
-      let offsetY = (mouseY - centerLeftEye.y) / 5;
-      if (offsetY < -maxOffset) offsetY = -maxOffset;
-      else if (offsetY > maxOffset) offsetY = maxOffset;
+        let offsetY = (mouseY - centerLeftEye.y) / 5;
+        if (offsetY < -maxOffset) offsetY = -maxOffset;
+        else if (offsetY > maxOffset) offsetY = maxOffset;
 
-      leftEye.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-      rightEye.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        leftEye.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        rightEye.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      });
     }
 
     window.addEventListener('mousemove', moveEyes, false);
-    return () => window.removeEventListener('mousemove', moveEyes, false);
+    return () => {
+      window.removeEventListener('mousemove', moveEyes, false);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, [monsterSvg]);
 
   return (

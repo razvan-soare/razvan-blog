@@ -4,7 +4,6 @@ import React, { useState, useEffect, memo } from 'react';
 import styled from 'styled-components';
 import Heart from '@/components/HeartLike';
 import type { PostFrontmatter } from '@/lib/mdx';
-import { format, parseISO } from 'date-fns';
 
 const PostRootCss = styled.div`
   width: 100%;
@@ -293,7 +292,8 @@ export default function ArticlePage({ mdxContent, frontmatter, slug }: ArticlePa
 
   let formattedDate = '';
   try {
-    formattedDate = format(parseISO(frontmatter.date), 'MMM do, yyyy');
+    const date = new Date(frontmatter.date);
+    formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   } catch {
     formattedDate = frontmatter.date;
   }
