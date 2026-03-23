@@ -1,0 +1,5 @@
+## 2026-03-23 — [RAZ-7] Like button DB investigation
+- Found and fixed a double-count bug: first like on a new article was counted twice in UserLike because the article upsert's create branch also created a UserLike, then the separate userLike upsert incremented it again.
+- Created missing Article, UserLike, and Subscriber tables in the database (they had never been migrated).
+- Verified end-to-end: likes are now correctly stored and incremented in PostgreSQL.
+- Note: production deployment on Coolify should ideally use a dedicated database for the blog, not the shared Paperclip platform DB.
