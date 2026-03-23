@@ -3,3 +3,16 @@
 - Created missing Article, UserLike, and Subscriber tables in the database (they had never been migrated).
 - Verified end-to-end: likes are now correctly stored and incremented in PostgreSQL.
 - Note: production deployment on Coolify should ideally use a dedicated database for the blog, not the shared Paperclip platform DB.
+
+## 2026-03-23 — [RAZ-10] Dark mode transition improvement
+- Added universal CSS transitions (color, background-color, border-color, box-shadow, fill, stroke) at 350ms to `*, ::before, ::after` in GlobalStyles.
+- Previously only `body` and `h1-h6` had transitions, causing inconsistent speed when toggling themes.
+- All elements now transition uniformly for a smooth dark mode switch.
+
+## 2026-03-23 — [RAZ-6] Issue creation auth fix
+- Researched CORS/auth issue with report-issue feature. The server-side proxy architecture was correct.
+- CEO updated route.ts with session-based auth using email/password login to Paperclip API.
+- Env vars needed in Coolify: PAPERCLIP_API_URL, PAPERCLIP_PUBLIC_URL, PAPERCLIP_EMAIL, PAPERCLIP_PASSWORD, PAPERCLIP_COMPANY_ID, PAPERCLIP_PROJECT_ID.
+
+## 2026-03-23 — [RAZ-5] Report issue password localStorage
+- Feature was already implemented. Password saved to localStorage on successful submission and loaded on mount.
