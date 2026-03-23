@@ -44,19 +44,11 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // Upsert article
+    // Upsert article (increment likes count, or create with initial count of 1)
     const article = await prisma.article.upsert({
       where: { slug },
-      create: {
-        slug,
-        likes: 1,
-        userLikes: {
-          create: { userId, count: 1 },
-        },
-      },
-      update: {
-        likes: { increment: 1 },
-      },
+      create: { slug, likes: 1 },
+      update: { likes: { increment: 1 } },
     });
 
     // Upsert user like
