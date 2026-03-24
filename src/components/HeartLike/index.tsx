@@ -38,11 +38,22 @@ const HeartSvg = ({ activePieces, allActive }: { activePieces: number[]; allActi
 
 const array15 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
+function generateId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  // Fallback for older browsers or non-secure contexts
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = (Math.random() * 16) | 0;
+    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+  });
+}
+
 function getUserId(): string {
   if (typeof window === 'undefined') return '';
   let userId = localStorage.getItem('userId');
   if (!userId) {
-    userId = crypto.randomUUID();
+    userId = generateId();
     localStorage.setItem('userId', userId);
   }
   return userId;
