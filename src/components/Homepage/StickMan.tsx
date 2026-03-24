@@ -1,108 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
 import ThoughtCloud from '@/components/ThoughtCloud';
-
-const HeroTextCss = styled.h1`
-  position: relative;
-  color: ${props => props.theme.text};
-  font-size: 20px;
-  line-height: 32px;
-  span {
-    color: ${props => props.theme.tertiary};
-  }
-  @media (max-width: ${props => props.theme.breakpoints.TABLET + 'px'}) {
-    font-size: 26px;
-    line-height: 30px;
-    text-align: center;
-  }
-`;
-
-const ThoughtWrapperCss = styled.div`
-  position: absolute;
-  right: 100px;
-  width: 500px;
-  top: -80%;
-  opacity: 0;
-  transition: opacity 200ms ease 0s;
-  pointer-events: none;
-  padding-bottom: 100px;
-`;
-
-const StickManWrapperCss = styled.div`
-  height: 200px;
-  width: 200px;
-  position: relative;
-  margin-left: auto;
-  z-index: 180;
-  background: ${props => props.theme.background};
-  border-radius: 50%;
-  box-shadow: 0px 0px 35px 35px ${props => props.theme.background};
-
-  #rest-hand {
-    display: block;
-  }
-  #wave-hand {
-    display: none;
-  }
-
-  &:hover {
-    ${ThoughtWrapperCss} {
-      opacity: 1;
-      pointer-events: all;
-    }
-    #rest-hand {
-      display: none;
-    }
-    #wave-hand {
-      display: block;
-    }
-  }
-`;
-
-const SvgWrapperCss = styled.div`
-  width: 100%;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  animation: updown 4s ease-in-out infinite;
-
-  @keyframes updown {
-    0% { transform: translateY(10px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(10px); }
-  }
-
-  .monster {
-    position: relative;
-    height: 50%;
-    width: 50%;
-    margin-left: 0px;
-    z-index: 10;
-
-    svg {
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .island {
-    width: 80%;
-    height: 80%;
-    margin-top: -45px;
-  }
-
-  .piggy {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    right: 45px;
-    top: 75px;
-    z-index: 15;
-  }
-`;
 
 export default function StickMan() {
   const monsterRef = useRef<HTMLDivElement>(null);
@@ -167,18 +66,21 @@ export default function StickMan() {
   }, [monsterSvg]);
 
   return (
-    <StickManWrapperCss>
-      <ThoughtWrapperCss>
+    <div className="group h-[200px] w-[200px] relative ml-auto z-[180] bg-background rounded-full shadow-[0px_0px_35px_35px_var(--color-background)] [&_#rest-hand]:block [&_#wave-hand]:hidden hover:[&_#rest-hand]:hidden hover:[&_#wave-hand]:block">
+      {/* Thought cloud - shown on hover via group-hover */}
+      <div className="absolute right-[100px] w-[500px] top-[-80%] opacity-0 transition-opacity duration-200 pointer-events-none pb-[100px] group-hover:opacity-100 group-hover:pointer-events-auto">
         <ThoughtCloud>
-          <HeroTextCss>
+          <h1 className="relative text-text text-xl leading-8 max-tablet:text-[26px] max-tablet:leading-[30px] max-tablet:text-center [&_span]:text-tertiary">
             Hello{' '}
             <span role="img" aria-label="hi">👋</span>{' '}
             I am Razvan, <span>React developer</span> and technology enthusiast{' '}
             <span role="img" aria-label="tada">🎉</span>
-          </HeroTextCss>
+          </h1>
         </ThoughtCloud>
-      </ThoughtWrapperCss>
-      <SvgWrapperCss>
+      </div>
+
+      {/* SVG wrapper with floating animation */}
+      <div className="w-full relative flex justify-center items-center flex-col animate-updown [&_.monster]:relative [&_.monster]:h-1/2 [&_.monster]:w-1/2 [&_.monster]:z-10 [&_.monster_svg]:w-full [&_.monster_svg]:h-full [&_.island]:w-4/5 [&_.island]:h-4/5 [&_.island]:-mt-[45px] [&_.piggy]:absolute [&_.piggy]:w-[30px] [&_.piggy]:h-[30px] [&_.piggy]:right-[45px] [&_.piggy]:top-[75px] [&_.piggy]:z-[15]">
         <div
           className="monster"
           ref={monsterRef}
@@ -188,7 +90,7 @@ export default function StickMan() {
         <img className="island" src="/images/svg/island.svg" alt="island" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="piggy" src="/images/svg/piggy.svg" alt="piggy" />
-      </SvgWrapperCss>
-    </StickManWrapperCss>
+      </div>
+    </div>
   );
 }

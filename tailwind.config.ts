@@ -74,6 +74,16 @@ const config: Config = {
       transitionDuration: {
         theme: '350ms',
       },
+      keyframes: {
+        updown: {
+          '0%': { transform: 'translateY(10px)' },
+          '50%': { transform: 'translateY(-10px)' },
+          '100%': { transform: 'translateY(10px)' },
+        },
+      },
+      animation: {
+        updown: 'updown 4s ease-in-out infinite',
+      },
     },
   },
   plugins: [],
