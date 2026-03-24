@@ -1,8 +1,6 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { ThemeProvider as SCThemeProvider } from 'styled-components';
-import { lightTheme, darkTheme } from './theme';
 
 interface ThemeContextType {
   isLightTheme: boolean;
@@ -26,7 +24,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const saved = localStorage.getItem('theme');
     const isLight = saved === 'light';
     setIsLightTheme(isLight);
-    // Apply CSS class to html element for CSS-variable-based theming
     document.documentElement.classList.toggle('light', isLight);
     setMounted(true);
   }, []);
@@ -35,7 +32,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setIsLightTheme(prev => {
       const next = !prev;
       localStorage.setItem('theme', next ? 'light' : 'dark');
-      // Toggle CSS class on html element
       document.documentElement.classList.toggle('light', next);
       return next;
     });
@@ -43,19 +39,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   if (!mounted) {
     return (
-      <SCThemeProvider theme={darkTheme}>
-        <ThemeContext.Provider value={{ isLightTheme: false, toggleTheme }}>
-          {children}
-        </ThemeContext.Provider>
-      </SCThemeProvider>
+      <ThemeContext.Provider value={{ isLightTheme: false, toggleTheme }}>
+        {children}
+      </ThemeContext.Provider>
     );
   }
 
   return (
-    <SCThemeProvider theme={isLightTheme ? lightTheme : darkTheme}>
-      <ThemeContext.Provider value={{ isLightTheme, toggleTheme }}>
-        {children}
-      </ThemeContext.Provider>
-    </SCThemeProvider>
+    <ThemeContext.Provider value={{ isLightTheme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
   );
 }

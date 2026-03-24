@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import StyledComponentsRegistry from '@/lib/StyledComponentsRegistry';
 import { ThemeProvider } from '@/lib/ThemeContext';
 import Header from '@/components/Header';
 import ReportIssue from '@/components/ReportIssue';
@@ -74,15 +73,13 @@ export default function RootLayout({
         `}} />
       </head>
       <body>
-        <StyledComponentsRegistry>
-          <ThemeProvider>
-            <Header title="Razvan Soare" />
-            <main className="layout">
-              {children}
-            </main>
-            <ReportIssue />
-          </ThemeProvider>
-        </StyledComponentsRegistry>
+        <ThemeProvider>
+          <Header title="Razvan Soare" />
+          <main className="layout">
+            {children}
+          </main>
+          <ReportIssue />
+        </ThemeProvider>
       </body>
     </html>
   );
