@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import StyledComponentsRegistry from '@/lib/StyledComponentsRegistry';
 import { ThemeProvider } from '@/lib/ThemeContext';
-import GlobalStyles from '@/lib/GlobalStyles';
 import Header from '@/components/Header';
 import ReportIssue from '@/components/ReportIssue';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Razvan Soare',
@@ -76,7 +76,6 @@ export default function RootLayout({
       <body>
         <StyledComponentsRegistry>
           <ThemeProvider>
-            <GlobalStyles />
             <Header title="Razvan Soare" />
             <main className="layout">
               {children}

@@ -24,7 +24,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem('theme');
-    setIsLightTheme(saved === 'light');
+    const isLight = saved === 'light';
+    setIsLightTheme(isLight);
+    // Apply CSS class to html element for CSS-variable-based theming
+    document.documentElement.classList.toggle('light', isLight);
     setMounted(true);
   }, []);
 
@@ -32,6 +35,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setIsLightTheme(prev => {
       const next = !prev;
       localStorage.setItem('theme', next ? 'light' : 'dark');
+      // Toggle CSS class on html element
+      document.documentElement.classList.toggle('light', next);
       return next;
     });
   }, []);

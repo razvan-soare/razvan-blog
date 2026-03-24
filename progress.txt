@@ -37,3 +37,12 @@
 - All content pages already static (SSG) with `generateStaticParams` — no changes needed
 - Next.js `Link` already prefetches article pages on viewport entry in production
 - Known follow-up: styled-components runtime could be replaced with CSS Modules for further gains
+
+## 2026-03-24 — [RAZ-12] Set up Tailwind CSS and convert theme system to CSS variables
+- Installed tailwindcss v3.4, postcss, autoprefixer
+- Created tailwind.config.ts with custom theme mapping all theme.ts colors/breakpoints to CSS variables
+- Created postcss.config.js for Tailwind/Autoprefixer PostCSS pipeline
+- Created src/app/globals.css with CSS custom properties for dark (default) and light themes, Tailwind directives, and all global reset styles from GlobalStyles.tsx
+- Updated ThemeContext.tsx to toggle `light` class on `<html>` for CSS-variable-based dark mode (class strategy), while keeping styled-components ThemeProvider for backward compatibility during migration
+- Updated layout.tsx to import globals.css and removed GlobalStyles component
+- StyledComponentsRegistry kept for now — existing components still use styled-components and will be migrated in subsequent tasks (RAZ-13 through RAZ-16)
