@@ -222,6 +222,65 @@ table {
   }
 }
 
+/* ===== Code Syntax Highlighting ===== */
+.code-wrapper {
+  margin: 0 0 80px;
+}
+.code-wrapper .highlight-line {
+  background-color: var(--color-syntax-highlight);
+  display: block;
+  margin-left: -2px;
+  padding: 0 10px;
+  border-left: 2px solid #df6b6b;
+}
+.code-wrapper code[class*='language-'],
+.code-wrapper pre[class*='language-'] {
+  color: var(--color-code-0);
+  font-size: 0.8rem;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  background: transparent !important;
+  line-height: 1.5;
+  tab-size: 2;
+  hyphens: none;
+}
+.code-wrapper .token.comment,
+.code-wrapper .token.prolog,
+.code-wrapper .token.doctype,
+.code-wrapper .token.cdata { color: #656565; }
+.code-wrapper .token.punctuation { color: var(--color-code-3); }
+.code-wrapper .token.number { color: var(--color-code-0); }
+.code-wrapper .token.tag,
+.code-wrapper .token.boolean,
+.code-wrapper .token.constant,
+.code-wrapper .token.symbol,
+.code-wrapper .token.deleted { color: var(--color-code-7); }
+.code-wrapper .token.selector,
+.code-wrapper .token.string,
+.code-wrapper .token.char,
+.code-wrapper .token.builtin,
+.code-wrapper .token.url,
+.code-wrapper .token.inserted,
+.code-wrapper .token.attr-value { color: var(--color-code-4); }
+.code-wrapper .token.attr-name { color: var(--color-code-5); }
+.code-wrapper .token.class-name { color: var(--color-code-6); }
+.code-wrapper .token.atrule,
+.code-wrapper .token.keyword { color: var(--color-code-1); }
+.code-wrapper .token.function { color: var(--color-code-2); }
+.code-wrapper .token.regex,
+.code-wrapper .token.important,
+.code-wrapper .token.variable { color: #2e94d3; }
+.code-wrapper .token-line:not(:last-child) { min-height: 1.185rem; }
+@media (max-width: 500px) {
+  .code-wrapper code[class*='language-'],
+  .code-wrapper pre[class*='language-'] {
+    font-size: 0.7rem;
+  }
+}
+
 /* ===== Sticky Note Transforms (Snippets) ===== */
 .sticky-note {
   transform: rotate(-1deg);

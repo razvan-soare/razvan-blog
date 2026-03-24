@@ -1,54 +1,36 @@
 'use client';
 
 import React from 'react';
-import styled from 'styled-components';
 
-const StyledTextBlock = styled.div<{ $variant: string }>`
-  border-left-style: solid;
-  border-left-width: 3px;
-  border-radius: 6px 6px 6px 3px;
-  font-size: 17px;
-  line-height: 1.5;
-  font-weight: 300;
-  margin-bottom: 64px;
-  margin-top: 48px;
-  padding: 24px 32px;
-  position: relative;
-  transition: background-color 350ms ease 0s, border-color 350ms ease 0s;
-  border-color: ${props => props.theme.textBlockBorder[props.$variant as keyof typeof props.theme.textBlockBorder]};
-  background: ${props => props.theme.textBlock[props.$variant as keyof typeof props.theme.textBlock]};
-  & > *:last-child {
-    margin-bottom: 0;
-  }
-`;
+const variantColors: Record<string, { bg: string; border: string }> = {
+  success: { bg: 'var(--color-text-block-success)', border: 'var(--color-text-block-border-success)' },
+  warning: { bg: 'var(--color-text-block-warning)', border: 'var(--color-text-block-border-warning)' },
+  danger: { bg: 'var(--color-text-block-danger)', border: 'var(--color-text-block-border-danger)' },
+  info: { bg: 'var(--color-text-block-info)', border: 'var(--color-text-block-border-info)' },
+  primary: { bg: 'var(--color-text-block-primary)', border: 'var(--color-text-block-border-primary)' },
+};
 
-const StyledIconWrap = styled.div<{ $variant: string }>`
-  background: ${props => props.theme.background};
-  border-radius: 50%;
-  display: block;
-  left: 0;
-  padding: 7px;
-  position: absolute;
-  top: 0;
-  transform: translate(-50%, -50%);
-  transition: background-color 350ms ease 0s;
-  font-size: 20px;
-`;
+const icons: Record<string, string> = {
+  success: '\u2705',
+  warning: '\u26A0\uFE0F',
+  danger: '\uD83D\uDED1',
+  info: '\u2139\uFE0F',
+  primary: '\u2139\uFE0F',
+};
 
 function TextBlock({ variant, children }: { variant: string; children: React.ReactNode }) {
-  const icons: Record<string, string> = {
-    success: '✅',
-    warning: '⚠️',
-    danger: '🛑',
-    info: 'ℹ️',
-    primary: 'ℹ️',
-  };
+  const colors = variantColors[variant] || variantColors.info;
 
   return (
-    <StyledTextBlock $variant={variant}>
-      <StyledIconWrap $variant={variant}>{icons[variant] || icons.info}</StyledIconWrap>
+    <div
+      className="border-l-[3px] border-solid rounded-[6px_6px_6px_3px] text-[17px] leading-relaxed font-light mb-16 mt-12 py-6 px-8 relative transition-[background-color,border-color] duration-theme [&>*:last-child]:mb-0"
+      style={{ borderColor: colors.border, background: colors.bg }}
+    >
+      <div className="bg-background rounded-full block absolute left-0 top-0 p-[7px] -translate-x-1/2 -translate-y-1/2 transition-[background-color] duration-theme text-xl">
+        {icons[variant] || icons.info}
+      </div>
       {children}
-    </StyledTextBlock>
+    </div>
   );
 }
 
@@ -72,12 +54,6 @@ export function Danger({ children }: { children: React.ReactNode }) {
   return <TextBlock variant="danger">{children}</TextBlock>;
 }
 
-const CustomUnderlineCss = styled.span`
-  position: relative;
-  border-bottom-width: 2px;
-  border-bottom-style: solid;
-`;
-
 export function U({ children }: { children: React.ReactNode }) {
-  return <CustomUnderlineCss>{children}</CustomUnderlineCss>;
+  return <span className="relative border-b-2 border-solid">{children}</span>;
 }
