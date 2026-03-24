@@ -55,7 +55,7 @@ export default function RootLayout({
           }
           @font-face {
             font-family: 'Wotfard';
-            src: url('/fonts/Wotfard-Bold.woff2') format('woff2');
+            src: url('/fonts/Wotfard-SemiBold.woff2') format('woff2');
             font-weight: 600;
             font-style: normal;
             font-display: swap;
