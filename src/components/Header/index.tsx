@@ -80,7 +80,7 @@ export default function Header({ title }: { title: string }) {
       <div className="h-[30px] w-full" />
 
       {/* Sticky container */}
-      <div className="sticky top-[-1px] px-[50px] mx-auto max-w-[1200px] z-[200] bg-background-blured tablet:px-0 max-tablet:px-0">
+      <div className="sticky top-[-1px] px-[50px] mx-auto max-w-[1300px] z-[200] bg-background-blured tablet:px-0 max-tablet:px-0">
         {/* Header bar */}
         <header className="flex justify-start items-center px-8 [&_a]:text-primary [&_a]:no-underline [&_a]:text-[22px] max-tablet:px-4 max-tablet:py-[7px] max-tablet:justify-between">
           <Link href="/">
