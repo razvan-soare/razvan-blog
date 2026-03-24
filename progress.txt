@@ -1,3 +1,9 @@
+## 2026-03-24 — [RAZ-7] Unit tests for likes API logic
+- Extracted getLikes/addLike business logic from route handler into `src/lib/likes.ts` for testability.
+- Added vitest with 6 tests covering: existing articles, missing articles (auto-creation), user like counts, article upsert, and increment behavior.
+- Route handler (`src/app/api/likes/route.ts`) now delegates to the extracted functions.
+- Added `npm test` script to package.json.
+
 ## 2026-03-23 — [RAZ-7] Like button DB investigation
 - Found and fixed a double-count bug: first like on a new article was counted twice in UserLike because the article upsert's create branch also created a UserLike, then the separate userLike upsert incremented it again.
 - Created missing Article, UserLike, and Subscriber tables in the database (they had never been migrated).
