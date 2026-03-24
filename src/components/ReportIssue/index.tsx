@@ -1,223 +1,6 @@
 'use client';
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
-
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-const FloatingButton = styled.button`
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: none;
-  background: ${({ theme }) => theme.primary};
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
-
-  &:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  }
-`;
-
-const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Dialog = styled.div`
-  background: ${({ theme }) => theme.background};
-  color: ${({ theme }) => theme.text};
-  border: 1px solid ${({ theme }) => theme.gray300};
-  border-radius: 12px;
-  padding: 24px;
-  width: 90%;
-  max-width: 480px;
-  animation: ${fadeIn} 0.2s ease-out;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-`;
-
-const DialogTitle = styled.h3`
-  margin: 0 0 16px;
-  font-size: 18px;
-  font-weight: 600;
-`;
-
-const Label = styled.label`
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  margin-bottom: 6px;
-  color: ${({ theme }) => theme.gray700};
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid ${({ theme }) => theme.gray300};
-  border-radius: 8px;
-  background: ${({ theme }) => theme.gray100};
-  color: ${({ theme }) => theme.text};
-  font-size: 14px;
-  font-family: inherit;
-  margin-bottom: 12px;
-  box-sizing: border-box;
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.primary};
-  }
-`;
-
-const TextArea = styled.textarea`
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid ${({ theme }) => theme.gray300};
-  border-radius: 8px;
-  background: ${({ theme }) => theme.gray100};
-  color: ${({ theme }) => theme.text};
-  font-size: 14px;
-  font-family: inherit;
-  margin-bottom: 16px;
-  min-height: 120px;
-  resize: vertical;
-  box-sizing: border-box;
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.primary};
-  }
-`;
-
-const ButtonRow = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-`;
-
-const Button = styled.button<{ $variant?: 'primary' | 'secondary' }>`
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 1px solid ${({ theme, $variant }) =>
-    $variant === 'primary' ? theme.primary : theme.gray300};
-  background: ${({ theme, $variant }) =>
-    $variant === 'primary' ? theme.primary : 'transparent'};
-  color: ${({ theme, $variant }) =>
-    $variant === 'primary' ? 'white' : theme.text};
-  font-size: 14px;
-  font-family: inherit;
-  cursor: pointer;
-  transition: opacity 0.2s;
-
-  &:hover {
-    opacity: 0.85;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-`;
-
-const SuccessMessage = styled.p`
-  color: ${({ theme }) => theme.textBlockBorder.success};
-  font-size: 14px;
-  margin: 0 0 16px;
-`;
-
-const ErrorMessage = styled.p`
-  color: ${({ theme }) => theme.red};
-  font-size: 14px;
-  margin: 0 0 16px;
-`;
-
-const AttachmentSection = styled.div`
-  margin-bottom: 16px;
-`;
-
-const DropZone = styled.div<{ $isDragging: boolean }>`
-  border: 2px dashed ${({ theme, $isDragging }) =>
-    $isDragging ? theme.primary : theme.gray300};
-  border-radius: 8px;
-  padding: 16px;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
-  background: ${({ theme, $isDragging }) =>
-    $isDragging ? `${theme.primary}11` : theme.gray100};
-  font-size: 13px;
-  color: ${({ theme }) => theme.gray700};
-
-  &:hover {
-    border-color: ${({ theme }) => theme.primary};
-  }
-`;
-
-const ImagePreviewGrid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
-`;
-
-const ImagePreviewWrapper = styled.div`
-  position: relative;
-  width: 80px;
-  height: 80px;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid ${({ theme }) => theme.gray300};
-`;
-
-const ImagePreview = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
-
-const RemoveImageButton = styled.button`
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  font-size: 12px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.8);
-  }
-`;
-
-const HiddenFileInput = styled.input`
-  display: none;
-`;
 
 const ADMIN_STORAGE_KEY = 'razvan-admin';
 const PASSWORD_STORAGE_KEY = 'razvan-report-password';
@@ -239,7 +22,6 @@ export default function ReportIssue() {
     if (params.get('admin') === 'true') {
       localStorage.setItem(ADMIN_STORAGE_KEY, 'true');
       setIsAdmin(true);
-      // Clean the URL
       const url = new URL(window.location.href);
       url.searchParams.delete('admin');
       window.history.replaceState({}, '', url.toString());
@@ -346,58 +128,86 @@ export default function ReportIssue() {
 
   return (
     <>
-      <FloatingButton onClick={() => setIsOpen(true)} title="Report an issue">
+      {/* Floating button */}
+      <button
+        className="fixed bottom-6 right-6 w-12 h-12 rounded-full border-none bg-primary text-white text-xl cursor-pointer z-[9999] flex items-center justify-center shadow-[0_2px_12px_rgba(0,0,0,0.3)] transition-[transform,box-shadow] duration-200 hover:scale-110 hover:shadow-[0_4px_20px_rgba(0,0,0,0.4)]"
+        onClick={() => setIsOpen(true)}
+        title="Report an issue"
+      >
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10" />
           <line x1="12" y1="8" x2="12" y2="12" />
           <line x1="12" y1="16" x2="12.01" y2="16" />
         </svg>
-      </FloatingButton>
+      </button>
 
       {isOpen && (
-        <Overlay onClick={handleClose}>
-          <Dialog onClick={(e) => e.stopPropagation()} onPaste={handlePaste}>
-            <DialogTitle>Report an Issue</DialogTitle>
+        /* Overlay */
+        <div
+          className="fixed inset-0 bg-black/50 z-[10000] flex items-center justify-center"
+          onClick={handleClose}
+        >
+          {/* Dialog */}
+          <div
+            className="bg-background text-text border border-gray-300 rounded-xl p-6 w-[90%] max-w-[480px] animate-fade-in shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+            onClick={(e) => e.stopPropagation()}
+            onPaste={handlePaste}
+          >
+            <h3 className="m-0 mb-4 text-lg font-semibold">Report an Issue</h3>
 
             {status === 'success' && (
-              <SuccessMessage>{resultMessage}</SuccessMessage>
+              <p className="text-text-block-border-success text-sm m-0 mb-4">{resultMessage}</p>
             )}
 
             {status === 'error' && (
-              <ErrorMessage>{resultMessage}</ErrorMessage>
+              <p className="text-red text-sm m-0 mb-4">{resultMessage}</p>
             )}
 
             {status !== 'success' && (
               <>
-                <Label htmlFor="report-title">Title</Label>
-                <Input
+                <label htmlFor="report-title" className="block text-[13px] font-medium mb-1.5 text-gray-700">
+                  Title
+                </label>
+                <input
                   id="report-title"
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg bg-gray-100 text-text text-sm font-[inherit] mb-3 box-border focus:outline-none focus:border-primary"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Brief summary of the issue"
                 />
 
-                <Label htmlFor="report-description">Description</Label>
-                <TextArea
+                <label htmlFor="report-description" className="block text-[13px] font-medium mb-1.5 text-gray-700">
+                  Description
+                </label>
+                <textarea
                   id="report-description"
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg bg-gray-100 text-text text-sm font-[inherit] mb-4 min-h-[120px] resize-y box-border focus:outline-none focus:border-primary"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Describe what you see and what you expected..."
                 />
 
-                <Label htmlFor="report-password">Password</Label>
-                <Input
+                <label htmlFor="report-password" className="block text-[13px] font-medium mb-1.5 text-gray-700">
+                  Password
+                </label>
+                <input
                   id="report-password"
                   type="password"
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg bg-gray-100 text-text text-sm font-[inherit] mb-3 box-border focus:outline-none focus:border-primary"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Admin password"
                 />
 
-                <AttachmentSection>
-                  <Label>Screenshots</Label>
-                  <DropZone
-                    $isDragging={isDragging}
+                {/* Attachments */}
+                <div className="mb-4">
+                  <label className="block text-[13px] font-medium mb-1.5 text-gray-700">Screenshots</label>
+                  <div
+                    className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-[border-color,background] duration-200 text-[13px] text-gray-700 hover:border-primary ${
+                      isDragging
+                        ? 'border-primary bg-[color:var(--color-primary)]/[0.07]'
+                        : 'border-gray-300 bg-gray-100'
+                    }`}
                     onClick={() => fileInputRef.current?.click()}
                     onDragOver={(e) => {
                       e.preventDefault();
@@ -409,54 +219,61 @@ export default function ReportIssue() {
                     {isDragging
                       ? 'Drop images here'
                       : 'Click to upload or drag & drop images (you can also paste with Ctrl+V)'}
-                  </DropZone>
-                  <HiddenFileInput
+                  </div>
+                  <input
                     ref={fileInputRef}
                     type="file"
                     accept="image/*"
                     multiple
+                    className="hidden"
                     onChange={(e) => {
                       if (e.target.files) addImages(e.target.files);
                       e.target.value = '';
                     }}
                   />
                   {images.length > 0 && (
-                    <ImagePreviewGrid>
+                    <div className="flex flex-wrap gap-2 mt-2">
                       {images.map((src, i) => (
-                        <ImagePreviewWrapper key={i}>
-                          <ImagePreview src={src} alt={`Attachment ${i + 1}`} />
-                          <RemoveImageButton
+                        <div key={i} className="relative w-20 h-20 rounded-md overflow-hidden border border-gray-300">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={src} alt={`Attachment ${i + 1}`} className="w-full h-full object-cover" />
+                          <button
+                            className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full border-none bg-black/60 text-white text-xs cursor-pointer flex items-center justify-center leading-none hover:bg-black/80"
                             onClick={() =>
                               setImages((prev) => prev.filter((_, j) => j !== i))
                             }
                             title="Remove"
                           >
                             &times;
-                          </RemoveImageButton>
-                        </ImagePreviewWrapper>
+                          </button>
+                        </div>
                       ))}
-                    </ImagePreviewGrid>
+                    </div>
                   )}
-                </AttachmentSection>
+                </div>
               </>
             )}
 
-            <ButtonRow>
-              <Button onClick={handleClose}>
+            {/* Button row */}
+            <div className="flex justify-end gap-2">
+              <button
+                className="px-4 py-2 rounded-lg border border-gray-300 bg-transparent text-text text-sm font-[inherit] cursor-pointer transition-opacity duration-200 hover:opacity-85"
+                onClick={handleClose}
+              >
                 {status === 'success' ? 'Close' : 'Cancel'}
-              </Button>
+              </button>
               {status !== 'success' && (
-                <Button
-                  $variant="primary"
+                <button
+                  className="px-4 py-2 rounded-lg border border-primary bg-primary text-white text-sm font-[inherit] cursor-pointer transition-opacity duration-200 hover:opacity-85 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleSubmit}
                   disabled={!title.trim() || !description.trim() || !password.trim() || status === 'submitting'}
                 >
                   {status === 'submitting' ? 'Submitting...' : 'Submit'}
-                </Button>
+                </button>
               )}
-            </ButtonRow>
-          </Dialog>
-        </Overlay>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
