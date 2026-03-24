@@ -74,3 +74,13 @@
 - Removed styled-components, @types/styled-components, StyledComponentsRegistry, GlobalStyles, theme.ts, styled.d.ts
 - ThemeContext simplified to CSS-class-based theming only (no more SCThemeProvider)
 - Build + all 6 tests pass with zero regressions
+
+## 2026-03-24 — [RAZ-26] Fix missing Snippets sticky-note rotation transforms
+- The nth-child CSS selectors on `.sticky-note` never matched because each div was wrapped in a `<Link>` parent
+- Added `.snippets-grid` class to the container and changed CSS selectors to `.snippets-grid > :nth-child(n) .sticky-note`
+
+## 2026-03-24 — [RAZ-27] Fix Header max-width inconsistency
+- Changed Header max-width from 1300px to 1200px to match the layout container width
+
+## 2026-03-24 — [RAZ-28] Fix missing Wotfard-Bold font file
+- Mapped font-weight 600 to Wotfard-SemiBold.woff2 instead of non-existent Wotfard-Bold.woff2
