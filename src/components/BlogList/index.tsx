@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { ViewTransition } from 'react';
 import Link from 'next/link';
 import type { Post } from '@/lib/mdx';
 
@@ -18,12 +18,11 @@ export default function BlogList({ posts }: { posts: Post[] }) {
       {posts.map(post => (
         <Link href={`/articles/${post.slug}`} key={post.slug} className="no-underline">
           <div className="group rounded-[7px] py-2.5 mb-10 cursor-pointer">
-            <h3
-              className="text-[22px] text-gray-1000 mb-4 group-hover:text-primary"
-              style={{ viewTransitionName: `article-title-${post.slug}` }}
-            >
-              {post.frontmatter.title}
-            </h3>
+            <ViewTransition name={`article-title-${post.slug}`}>
+              <h3 className="text-[22px] text-gray-1000 mb-4 group-hover:text-primary">
+                {post.frontmatter.title}
+              </h3>
+            </ViewTransition>
             <p className="text-text text-base mb-4 leading-relaxed font-light">
               {truncate(post.frontmatter.excerpt, 180)}
             </p>

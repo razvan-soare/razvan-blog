@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, memo } from 'react';
+import React, { ViewTransition, useState, useEffect, memo } from 'react';
 import Heart from '@/components/HeartLike';
 import type { PostFrontmatter } from '@/lib/mdx';
 
@@ -74,12 +74,11 @@ export default function ArticlePage({ mdxContent, frontmatter, slug }: ArticlePa
           </div>
 
           {/* Title */}
-          <h1
-            className="text-gray-1000 text-[38px] leading-[42px] m-0 mb-20 text-center"
-            style={{ viewTransitionName: `article-title-${slug}` }}
-          >
-            {frontmatter.title}
-          </h1>
+          <ViewTransition name={`article-title-${slug}`}>
+            <h1 className="text-gray-1000 text-[38px] leading-[42px] m-0 mb-20 text-center">
+              {frontmatter.title}
+            </h1>
+          </ViewTransition>
 
           {mdxContent}
         </div>
