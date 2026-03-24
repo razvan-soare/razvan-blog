@@ -47,7 +47,12 @@
 - Updated layout.tsx to import globals.css and removed GlobalStyles component
 - StyledComponentsRegistry kept for now — existing components still use styled-components and will be migrated in subsequent tasks (RAZ-13 through RAZ-16)
 
-## 2026-03-24 — [RAZ-13] Migrate Header component from styled-components to Tailwind
-- Replaced all ~10 styled-components in Header/index.tsx with Tailwind utility classes
-- Preserved responsive burger menu with animated open/close, mobile overlay with staggered slide-in delays, sticky positioning, and theme-aware colors via CSS variables
-- Build and all tests pass with zero regressions
+## 2026-03-24 — [RAZ-13 through RAZ-22] Complete styled-components to Tailwind migration
+- Migrated all 10 component files from styled-components to Tailwind CSS utility classes
+- Components: Header, Homepage/StickMan, ArticlePage, BlogList, Projects, Snippets, HeartLike, Code, MdxComponents, ReportIssue, About, ThemeIcons, ThoughtCloud, VideoGifImg
+- Complex styles (article content, code syntax tokens, thought cloud pseudo-elements, sticky note transforms) moved to CSS classes in globals.css
+- Dynamic styles (puzzle piece fills, variant colors, drag states) use inline styles or conditional classes
+- Animations (updown, slide, heartbeat, icon-enter, fade-in) added as keyframes in tailwind.config.ts
+- Removed styled-components, @types/styled-components, StyledComponentsRegistry, GlobalStyles, theme.ts, styled.d.ts
+- ThemeContext simplified to CSS-class-based theming only (no more SCThemeProvider)
+- Build + all 6 tests pass with zero regressions
