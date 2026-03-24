@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { getLikes, addLike } from '@/lib/likes';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -11,24 +12,8 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    let article = await prisma.article.findUnique({
-      where: { slug },
-      include: { userLikes: { where: { userId } } },
-    });
-
-    if (!article) {
-      article = await prisma.article.create({
-        data: { slug },
-        include: { userLikes: true },
-      });
-    }
-
-    const userLike = article.userLikes[0];
-
-    return NextResponse.json({
-      articleLikes: article.likes,
-      userLikes: userLike?.count || 0,
-    }, {
+    const result = await getLikes(prisma, { slug, userId });
+    return NextResponse.json(result, {
       headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' },
     });
   } catch (error) {
@@ -46,20 +31,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // Upsert article (increment likes count, or create with initial count of 1)
-    const article = await prisma.article.upsert({
-      where: { slug },
-      create: { slug, likes: 1 },
-      update: { likes: { increment: 1 } },
-    });
-
-    // Upsert user like
-    await prisma.userLike.upsert({
-      where: { articleId_userId: { articleId: article.id, userId } },
-      create: { articleId: article.id, userId, count: 1 },
-      update: { count: { increment: 1 } },
-    });
-
+    await addLike(prisma, { slug, userId });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error setting likes:', error);
