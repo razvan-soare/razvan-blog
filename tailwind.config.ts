@@ -80,9 +80,15 @@ const config: Config = {
           '50%': { transform: 'translateY(-10px)' },
           '100%': { transform: 'translateY(10px)' },
         },
+        slide: {
+          '0%': { marginLeft: '5px' },
+          '50%': { marginLeft: '15px' },
+          '100%': { marginLeft: '5px' },
+        },
       },
       animation: {
         updown: 'updown 4s ease-in-out infinite',
+        slide: 'slide 300ms cubic-bezier(0.64, 0.57, 0.67, 1.53)',
       },
     },
   },
