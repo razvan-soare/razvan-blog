@@ -18,11 +18,11 @@ export default function BlogList({ posts }: { posts: Post[] }) {
       {posts.map(post => (
         <Link href={`/articles/${post.slug}`} key={post.slug} className="no-underline">
           <div className="group rounded-[7px] py-2.5 mb-10 cursor-pointer">
-            <ViewTransition name={`article-title-${post.slug}`}>
-              <h3 className="text-[22px] text-gray-1000 mb-4 group-hover:text-primary">
-                {post.frontmatter.title}
-              </h3>
-            </ViewTransition>
+            <h3 className="text-[22px] text-gray-1000 mb-4 group-hover:text-primary">
+              <ViewTransition name={`article-title-${post.slug}`}>
+                <span className="inline-block">{post.frontmatter.title}</span>
+              </ViewTransition>
+            </h3>
             <p className="text-text text-base mb-4 leading-relaxed font-light">
               {truncate(post.frontmatter.excerpt, 180)}
             </p>

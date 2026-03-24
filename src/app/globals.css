@@ -451,3 +451,18 @@ table {
     margin-right: 10px;
   }
 }
+
+/* ===== View Transition: Article Title Animation ===== */
+
+::view-transition-group(*) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  height: 100%;
+  width: 100%;
+}
