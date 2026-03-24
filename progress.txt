@@ -1,3 +1,7 @@
+## 2026-03-24 — [RAZ-9] Fix title animation using React ViewTransition component
+- Replaced inline `viewTransitionName` CSS with React's `<ViewTransition>` component (from React 19) in both BlogList and ArticlePage.
+- The inline CSS approach didn't work because Next.js's `experimental.viewTransition` integrates with React's ViewTransition component, not raw CSS properties. React's `<ViewTransition>` properly hooks into `document.startViewTransition()` during navigations.
+
 ## 2026-03-24 — [RAZ-9] Fix crypto.randomUUID crash on non-secure contexts
 - Added a Math.random-based UUID v4 fallback in HeartLike's getUserId() for browsers where crypto.randomUUID is unavailable (HTTP, older browsers).
 - The original crash was introduced in RAZ-8 when `uuid` package was replaced with `crypto.randomUUID()`.
