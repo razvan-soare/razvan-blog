@@ -1,3 +1,8 @@
+## 2026-03-24 — [RAZ-25] Fix html font-size: 62.5% breaking Tailwind rem sizing
+- Changed `html { font-size: 62.5% }` to `100%` and `body { font-size: 1.6rem }` to `16px` in globals.css
+- The legacy 62.5% trick (1rem = 10px) was causing all Tailwind utility classes to render at 62.5% of intended size since Tailwind uses rem internally
+- Code block rem values (0.8rem, 1.185rem, 0.7rem) left unchanged as they produce reasonable sizes at standard 16px base
+
 ## 2026-03-24 — [RAZ-9] Fix title animation snapping at end of transition
 - Moved ViewTransition wrapper inside heading elements to wrap just the text span (inline-block), so the transition captures consistent bounding boxes instead of different container layouts.
 - Added custom CSS for ::view-transition-group/old/new pseudo-elements: 0.5s duration with smooth cubic-bezier easing to eliminate the end-of-animation snap.
