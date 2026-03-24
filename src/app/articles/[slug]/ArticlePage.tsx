@@ -1,257 +1,23 @@
 'use client';
 
 import React, { useState, useEffect, memo } from 'react';
-import styled from 'styled-components';
 import Heart from '@/components/HeartLike';
 import type { PostFrontmatter } from '@/lib/mdx';
-
-const PostRootCss = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin: 60px 0 0 30px;
-  @media (max-width: ${props => props.theme.breakpoints.TABLET + 'px'}) {
-    margin: 40px 0 0;
-  }
-`;
-
-const PostsWrapperCss = styled.div`
-  word-wrap: break-word;
-
-  h2 {
-    font-size: 32px;
-    color: ${props => props.theme.tertiary};
-    margin: 64px 0 32px;
-    position: relative;
-  }
-  h3 { font-size: 28px; margin: 36px 0 14px; }
-  h4 { font-size: 24px; margin: 32px 0 14px; }
-  h5 { font-size: 19px; margin-bottom: 32px; text-transform: uppercase; }
-  h6 { font-size: 16px; margin-bottom: 32px; }
-
-  p {
-    font-size: 18px;
-    font-weight: 300;
-    line-height: 1.6;
-    margin-bottom: 32px;
-
-    code {
-      color: ${props => props.theme.primary};
-      display: inline-block;
-      font-size: 0.9em;
-      letter-spacing: -0.5px;
-      margin: 1px 0px;
-      padding: 2px 6px;
-      position: relative;
-      z-index: 2;
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0px; left: -1px; right: -1px; bottom: 0px;
-        opacity: 0.15;
-        background: ${props => props.theme.gray700};
-        border-radius: 3px;
-        z-index: -1;
-      }
-    }
-  }
-
-  em {
-    font-family: Sriracha;
-    letter-spacing: -0.25px;
-    color: ${props => props.theme.secondary};
-    font-style: normal;
-  }
-
-  a {
-    color: ${props => props.theme.primary};
-    font-weight: 400;
-    text-decoration: none;
-    box-shadow: 0px 0px 0px ${props => props.theme.primary};
-    &:hover {
-      box-shadow: 0px 2px 0px ${props => props.theme.primary};
-    }
-  }
-
-  ul {
-    font-size: 18px;
-    margin-bottom: 32px;
-    list-style: none;
-    li {
-      margin-bottom: 16px;
-      font-weight: 300;
-      line-height: 1.6;
-      display: flex;
-      align-items: baseline;
-      &::before {
-        content: '›';
-        margin-right: 10px;
-        color: ${props => props.theme.text};
-        font-weight: 600;
-      }
-    }
-  }
-
-  ol {
-    font-size: 18px;
-    margin: 15px 0 32px;
-    list-style: none;
-    counter-reset: list-counter;
-    li {
-      font-weight: 300;
-      line-height: 1.6;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: baseline;
-      counter-increment: list-counter;
-      &::before {
-        content: counter(list-counter) '.';
-        margin-right: 10px;
-        font-weight: 600;
-      }
-    }
-  }
-
-  img { vertical-align: baseline; width: 100%; }
-
-  .code-title-custom {
-    position: relative;
-    z-index: 10;
-    padding: 6px 14px;
-    margin-top: 30px;
-    display: inline;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    background: ${props => props.theme.syntaxBg};
-    color: ${props => props.theme.gray700};
-    border-bottom: none;
-    font-size: 16px;
-  }
-
-  @media (max-width: 500px) {
-    padding: 10px;
-    ul, ol { margin-right: 10px; }
-  }
-`;
-
-const PostTitleCss = styled.h1`
-  color: ${props => props.theme.gray1000};
-  font-size: 38px;
-  line-height: 42px;
-  margin: 0 0 80px;
-  text-align: center;
-`;
-
-const TagsWrapperCss = styled.div`
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  p {
-    font-size: 18px;
-    color: ${props => props.theme.primary};
-    margin-bottom: 10px;
-    font-weight: 400;
-  }
-  p + p { margin-left: 10px; }
-`;
-
-const LeftSideCss = styled.div`
-  width: 70%;
-  @media (max-width: ${props => props.theme.breakpoints.TABLET + 'px'}) {
-    width: 100%;
-  }
-`;
-
-const RightSideCss = styled.div`
-  width: 30%;
-  @media (max-width: ${props => props.theme.breakpoints.TABLET + 'px'}) {
-    display: none;
-  }
-`;
-
-const RightContentCss = styled.div`
-  align-items: flex-end;
-  display: flex;
-  flex-direction: column;
-  padding: 0 15px 0 60px;
-  position: sticky;
-  top: 100px;
-`;
-
-const ContentsWrapperCss = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-bottom: 10px;
-`;
-
-const ContentsTitleCss = styled.h3`
-  color: ${props => props.theme.gray1000};
-  font-size: 16px;
-  letter-spacing: 2px;
-  margin-bottom: 16px;
-  text-transform: uppercase;
-`;
-
-const AnchorCss = styled.a`
-  color: ${props => props.theme.gray1000};
-  cursor: pointer;
-  font-size: 15px;
-  line-height: 20px;
-  margin-bottom: 10px;
-  opacity: 0.7;
-  text-decoration: none;
-  transition: opacity 500ms ease 0s;
-  &:hover { opacity: 1; }
-`;
-
-const LikeCounterCss = styled.div<{ $mobile?: boolean }>`
-  display: flex;
-  align-self: flex-start;
-  margin-left: 15px;
-  margin-top: 20px;
-  display: ${props => (props.$mobile ? 'none' : 'block')};
-  @media (max-width: ${props => props.theme.breakpoints.TABLET + 'px'}) {
-    display: ${props => (props.$mobile ? 'block' : 'none')};
-    margin: 0;
-  }
-`;
-
-const DateWrapperCss = styled.div``;
-const DateTileCss = styled.p`
-  font-size: 14px;
-  color: ${props => props.theme.gray500};
-  text-transform: uppercase;
-  margin-bottom: 7px;
-  font-weight: 500;
-  letter-spacing: 0.8px;
-`;
-
-const DateCss = styled.p`
-  color: ${props => props.theme.text};
-  font-size: 20px;
-  font-weight: 300;
-`;
-
-const PostFooterCss = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 40px 0;
-`;
 
 const TableOfContents = memo(function TableMemo({ headings }: { headings: string[] }) {
   if (!headings || headings.length === 0) return null;
 
   return (
     <>
-      <ContentsTitleCss>TABLE OF CONTENTS</ContentsTitleCss>
+      <h3 className="text-gray-1000 text-base tracking-[2px] mb-4 uppercase">
+        TABLE OF CONTENTS
+      </h3>
       {headings.map(tag => {
         if (!tag) return null;
         return (
-          <AnchorCss
+          <a
             key={tag}
+            className="text-gray-1000 cursor-pointer text-[15px] leading-5 mb-2.5 opacity-70 no-underline transition-opacity duration-500 hover:opacity-100 block"
             onClick={e => {
               e.preventDefault();
               const el = document.getElementById(tag.toLowerCase().replaceAll(' ', '-'));
@@ -260,7 +26,7 @@ const TableOfContents = memo(function TableMemo({ headings }: { headings: string
             href={`#${tag.toLowerCase().replaceAll(' ', '-')}`}
           >
             {tag}
-          </AnchorCss>
+          </a>
         );
       })}
     </>
@@ -299,41 +65,53 @@ export default function ArticlePage({ mdxContent, frontmatter, slug }: ArticlePa
   }
 
   return (
-    <PostRootCss>
-      <LeftSideCss>
-        <PostsWrapperCss>
-          <TagsWrapperCss>
+    <div className="w-full flex justify-center mt-[60px] ml-[30px] max-tablet:mt-[40px] max-tablet:ml-0">
+      <div className="w-[70%] max-tablet:w-full">
+        <div className="article-content">
+          {/* Tags */}
+          <div className="flex items-center flex-wrap justify-center [&_p]:text-lg [&_p]:text-primary [&_p]:mb-2.5 [&_p]:font-normal [&_p+p]:ml-2.5">
             {frontmatter.tags?.map((tag, i) => <p key={i}>{tag}</p>)}
-          </TagsWrapperCss>
-          <PostTitleCss style={{ viewTransitionName: `article-title-${slug}` }}>{frontmatter.title}</PostTitleCss>
-          {mdxContent}
-        </PostsWrapperCss>
+          </div>
 
-        <PostFooterCss>
-          <DateWrapperCss>
-            <DateTileCss>Last updated:</DateTileCss>
-            <DateCss>{formattedDate}</DateCss>
-          </DateWrapperCss>
+          {/* Title */}
+          <h1
+            className="text-gray-1000 text-[38px] leading-[42px] m-0 mb-20 text-center"
+            style={{ viewTransitionName: `article-title-${slug}` }}
+          >
+            {frontmatter.title}
+          </h1>
+
+          {mdxContent}
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-between items-center my-10">
+          <div>
+            <p className="text-sm text-gray-500 uppercase mb-[7px] font-medium tracking-wide">
+              Last updated:
+            </p>
+            <p className="text-text text-xl font-light">{formattedDate}</p>
+          </div>
           {showLikeButton && (
-            <LikeCounterCss $mobile>
+            <div className="hidden max-tablet:block">
               <Heart slug={slug} />
-            </LikeCounterCss>
+            </div>
           )}
-        </PostFooterCss>
-      </LeftSideCss>
+        </div>
+      </div>
 
       {showLikeButton && (
-        <RightSideCss>
-          <RightContentCss>
-            <ContentsWrapperCss>
+        <div className="w-[30%] max-tablet:hidden">
+          <div className="flex flex-col items-end px-0 pl-[60px] pr-[15px] sticky top-[100px]">
+            <div className="flex flex-col justify-center mb-2.5">
               <TableOfContents headings={headings} />
-              <LikeCounterCss>
+              <div className="flex self-start ml-[15px] mt-5">
                 <Heart slug={slug} />
-              </LikeCounterCss>
-            </ContentsWrapperCss>
-          </RightContentCss>
-        </RightSideCss>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
-    </PostRootCss>
+    </div>
   );
 }
