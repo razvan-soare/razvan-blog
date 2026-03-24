@@ -1,3 +1,7 @@
+## 2026-03-24 — [RAZ-9] Fix crypto.randomUUID crash on non-secure contexts
+- Added a Math.random-based UUID v4 fallback in HeartLike's getUserId() for browsers where crypto.randomUUID is unavailable (HTTP, older browsers).
+- The original crash was introduced in RAZ-8 when `uuid` package was replaced with `crypto.randomUUID()`.
+
 ## 2026-03-24 — [RAZ-7] Unit tests for likes API logic
 - Extracted getLikes/addLike business logic from route handler into `src/lib/likes.ts` for testability.
 - Added vitest with 6 tests covering: existing articles, missing articles (auto-creation), user like counts, article upsert, and increment behavior.
