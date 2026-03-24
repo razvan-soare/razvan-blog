@@ -1,16 +1,6 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
-import styled from 'styled-components';
-
-const WrapperCss = styled.div`
-  margin-bottom: 30px;
-  video, img {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-`;
 
 interface VideoGifImgProps {
   type?: 'img' | 'video' | 'gif';
@@ -46,7 +36,7 @@ export default function VideoGifImg({ type = 'img', path = '', style }: VideoGif
 
   if (type === 'video') {
     return (
-      <WrapperCss style={style}>
+      <div className="mb-[30px] [&_video]:block [&_video]:w-full [&_video]:h-full" style={style}>
         <video
           ref={videoRef}
           src={`/images/${path}`}
@@ -56,14 +46,14 @@ export default function VideoGifImg({ type = 'img', path = '', style }: VideoGif
           playsInline
           muted
         />
-      </WrapperCss>
+      </div>
     );
   }
 
   return (
-    <WrapperCss style={style}>
+    <div className="mb-[30px] [&_img]:block [&_img]:w-full [&_img]:h-full" style={style}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={`/images/${path}`} alt="content" />
-    </WrapperCss>
+    </div>
   );
 }

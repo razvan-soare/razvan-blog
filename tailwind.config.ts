@@ -85,6 +85,10 @@ const config: Config = {
           '50%': { marginLeft: '15px' },
           '100%': { marginLeft: '5px' },
         },
+        'icon-enter': {
+          '0%': { transform: 'rotate(80deg) scale(0.8)', opacity: '0' },
+          '100%': { transform: 'rotate(0deg) scale(1)', opacity: '1' },
+        },
         heartbeat: {
           '0%': { transform: 'scale(1)' },
           '25%': { transform: 'scale(0.97)' },
@@ -99,6 +103,7 @@ const config: Config = {
       animation: {
         updown: 'updown 4s ease-in-out infinite',
         slide: 'slide 300ms cubic-bezier(0.64, 0.57, 0.67, 1.53)',
+        'icon-enter': 'icon-enter 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards',
         heartbeat: 'heartbeat 2s',
       },
     },

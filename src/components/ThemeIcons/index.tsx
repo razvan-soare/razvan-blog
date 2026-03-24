@@ -1,53 +1,10 @@
 'use client';
 
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
-
-const sunEnter = keyframes`
-  0% { transform: rotate(80deg) scale(0.8); opacity: 0; }
-  100% { transform: rotate(0deg) scale(1); opacity: 1; }
-`;
-
-const moonEnter = keyframes`
-  0% { transform: rotate(80deg) scale(0.8); opacity: 0; }
-  100% { transform: rotate(0deg) scale(1); opacity: 1; }
-`;
-
-const SunWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: ${sunEnter} 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-
-  svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  path {
-    fill: ${props => props.theme.text};
-  }
-`;
-
-const MoonWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: ${moonEnter} 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-
-  svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  path {
-    fill: ${props => props.theme.text};
-  }
-`;
 
 export function SunIcon() {
   return (
-    <SunWrapper>
+    <div className="flex items-center justify-center animate-icon-enter [&_svg]:w-6 [&_svg]:h-6 [&_path]:fill-text">
       <svg viewBox="0 0 302.4 302.4" xmlns="http://www.w3.org/2000/svg">
         <path d="M204.8,97.6C191.2,84,172,75.2,151.2,75.2c-20.8,0-40,8.4-53.6,22.4C84,111.2,75.2,130.4,75.2,151.2c0,20.8,8.8,40,22.4,53.6c13.6,13.6,32.8,22.4,53.6,22.4c20.8,0,40-8.4,53.6-22.4c13.6-13.6,22.4-32.8,22.4-53.6C227.2,130.4,218.8,111.2,204.8,97.6zM190.4,190.4c-10,10-24,16-39.2,16s-29.2-6-39.2-16c-10-10-16-24-16-39.2c0-15.2,6-29.2,16-39.2c10-10,24-16,39.2-16c15.2,0,29.2,6,39.2,16c10,10,16,24,16,39.2C206.4,166.4,200.4,180.4,190.4,190.4z" />
         <path d="M292,140.8h-30.8c-5.6,0-10.4,4.8-10.4,10.4c0,5.6,4.8,10.4,10.4,10.4H292c5.6,0,10.4-4.8,10.4-10.4C302.4,145.6,297.6,140.8,292,140.8z" />
@@ -59,16 +16,16 @@ export function SunIcon() {
         <path d="M80.4,221.6c-3.6-4-10.4-4-14.4,0l-22,22c-4,4-4,10.4,0,14.4c4,4,10.4,4,14.4,0l22-22C84.4,232,84.4,225.6,80.4,221.6z" />
         <path d="M80.4,66.4L58.4,44.4c-4-4-10.4-4-14.4,0c-4,4-4,10.4,0,14.4l22,22c4,4,10.4,4,14.4,0C84.4,76.8,84.4,70.4,80.4,66.4z" />
       </svg>
-    </SunWrapper>
+    </div>
   );
 }
 
 export function MoonIcon() {
   return (
-    <MoonWrapper>
+    <div className="flex items-center justify-center animate-icon-enter [&_svg]:w-6 [&_svg]:h-6 [&_path]:fill-text">
       <svg viewBox="0 0 312.999 312.999" xmlns="http://www.w3.org/2000/svg">
         <path d="M269.6,172.85c-2.43-0.61-4.86,0-6.98,1.52c-7.89,6.68-16.99,12.14-27,15.78c-9.41,3.64-19.72,5.46-30.65,5.46c-24.58,0-47.03-10.01-63.11-26.1c-16.08-16.08-26.1-38.53-26.1-63.11c0-10.32,1.82-20.33,4.86-29.43c3.34-9.71,8.19-18.51,14.56-26.09c2.73-3.34,2.12-8.19-1.22-10.92c-2.12-1.52-4.55-2.12-6.98-1.52C101.2,45.41,78.75,60.88,62.66,81.52c-15.47,20.33-24.88,45.52-24.88,73.13c0,33.07,13.35,63.11,35.2,84.96c21.85,21.85,51.89,35.2,84.96,35.2c27.92,0,53.71-9.71,74.34-25.79c20.94-16.38,36.11-39.74,42.48-66.44C276.28,178.01,273.85,173.76,269.6,172.85zM223.18,236.27c-17.6,13.96-39.05,22.45-63.63,22.45c-28.83,0-54.92-11.83-73.73-30.65c-18.81-18.81-30.65-44.91-30.65-73.73c0-23.97,7.89-45.82,21.54-63.42c9.41-12.14,21.24-22.15,34.9-29.13c-1.52,3.34-3.03,6.68-4.25,10.32c-3.94,10.92-5.76,22.45-5.76,34.59c0,28.83,11.83,55.22,30.65,74.04c18.81,18.81,45.21,30.65,74.04,30.65c12.74,0,24.88-2.12,36.11-6.37c3.94-1.52,7.89-3.03,11.53-4.86C245.63,214.12,235.62,226.56,223.18,236.27z" />
       </svg>
-    </MoonWrapper>
+    </div>
   );
 }

@@ -222,6 +222,49 @@ table {
   }
 }
 
+/* ===== Thought Cloud ===== */
+.thought-cloud {
+  display: flex;
+  background: radial-gradient(closest-side, var(--color-home-bg-dark), var(--color-home-bg-light));
+  padding: 20px;
+  border-radius: 30px;
+  max-width: 100%;
+  min-width: 40px;
+  min-height: 40px;
+  margin: 20px;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.thought-cloud::before,
+.thought-cloud::after {
+  content: '';
+  background-color: var(--color-home-bg-light);
+  border-radius: 50%;
+  display: block;
+  position: absolute;
+  z-index: -1;
+}
+.thought-cloud::before {
+  width: 44px;
+  height: 44px;
+  top: -12px;
+  left: 28px;
+  box-shadow: -50px 30px 0 -12px var(--color-home-bg-light);
+}
+.thought-cloud::after {
+  bottom: -10px;
+  right: 26px;
+  width: 30px;
+  height: 30px;
+  box-shadow:
+    40px -34px 0 0 var(--color-home-bg-light),
+    -53px 1px 0 8px var(--color-home-bg-light),
+    -24px 34px 0 -4px var(--color-home-bg-light),
+    -3px 50px 0 -8px var(--color-home-bg-light);
+}
+
 /* ===== Code Syntax Highlighting ===== */
 .code-wrapper {
   margin: 0 0 80px;

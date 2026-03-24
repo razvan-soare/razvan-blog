@@ -1,54 +1,6 @@
 'use client';
 
 import React from 'react';
-import styled from 'styled-components';
-
-const AboutWrapperCss = styled.div`
-  padding: 100px 0;
-
-  h1 {
-    font-size: 42px;
-    margin-bottom: 50px;
-  }
-
-  p {
-    font-size: 22px;
-    line-height: 1.7;
-    margin-bottom: 30px;
-  }
-`;
-
-const SocialWrapperCss = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 30px;
-
-  a {
-    color: ${props => props.theme.gray700};
-    font-size: 24px;
-    text-decoration: none;
-    &:hover {
-      color: ${props => props.theme.gray1000};
-    }
-  }
-
-  svg {
-    width: 50px;
-    height: 50px;
-    fill: ${props => props.theme.gray700};
-    cursor: pointer;
-    path {
-      fill: ${props => props.theme.gray700};
-    }
-    &:hover {
-      fill: ${props => props.theme.gray1000};
-      path {
-        fill: ${props => props.theme.gray1000};
-      }
-    }
-  }
-`;
 
 export default function About() {
   const birthDate = new Date('1994-08-03');
@@ -58,7 +10,7 @@ export default function About() {
   if (m < 0 || (m === 0 && now.getDate() < birthDate.getDate())) age--;
 
   return (
-    <AboutWrapperCss>
+    <div className="py-[100px] [&>h1]:text-[42px] [&>h1]:mb-[50px] [&>p]:text-[22px] [&>p]:leading-[1.7] [&>p]:mb-[30px]">
       <h1>Hello 👋</h1>
       <p>
         My name is Razvan Soare, I&apos;m a {age} year old, Front End Engineer
@@ -80,7 +32,7 @@ export default function About() {
       <br />
       <br />
       <p>Follow me on</p>
-      <SocialWrapperCss>
+      <div className="flex justify-start items-center gap-[30px] [&_a]:text-gray-700 [&_a]:text-2xl [&_a]:no-underline hover:[&_a]:text-gray-1000 [&_svg]:w-[50px] [&_svg]:h-[50px] [&_svg]:fill-gray-700 [&_svg]:cursor-pointer [&_svg_path]:fill-gray-700 hover:[&_svg]:fill-gray-1000 hover:[&_svg_path]:fill-gray-1000">
         <a
           target="_blank"
           rel="noreferrer"
@@ -108,7 +60,7 @@ export default function About() {
             <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
           </svg>
         </a>
-      </SocialWrapperCss>
-    </AboutWrapperCss>
+      </div>
+    </div>
   );
 }
