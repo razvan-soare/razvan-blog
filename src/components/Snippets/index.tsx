@@ -24,7 +24,7 @@ export default function Snippets({ posts }: { posts: Post[] }) {
         A collection of useful bits of code that can be easily integrated with
         any project
       </h5>
-      <div className="flex flex-wrap justify-around items-center rounded-[5px] p-[25px]">
+      <div className="snippets-grid flex flex-wrap justify-around items-center rounded-[5px] p-[25px]">
         {posts.map(post => (
           <Link href={`/articles/${post.slug}`} key={post.slug} className="no-underline">
             <div
