@@ -1,3 +1,8 @@
+## 2026-03-24 — [RAZ-9] Fix title animation snapping at end of transition
+- Moved ViewTransition wrapper inside heading elements to wrap just the text span (inline-block), so the transition captures consistent bounding boxes instead of different container layouts.
+- Added custom CSS for ::view-transition-group/old/new pseudo-elements: 0.5s duration with smooth cubic-bezier easing to eliminate the end-of-animation snap.
+- The snap was caused by the h3 (left-aligned, 22px) and h1 (centered, 38px) having different container layouts that the view transition couldn't smoothly interpolate.
+
 ## 2026-03-24 — [RAZ-9] Fix title animation using React ViewTransition component
 - Replaced inline `viewTransitionName` CSS with React's `<ViewTransition>` component (from React 19) in both BlogList and ArticlePage.
 - The inline CSS approach didn't work because Next.js's `experimental.viewTransition` integrates with React's ViewTransition component, not raw CSS properties. React's `<ViewTransition>` properly hooks into `document.startViewTransition()` during navigations.
