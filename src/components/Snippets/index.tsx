@@ -2,95 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import styled from 'styled-components';
 import type { Post } from '@/lib/mdx';
-
-const SnippetsWrapperCss = styled.div`
-  padding: 100px 0;
-  h1 {
-    font-size: 42px;
-    margin-bottom: 20px;
-  }
-  h5 {
-    font-size: 20px;
-    margin-bottom: 50px;
-  }
-`;
-
-const SnippetPostWrapperCss = styled.div`
-  align-items: center;
-  border-radius: 5px;
-  box-sizing: border-box;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  padding: 25px;
-`;
-
-const PostWrapperCss = styled.div<{ $color: string }>`
-  text-decoration: none;
-  color: #000;
-  background: ${props => props.$color};
-  cursor: pointer;
-  height: 200px;
-  width: 200px;
-  padding: 30px 15px 15px;
-  margin: 15px 15px 50px;
-  box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.7);
-  transition: transform 0.15s linear;
-  transform: rotate(-1deg);
-  position: relative;
-  top: 5px;
-
-  &:nth-child(even) { transform: rotate(4deg); top: 5px; }
-  &:nth-child(3n) { transform: rotate(-4deg); top: -5px; }
-  &:nth-child(5n) { transform: rotate(5deg); top: -10px; }
-  &:nth-child(7n) { transform: rotate(1deg); top: 0px; }
-
-  &:hover, &:focus {
-    box-shadow: 10px 10px 7px rgba(0, 0, 0, 0.7);
-    transform: scale(1.25);
-    position: relative;
-    z-index: 5;
-  }
-`;
-
-const PostContentCss = styled.div`
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
-  height: 100%;
-`;
-
-const TagWrapperCss = styled.div`
-  position: absolute;
-  top: 10px;
-  right: 0;
-  background: white;
-  padding: 3px 6px;
-  transform: rotate(20deg);
-  transform-origin: 100% 0;
-  box-shadow: 2px 2px 3px -2px black;
-  font-size: 12px;
-`;
-
-const PostTitleCss = styled.h2`
-  font-size: 20px;
-  margin-bottom: 15px;
-  line-height: 1.2;
-`;
-
-const PostDescriptionCss = styled.h2`
-  font-size: 26px;
-  font-family: 'Reenie', arial, sans-serif;
-  line-height: 1.1;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-`;
 
 function generateColor() {
   return (
@@ -106,29 +18,34 @@ function generateColor() {
 
 export default function Snippets({ posts }: { posts: Post[] }) {
   return (
-    <SnippetsWrapperCss>
+    <div className="py-[100px] [&>h1]:text-[42px] [&>h1]:mb-5 [&>h5]:text-xl [&>h5]:mb-[50px]">
       <h1>Snippets</h1>
       <h5>
         A collection of useful bits of code that can be easily integrated with
         any project
       </h5>
-      <SnippetPostWrapperCss>
+      <div className="flex flex-wrap justify-around items-center rounded-[5px] p-[25px]">
         {posts.map(post => (
-          <Link href={`/articles/${post.slug}`} key={post.slug} style={{ textDecoration: 'none' }}>
-            <PostWrapperCss $color={generateColor()}>
-              <PostContentCss>
-                <TagWrapperCss>
+          <Link href={`/articles/${post.slug}`} key={post.slug} className="no-underline">
+            <div
+              className="sticky-note text-black cursor-pointer h-[200px] w-[200px] p-[30px_15px_15px] m-[15px_15px_50px] shadow-[5px_5px_7px_rgba(33,33,33,0.7)] transition-transform duration-150 relative hover:shadow-[10px_10px_7px_rgba(0,0,0,0.7)] hover:scale-125 hover:z-[5]"
+              style={{ background: generateColor() }}
+            >
+              <div className="flex flex-col items-start justify-center overflow-hidden h-full">
+                <div className="absolute top-2.5 right-0 bg-white px-1.5 py-[3px] rotate-[20deg] origin-top-right shadow-[2px_2px_3px_-2px_black] text-xs">
                   📎 {post.frontmatter.tags[0]}
-                </TagWrapperCss>
-                <PostTitleCss>{post.frontmatter.title}</PostTitleCss>
-                <PostDescriptionCss>
+                </div>
+                <h2 className="text-xl mb-[15px] leading-[1.2]">
+                  {post.frontmatter.title}
+                </h2>
+                <h2 className="text-[26px] font-reenie leading-[1.1] overflow-hidden line-clamp-4">
                   {post.frontmatter.excerpt}
-                </PostDescriptionCss>
-              </PostContentCss>
-            </PostWrapperCss>
+                </h2>
+              </div>
+            </div>
           </Link>
         ))}
-      </SnippetPostWrapperCss>
-    </SnippetsWrapperCss>
+      </div>
+    </div>
   );
 }

@@ -222,6 +222,16 @@ table {
   }
 }
 
+/* ===== Sticky Note Transforms (Snippets) ===== */
+.sticky-note {
+  transform: rotate(-1deg);
+  top: 5px;
+}
+.sticky-note:nth-child(even) { transform: rotate(4deg); top: 5px; }
+.sticky-note:nth-child(3n) { transform: rotate(-4deg); top: -5px; }
+.sticky-note:nth-child(5n) { transform: rotate(5deg); top: -10px; }
+.sticky-note:nth-child(7n) { transform: rotate(1deg); top: 0px; }
+
 /* ===== Article Content Styles ===== */
 .article-content {
   word-wrap: break-word;
