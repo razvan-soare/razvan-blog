@@ -1,3 +1,7 @@
+## 2026-03-25 — [RAZ-33] Navbar items color fix
+- Removed blanket `[&_a]:text-primary` from header that was making all nav links pink
+- Moved pink color to only the logo link; menu items now use their own white (`text-text`) color
+
 ## 2026-03-25 — [RAZ-32] Header is missing padding
 - Increased navbar sticky container horizontal padding from 50px to 80px
 - Restores the left/right spacing that was present in the old design
