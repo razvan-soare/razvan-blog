@@ -1,3 +1,7 @@
+## 2026-03-25 — [RAZ-32] Header is missing padding
+- Increased navbar sticky container horizontal padding from 50px to 80px
+- Restores the left/right spacing that was present in the old design
+
 ## 2026-03-25 — [RAZ-31] Like button fixed on mobile
 - Made the heart/like button fixed-positioned at bottom-right on mobile article pages
 - Users can now like an article at any point while scrolling, not just at the end
