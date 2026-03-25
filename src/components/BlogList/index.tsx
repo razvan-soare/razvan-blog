@@ -20,7 +20,7 @@ export default function BlogList({ posts }: { posts: Post[] }) {
           <div className="group rounded-[7px] py-2.5 mb-10 cursor-pointer">
             <h3 className="text-[22px] text-gray-1000 mb-4 group-hover:text-primary">
               <ViewTransition name={`article-title-${post.slug}`}>
-                <span className="inline-block">{post.frontmatter.title}</span>
+                <span className="inline-block" style={{ viewTransitionName: `article-title-${post.slug}` }}>{post.frontmatter.title}</span>
               </ViewTransition>
             </h3>
             <p className="text-text text-base mb-4 leading-relaxed font-light">

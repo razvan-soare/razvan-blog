@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ThemeProvider } from '@/lib/ThemeContext';
 import Header from '@/components/Header';
 import ReportIssue from '@/components/ReportIssue';
+import ViewTransitionOnBack from '@/components/ViewTransitionOnBack';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -74,6 +75,7 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeProvider>
+          <ViewTransitionOnBack />
           <Header title="Razvan Soare" />
           <main className="layout">
             {children}

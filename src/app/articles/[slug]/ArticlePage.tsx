@@ -76,7 +76,7 @@ export default function ArticlePage({ mdxContent, frontmatter, slug }: ArticlePa
           {/* Title */}
           <h1 className="text-gray-1000 text-[38px] leading-[42px] m-0 mb-20 text-center">
             <ViewTransition name={`article-title-${slug}`}>
-              <span className="inline-block">{frontmatter.title}</span>
+              <span className="inline-block" style={{ viewTransitionName: `article-title-${slug}` }}>{frontmatter.title}</span>
             </ViewTransition>
           </h1>
 
