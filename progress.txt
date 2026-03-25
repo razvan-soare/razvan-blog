@@ -1,3 +1,7 @@
+## 2026-03-25 — [RAZ-35] The article effect
+- Added delayed fade-in animation (0.45s delay, 0.4s duration) to article content (tags, body, footer, sidebar)
+- Title ViewTransition plays first, then content gracefully fades in with a subtle upward slide
+
 ## 2026-03-25 — [RAZ-33] Navbar items color fix
 - Removed blanket `[&_a]:text-primary` from header that was making all nav links pink
 - Moved pink color to only the logo link; menu items now use their own white (`text-text`) color
