@@ -1,3 +1,8 @@
+## 2026-03-25 — [RAZ-36] Title animation on browser back
+- Fixed title view transition not playing when using browser back/forward buttons
+- Root cause: Next.js popstate handler doesn't enable React's view transition context, so document.startViewTransition() was never called for back/forward navigation
+- Added ViewTransitionOnBack component that intercepts popstate events and manually triggers the browser View Transitions API, plus explicit viewTransitionName inline styles on title elements
+
 ## 2026-03-25 — [RAZ-35] The article effect
 - Added delayed fade-in animation (0.45s delay, 0.4s duration) to article content (tags, body, footer, sidebar)
 - Title ViewTransition plays first, then content gracefully fades in with a subtle upward slide
