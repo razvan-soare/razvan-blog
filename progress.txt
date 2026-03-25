@@ -90,3 +90,8 @@
 
 ## 2026-03-24 — [RAZ-28] Fix missing Wotfard-Bold font file
 - Mapped font-weight 600 to Wotfard-SemiBold.woff2 instead of non-existent Wotfard-Bold.woff2
+
+## 2026-03-25 — [RAZ-30] Replace emoji icons with SVG icons in info panels
+- Replaced Unicode emoji icons (ℹ️, ⚠️, ✅, 🛑) with inline SVG icons for all TextBlock variants (Info, Warning, Success, Danger, Primary)
+- The info icon now uses the classic "i in a circle" SVG matching the original design
+- SVG icons inherit color from the variant's border color for consistent theming
