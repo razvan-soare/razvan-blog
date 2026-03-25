@@ -1,3 +1,9 @@
+## 2026-03-25 — [RAZ-23] Add baseline Prisma migration for build-step support
+- Created `prisma/migrations/0_init/migration.sql` baseline from existing schema (Article, UserLike, Subscriber)
+- Marked as already applied via `prisma migrate resolve` so it won't re-run on the existing DB
+- The build script (`prisma migrate deploy && next build`) now properly tracks schema changes going forward
+- Future schema changes: run `npx prisma migrate dev --name <description>` locally, commit the generated migration, and it deploys automatically on build
+
 ## 2026-03-24 — [RAZ-25] Fix html font-size: 62.5% breaking Tailwind rem sizing
 - Changed `html { font-size: 62.5% }` to `100%` and `body { font-size: 1.6rem }` to `16px` in globals.css
 - The legacy 62.5% trick (1rem = 10px) was causing all Tailwind utility classes to render at 62.5% of intended size since Tailwind uses rem internally
