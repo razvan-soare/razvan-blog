@@ -1,3 +1,8 @@
+## 2026-03-25 — [RAZ-31] Like button fixed on mobile
+- Made the heart/like button fixed-positioned at bottom-right on mobile article pages
+- Users can now like an article at any point while scrolling, not just at the end
+- Uses existing `max-tablet` breakpoint; desktop sidebar layout unchanged
+
 ## 2026-03-25 — [RAZ-23] Add baseline Prisma migration for build-step support
 - Created `prisma/migrations/0_init/migration.sql` baseline from existing schema (Article, UserLike, Subscriber)
 - Marked as already applied via `prisma migrate resolve` so it won't re-run on the existing DB
