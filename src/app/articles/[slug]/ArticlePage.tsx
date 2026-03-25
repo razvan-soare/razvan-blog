@@ -69,7 +69,7 @@ export default function ArticlePage({ mdxContent, frontmatter, slug }: ArticlePa
       <div className="w-[70%] max-tablet:w-full">
         <div className="article-content">
           {/* Tags */}
-          <div className="flex items-center flex-wrap justify-center [&_p]:text-lg [&_p]:text-primary [&_p]:mb-2.5 [&_p]:font-normal [&_p+p]:ml-2.5">
+          <div className="article-content-fade flex items-center flex-wrap justify-center [&_p]:text-lg [&_p]:text-primary [&_p]:mb-2.5 [&_p]:font-normal [&_p+p]:ml-2.5">
             {frontmatter.tags?.map((tag, i) => <p key={i}>{tag}</p>)}
           </div>
 
@@ -80,11 +80,13 @@ export default function ArticlePage({ mdxContent, frontmatter, slug }: ArticlePa
             </ViewTransition>
           </h1>
 
-          {mdxContent}
+          <div className="article-content-fade">
+            {mdxContent}
+          </div>
         </div>
 
         {/* Footer */}
-        <div className="flex justify-between items-center my-10">
+        <div className="article-content-fade flex justify-between items-center my-10">
           <div>
             <p className="text-sm text-gray-500 uppercase mb-[7px] font-medium tracking-wide">
               Last updated:
@@ -100,7 +102,7 @@ export default function ArticlePage({ mdxContent, frontmatter, slug }: ArticlePa
       </div>
 
       {showLikeButton && (
-        <div className="w-[30%] max-tablet:hidden">
+        <div className="article-content-fade w-[30%] max-tablet:hidden">
           <div className="flex flex-col items-end px-0 pl-[60px] pr-[15px] sticky top-[100px]">
             <div className="flex flex-col justify-center mb-2.5">
               <TableOfContents headings={headings} />
