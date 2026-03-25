@@ -82,8 +82,8 @@ export default function Header({ title }: { title: string }) {
       {/* Sticky container */}
       <div className="sticky top-[-1px] px-[80px] mx-auto max-w-[1300px] z-[200] bg-background-blured tablet:px-0 max-tablet:px-0">
         {/* Header bar */}
-        <header className="flex justify-start items-center px-8 [&_a]:text-primary [&_a]:no-underline [&_a]:text-[22px] max-tablet:px-4 max-tablet:py-[7px] max-tablet:justify-between">
-          <Link href="/">
+        <header className="flex justify-start items-center px-8 [&_a]:no-underline max-tablet:px-4 max-tablet:py-[7px] max-tablet:justify-between">
+          <Link href="/" className="text-primary text-[22px]">
             <h1>{title}</h1>
           </Link>
 
