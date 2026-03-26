@@ -59,7 +59,7 @@ function getUserId(): string {
   return userId;
 }
 
-export default function Heart({ slug }: { slug: string }) {
+export default function Heart({ slug, compact = false }: { slug: string; compact?: boolean }) {
   const [articleLikesCnt, setArticleLikesCnt] = useState(0);
   const [animate, setAnimate] = useState(false);
   const [activePieces, setActivePieces] = useState<number[]>([]);
@@ -105,6 +105,26 @@ export default function Heart({ slug }: { slug: string }) {
       setActivePieces(prev => [...prev, ...roll]);
     }
   }, [piecesLeft, slug]);
+
+  if (compact) {
+    return (
+      <div
+        className={`outline-none cursor-pointer relative ${
+          animate && allActive ? 'animate-heartbeat' : ''
+        }`}
+        onClick={activatePiece}
+        onMouseDown={e => e.preventDefault()}
+        role="button"
+        tabIndex={0}
+        style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.25))' }}
+      >
+        <HeartSvg activePieces={activePieces} allActive={allActive} />
+        <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
+          {articleLikesCnt}
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div
