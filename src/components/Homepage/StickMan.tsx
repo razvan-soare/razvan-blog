@@ -65,8 +65,13 @@ export default function StickMan() {
     };
   }, [monsterSvg]);
 
+  const loaded = monsterSvg !== '';
+
   return (
-    <div className="group h-[200px] w-[200px] relative ml-auto z-[180] bg-background rounded-full shadow-[0px_0px_35px_35px_var(--color-background)] [&_#rest-hand]:block [&_#wave-hand]:hidden hover:[&_#rest-hand]:hidden hover:[&_#wave-hand]:block">
+    <div
+      className="group h-[200px] w-[200px] relative ml-auto z-[180] bg-background rounded-full shadow-[0px_0px_35px_35px_var(--color-background)] [&_#rest-hand]:block [&_#wave-hand]:hidden hover:[&_#rest-hand]:hidden hover:[&_#wave-hand]:block transition-opacity duration-700 ease-out"
+      style={{ opacity: loaded ? 1 : 0 }}
+    >
       {/* Thought cloud - shown on hover via group-hover */}
       <div className="absolute right-[100px] w-[500px] top-[-80%] opacity-0 transition-opacity duration-200 pointer-events-none pb-[100px] group-hover:opacity-100 group-hover:pointer-events-auto">
         <ThoughtCloud>
