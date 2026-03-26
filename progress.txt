@@ -1,3 +1,7 @@
+## 2026-03-26 — [RAZ-38] Article block scrollbar fix
+- Removed max-h-[75vh] height constraint from code blocks so full content displays without vertical scrollbar
+- Changed overflow-auto to overflow-x-auto to keep horizontal scroll for wide code but eliminate vertical scroll
+
 ## 2026-03-26 — [RAZ-32] Header padding fix v3 (mobile top spacing)
 - Increased mobile vertical padding from 7px to 16px so logo isn't pressed against the top border
 - Increased tablet container padding from 16px to 24px for better left spacing
