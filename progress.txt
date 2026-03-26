@@ -1,3 +1,9 @@
+## 2026-03-26 — [RAZ-31] Like button mobile v3 (drop shadow + overlay count)
+- Removed ugly background container from mobile fixed like button
+- Added drop-shadow to the heart SVG for visual separation
+- Like count now overlaid in the center of the heart via a new `compact` prop on the Heart component
+- Desktop sidebar layout unchanged
+
 ## 2026-03-26 — [RAZ-37] Render issue on article (list layout fix)
 - Fixed article list items using display:flex which caused nested content (sub-paragraphs, ordered sub-lists) to render side-by-side in columns instead of stacking vertically
 - Switched to position:relative + absolute ::before positioning for custom bullets/counters, allowing nested content to flow naturally
