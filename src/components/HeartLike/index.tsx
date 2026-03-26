@@ -109,7 +109,7 @@ export default function Heart({ slug, compact = false }: { slug: string; compact
   if (compact) {
     return (
       <div
-        className={`outline-none cursor-pointer relative ${
+        className={`outline-none cursor-pointer relative [&_svg]:!m-0 ${
           animate && allActive ? 'animate-heartbeat' : ''
         }`}
         onClick={activatePiece}
