@@ -93,11 +93,6 @@ export default function ArticlePage({ mdxContent, frontmatter, slug }: ArticlePa
             </p>
             <p className="text-text text-xl font-light">{formattedDate}</p>
           </div>
-          {showLikeButton && (
-            <div className="hidden max-tablet:fixed max-tablet:bottom-6 max-tablet:right-6 max-tablet:z-50 max-tablet:block max-tablet:bg-background max-tablet:rounded-full max-tablet:shadow-lg max-tablet:p-2">
-              <Heart slug={slug} />
-            </div>
-          )}
         </div>
       </div>
 
@@ -111,6 +106,13 @@ export default function ArticlePage({ mdxContent, frontmatter, slug }: ArticlePa
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Mobile fixed like button */}
+      {showLikeButton && (
+        <div className="fixed bottom-6 right-6 z-50 bg-background rounded-full shadow-lg p-2 tablet:hidden">
+          <Heart slug={slug} />
         </div>
       )}
     </div>
