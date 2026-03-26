@@ -1,3 +1,8 @@
+## 2026-03-26 — [RAZ-31] Like button fixed on mobile (v2)
+- Made the heart/like button a standalone fixed-position element on mobile article pages
+- Previous attempt using hidden + max-tablet:fixed on same element didn't reliably apply fixed positioning
+- Now uses a separate div with `fixed bottom-6 right-6 z-50 tablet:hidden` outside the content flow
+
 ## 2026-03-25 — [RAZ-36] Title animation on browser back
 - Fixed title view transition not playing when using browser back/forward buttons
 - Root cause: Next.js popstate handler doesn't enable React's view transition context, so document.startViewTransition() was never called for back/forward navigation
