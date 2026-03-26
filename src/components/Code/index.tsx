@@ -60,7 +60,7 @@ export default function Code({ codeString, language, metastring }: CodeProps) {
             </div>
 
             {/* Code content */}
-            <div className="relative flex text-lg overflow-auto -mx-8 p-8 bg-syntax-bg max-h-[75vh] rounded [&_pre]:!text-[17px] max-tablet:mx-0">
+            <div className="relative flex text-lg overflow-x-auto -mx-8 p-8 bg-syntax-bg rounded [&_pre]:!text-[17px] max-tablet:mx-0">
               <pre className={className} style={style}>
                 {tokens.map((line, i) => {
                   const lineProps = getLineProps({ line });
