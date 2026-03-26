@@ -1,3 +1,7 @@
+## 2026-03-26 — [RAZ-37] Render issue on article (list layout fix)
+- Fixed article list items using display:flex which caused nested content (sub-paragraphs, ordered sub-lists) to render side-by-side in columns instead of stacking vertically
+- Switched to position:relative + absolute ::before positioning for custom bullets/counters, allowing nested content to flow naturally
+
 ## 2026-03-26 — [RAZ-36] Title animation v2 + monster fade-in
 - Revised back-button view transition: replaced manual document.startViewTransition() with router.replace() approach that intercepts popstate and uses ACTION_NAVIGATE path (same as Link clicks)
 - Added 700ms opacity fade-in on homepage monster character to prevent jarring SVG jump-in on load
