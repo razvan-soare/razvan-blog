@@ -43,24 +43,21 @@ export default function Code({ codeString, language, metastring }: CodeProps) {
     <div className="code-wrapper">
       <Highlight code={codeString} language={lang} theme={{ plain: {}, styles: [] }}>
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
-          <div className="relative pr-2.5 w-full [&_pre[class*='language-']]:relative [&_pre[class*='language-']]:bg-transparent [&_pre[class*='language-']]:m-0 [&_pre[class*='language-']]:p-0 [&_pre[class*='language-']]:overflow-auto">
+          <div className="relative w-full [&_pre[class*='language-']]:relative [&_pre[class*='language-']]:bg-transparent [&_pre[class*='language-']]:m-0 [&_pre[class*='language-']]:p-0 [&_pre[class*='language-']]:overflow-auto">
             {/* Language badge */}
-            <div className="z-10 absolute top-0 right-0 -translate-y-full rounded-t bg-syntax-bg text-gray-700 px-5 py-[7px] pb-1 max-tablet:right-[50px]">
+            <div className="z-10 absolute top-0 right-0 -translate-y-full rounded-t bg-syntax-bg text-gray-700 text-sm px-3 py-1 pb-0.5 max-tablet:right-[50px]">
               {lang.toUpperCase()}
-            </div>
-
-            {/* Copy button */}
-            <div className="absolute z-10 top-[15px] right-0">
-              <button
-                className="cursor-pointer px-1.5 py-[5px] rounded-[5px] bg-transparent font-semibold text-gray-700 select-none border-none opacity-70 hover:opacity-100"
-                onClick={handleCopy}
-              >
-                {copyBtnText}
-              </button>
             </div>
 
             {/* Code content */}
             <div className="relative flex text-lg overflow-x-auto -mx-8 p-8 bg-syntax-bg rounded [&_pre]:!text-[17px] max-tablet:mx-0">
+              {/* Copy button */}
+              <button
+                className="absolute z-10 top-2 right-2 cursor-pointer px-1.5 py-[5px] rounded-[5px] bg-transparent font-semibold text-sm text-gray-700 select-none border-none opacity-70 hover:opacity-100"
+                onClick={handleCopy}
+              >
+                {copyBtnText}
+              </button>
               <pre className={className} style={style}>
                 {tokens.map((line, i) => {
                   const lineProps = getLineProps({ line });

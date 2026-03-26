@@ -267,7 +267,7 @@ table {
 
 /* ===== Code Syntax Highlighting ===== */
 .code-wrapper {
-  margin: 0 0 80px;
+  margin: 32px 0 80px;
 }
 .code-wrapper .highlight-line {
   background-color: var(--color-syntax-highlight);
