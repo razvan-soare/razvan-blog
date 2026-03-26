@@ -80,9 +80,9 @@ export default function Header({ title }: { title: string }) {
       <div className="h-[30px] w-full" />
 
       {/* Sticky container */}
-      <div className="sticky top-[-1px] px-[80px] mx-auto max-w-[1300px] z-[200] bg-background-blured tablet:px-4 max-tablet:px-4">
+      <div className="sticky top-[-1px] px-[80px] mx-auto max-w-[1300px] z-[200] bg-background-blured tablet:px-6 max-tablet:px-4">
         {/* Header bar */}
-        <header className="flex justify-start items-center px-8 [&_a]:no-underline max-tablet:px-4 max-tablet:py-[7px] max-tablet:justify-between">
+        <header className="flex justify-start items-center px-8 [&_a]:no-underline max-tablet:px-4 max-tablet:py-4 max-tablet:justify-between">
           <Link href="/" className="text-primary text-[22px]">
             <h1>{title}</h1>
           </Link>
