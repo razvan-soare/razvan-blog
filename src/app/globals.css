@@ -397,14 +397,15 @@ table {
   margin-bottom: 16px;
   font-weight: 300;
   line-height: 1.6;
-  display: flex;
-  align-items: baseline;
+  position: relative;
+  padding-left: 18px;
 }
 .article-content ul li::before {
   content: '\203A';
-  margin-right: 10px;
   color: var(--color-text);
   font-weight: 600;
+  position: absolute;
+  left: 0;
 }
 .article-content ol {
   font-size: 18px;
@@ -416,14 +417,15 @@ table {
   font-weight: 300;
   line-height: 1.6;
   margin-bottom: 16px;
-  display: flex;
-  align-items: baseline;
+  position: relative;
+  padding-left: 24px;
   counter-increment: list-counter;
 }
 .article-content ol li::before {
   content: counter(list-counter) '.';
-  margin-right: 10px;
   font-weight: 600;
+  position: absolute;
+  left: 0;
 }
 .article-content img {
   vertical-align: baseline;
