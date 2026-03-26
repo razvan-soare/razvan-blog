@@ -1,3 +1,7 @@
+## 2026-03-26 — [RAZ-36] Title animation v2 + monster fade-in
+- Revised back-button view transition: replaced manual document.startViewTransition() with router.replace() approach that intercepts popstate and uses ACTION_NAVIGATE path (same as Link clicks)
+- Added 700ms opacity fade-in on homepage monster character to prevent jarring SVG jump-in on load
+
 ## 2026-03-26 — [RAZ-32] Header padding fix v2 (mobile/tablet)
 - Previous fix only addressed desktop padding; mobile/tablet had px-0 on the sticky container
 - Changed tablet:px-0 and max-tablet:px-0 to px-4 so mobile/tablet screens get proper left/right spacing
