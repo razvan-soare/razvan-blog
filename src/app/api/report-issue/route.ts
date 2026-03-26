@@ -16,10 +16,12 @@ async function loginToPaperclip(
     return null;
   }
 
+  const publicHost = new URL(publicUrl).host;
   const response = await fetch(`${apiUrl}/api/auth/sign-in/email`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Host: publicHost,
       Origin: publicUrl,
       Referer: publicUrl,
     },
@@ -27,11 +29,13 @@ async function loginToPaperclip(
   });
 
   if (!response.ok) {
-    console.error('Paperclip login failed:', await response.text());
+    console.error('Paperclip login failed:', response.status, await response.text());
     return null;
   }
 
+  console.log('Paperclip login success, status:', response.status);
   const setCookieHeaders = response.headers.getSetCookie?.() ?? [];
+  console.log('Set-Cookie headers received:', setCookieHeaders.length, setCookieHeaders);
   const cookies = setCookieHeaders.map((c) => c.split(';')[0]).join('; ');
 
   if (cookies) {
@@ -48,8 +52,10 @@ async function createIssue(
   issueBody: Record<string, unknown>,
   cookie: string | null,
 ) {
+  const publicHost = new URL(publicUrl).host;
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
+    Host: publicHost,
     Origin: publicUrl,
     Referer: publicUrl,
   };
@@ -120,6 +126,7 @@ export async function POST(request: NextRequest) {
     cachedSessionCookie,
   );
 
+  console.log('Create issue attempt response:', response.status);
   // If unauthorized, login and retry
   if (response.status === 401 || response.status === 403) {
     const cookie = await loginToPaperclip(apiUrl, publicUrl!);
