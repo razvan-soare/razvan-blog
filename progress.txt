@@ -1,3 +1,8 @@
+## 2026-03-26 — [RAZ-32] Header padding fix v3 (mobile top spacing)
+- Increased mobile vertical padding from 7px to 16px so logo isn't pressed against the top border
+- Increased tablet container padding from 16px to 24px for better left spacing
+- Previous fixes addressed desktop and mobile horizontal padding; this round fixes vertical spacing
+
 ## 2026-03-26 — [RAZ-31] Like button mobile v3 (drop shadow + overlay count)
 - Removed ugly background container from mobile fixed like button
 - Added drop-shadow to the heart SVG for visual separation
