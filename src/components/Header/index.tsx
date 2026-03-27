@@ -83,7 +83,7 @@ export default function Header({ title }: { title: string }) {
       <div className="h-[30px] w-full" />
 
       {/* Sticky container */}
-      <div className="sticky top-[-1px] px-[80px] mx-auto max-w-[1300px] z-[200] bg-background-blured tablet:px-6 max-tablet:px-4">
+      <div className="sticky top-[-1px] px-[80px] mx-auto max-w-[1300px] z-[200] bg-background-blured tablet:px-6 max-tablet:px-4 ![transition:none]">
         {/* Header bar */}
         <header className="flex justify-start items-center px-8 [&_a]:no-underline max-tablet:px-4 max-tablet:py-4 max-tablet:justify-between">
           <Link href="/" className="text-primary text-[22px]">
@@ -123,7 +123,7 @@ export default function Header({ title }: { title: string }) {
 
               {/* Mobile overlay menu */}
               <div
-                className={`fixed inset-0 bg-background-blured z-[100] flex justify-center items-center cursor-pointer transition-[opacity,background-color] duration-500 max-tablet:flex-col [&_ul]:flex [&_ul]:flex-col [&_ul]:justify-center [&_ul]:items-center [&_ul]:text-center ${
+                className={`fixed inset-0 bg-background-blured z-[100] flex justify-center items-center cursor-pointer transition-[opacity] duration-500 max-tablet:flex-col [&_ul]:flex [&_ul]:flex-col [&_ul]:justify-center [&_ul]:items-center [&_ul]:text-center ${
                   isOpen
                     ? 'opacity-100 pointer-events-auto [&_li]:translate-x-0'
                     : 'opacity-0 pointer-events-none [&_li]:-translate-x-[70%]'
