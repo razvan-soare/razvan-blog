@@ -1,3 +1,7 @@
+## 2026-03-27 — [RAZ-47] Theme toggle causing text selection
+- Converted theme toggle from div to button element and added onMouseDown preventDefault
+- Prevents rapid clicking from triggering text selection on "recently published" items
+
 ## 2026-03-26 — [RAZ-39] Article code block UI fixes
 - Fixed language badge (e.g. "JSX") being too tall and crowding article text above by reducing padding/font-size and adding top margin
 - Moved copy button inside the code content container so it no longer overflows on mobile
