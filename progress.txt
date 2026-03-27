@@ -1,3 +1,7 @@
+## 2026-03-27 — [RAZ-24] Spacing and font sizing fixes
+- Reduced menu item text/padding in header, increased TOC item spacing, enlarged blog titles, reduced excessive homepage top margin and article title bottom margin
+- These issues remained after the html font-size 62.5% fix (RAZ-8/RAZ-25)
+
 ## 2026-03-27 — [RAZ-34] Snippets page UI fixes
 - Reduced title-subtitle spacing from mb-5 to mb-1
 - Replaced emoji paperclip with inline SVG positioned on top of label (clipping effect)
