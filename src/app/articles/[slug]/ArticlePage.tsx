@@ -17,7 +17,7 @@ const TableOfContents = memo(function TableMemo({ headings }: { headings: string
         return (
           <a
             key={tag}
-            className="text-gray-1000 cursor-pointer text-[15px] leading-5 mb-2.5 opacity-70 no-underline transition-opacity duration-500 hover:opacity-100 block"
+            className="text-gray-1000 cursor-pointer text-[14px] leading-6 mb-3 opacity-70 no-underline transition-opacity duration-500 hover:opacity-100 block"
             onClick={e => {
               e.preventDefault();
               const el = document.getElementById(tag.toLowerCase().replaceAll(' ', '-'));
@@ -74,7 +74,7 @@ export default function ArticlePage({ mdxContent, frontmatter, slug }: ArticlePa
           </div>
 
           {/* Title */}
-          <h1 className="text-gray-1000 text-[38px] leading-[42px] m-0 mb-20 text-center">
+          <h1 className="text-gray-1000 text-[38px] leading-[42px] m-0 mb-12 text-center">
             <ViewTransition name={`article-title-${slug}`}>
               <span className="inline-block" style={{ viewTransitionName: `article-title-${slug}` }}>{frontmatter.title}</span>
             </ViewTransition>

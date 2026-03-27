@@ -12,13 +12,13 @@ function truncate(str: string, len: number) {
 export default function BlogList({ posts }: { posts: Post[] }) {
   return (
     <div className="flex flex-col">
-      <h2 className="text-secondary text-base font-normal tracking-[2px] mb-10">
+      <h2 className="text-secondary text-sm font-medium tracking-[3px] mb-8">
         RECENTLY PUBLISHED
       </h2>
       {posts.map(post => (
         <Link href={`/articles/${post.slug}`} key={post.slug} className="no-underline">
-          <div className="group rounded-[7px] py-2.5 mb-10 cursor-pointer">
-            <h3 className="text-[22px] text-gray-1000 mb-4 group-hover:text-primary">
+          <div className="group rounded-[7px] py-2.5 mb-8 cursor-pointer">
+            <h3 className="text-[24px] text-gray-1000 mb-3 group-hover:text-primary">
               <ViewTransition name={`article-title-${post.slug}`}>
                 <span className="inline-block" style={{ viewTransitionName: `article-title-${post.slug}` }}>{post.frontmatter.title}</span>
               </ViewTransition>

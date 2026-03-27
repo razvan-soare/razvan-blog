@@ -7,7 +7,7 @@ import type { Post } from '@/lib/mdx';
 
 export default function Homepage({ posts }: { posts: Post[] }) {
   return (
-    <div className="flex mt-[200px] max-tablet:mt-[100px]">
+    <div className="flex mt-[120px] max-tablet:mt-[60px]">
       <div className="w-[60%] pr-[15px] flex justify-center max-tablet:w-full">
         <BlogList posts={posts} />
       </div>

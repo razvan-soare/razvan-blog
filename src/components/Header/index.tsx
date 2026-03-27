@@ -28,34 +28,34 @@ function Menu({ isOpen }: { isOpen: boolean }) {
           isOpen ? 'opacity-100' : 'opacity-0'
         }`}
       >
-        <li className="m-2.5">
+        <li className="m-1.5">
           <Link
             href="/"
-            className="no-underline text-text text-base p-2.5 font-normal tracking-wide"
+            className="no-underline text-text text-sm p-1.5 font-normal tracking-wide"
           >
             Home
           </Link>
         </li>
-        <li className="m-2.5">
+        <li className="m-1.5">
           <Link
             href="/about"
-            className="no-underline text-text text-base p-2.5 font-normal tracking-wide"
+            className="no-underline text-text text-sm p-1.5 font-normal tracking-wide"
           >
             About
           </Link>
         </li>
-        <li className="m-2.5">
+        <li className="m-1.5">
           <Link
             href="/snippets"
-            className="no-underline text-text text-base p-2.5 font-normal tracking-wide"
+            className="no-underline text-text text-sm p-1.5 font-normal tracking-wide"
           >
             Snippets
           </Link>
         </li>
-        <li className="m-2.5">
+        <li className="m-1.5">
           <Link
             href="/projects"
-            className="no-underline text-text text-base p-2.5 font-normal tracking-wide"
+            className="no-underline text-text text-sm p-1.5 font-normal tracking-wide"
           >
             Projects
           </Link>
@@ -66,7 +66,7 @@ function Menu({ isOpen }: { isOpen: boolean }) {
           isOpen ? 'opacity-100' : 'opacity-0'
         }`}
       >
-        <li className="m-2.5">
+        <li className="m-1.5">
           <ThemeToggle />
         </li>
       </ul>
