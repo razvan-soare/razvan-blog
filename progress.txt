@@ -1,3 +1,8 @@
+## 2026-03-27 — [RAZ-48] Header background fade on theme switch
+- Removed background-color transition from header sticky container (set transition:none)
+- Changed mobile overlay transition from opacity+background-color to opacity only
+- Header background now changes instantly to match the page background on theme toggle
+
 ## 2026-03-27 — [RAZ-47] Theme toggle causing text selection
 - Converted theme toggle from div to button element and added onMouseDown preventDefault
 - Prevents rapid clicking from triggering text selection on "recently published" items
