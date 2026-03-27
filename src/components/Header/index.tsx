@@ -8,12 +8,15 @@ import { SunIcon, MoonIcon } from '@/components/ThemeIcons';
 function ThemeToggle() {
   const { isLightTheme, toggleTheme } = useTheme();
   return (
-    <div
-      className="cursor-pointer flex items-center p-2.5 text-xl"
+    <button
+      type="button"
+      className="cursor-pointer flex items-center p-2.5 text-xl bg-transparent border-none select-none"
       onClick={toggleTheme}
+      onMouseDown={(e) => e.preventDefault()}
+      aria-label={isLightTheme ? 'Switch to dark theme' : 'Switch to light theme'}
     >
       {isLightTheme ? <MoonIcon /> : <SunIcon />}
-    </div>
+    </button>
   );
 }
 
