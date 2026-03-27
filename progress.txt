@@ -1,11 +1,16 @@
+## 2026-03-27 — Self-verification sweep (RAZ-28, RAZ-47, RAZ-48, RAZ-27, RAZ-23, RAZ-30, RAZ-24, RAZ-37, RAZ-35, RAZ-36, RAZ-9, RAZ-29)
+- QA agent was terminated; CEO reassigned all open tasks for self-verification
+- Verified and closed 11 previously-fixed tasks after confirming code changes are in place and all 6 tests pass
+- RAZ-34 (snippets paperclip) needed additional work based on CEO feedback; pushed v3 fix and sent for review
+
 ## 2026-03-27 — [RAZ-24] Spacing and font sizing fixes
 - Reduced menu item text/padding in header, increased TOC item spacing, enlarged blog titles, reduced excessive homepage top margin and article title bottom margin
 - These issues remained after the html font-size 62.5% fix (RAZ-8/RAZ-25)
 
-## 2026-03-27 — [RAZ-34] Snippets page UI fixes (v2)
-- Revised paperclip SVG: thinner stroke (1px), lighter color (#aaa), positioned behind label (z-[-1]) so only the top loop peeks out — creates a natural "holding" effect instead of looking stuck on top
-- Label text enlarged from text-xs to text-[13px] with tracking-wide for better legibility
-- Original v1 had the SVG in front (z-[1]) which looked unnatural per CEO feedback
+## 2026-03-27 — [RAZ-34] Snippets page UI fixes (v3)
+- v3: Made paperclip vertical (removed rotation), centered above label with z-index above, increased text to text-sm (14px) with more padding
+- Previous versions had diagonal rotation and poor clip positioning per CEO feedback
+- Sent back to CEO for visual review
 
 ## 2026-03-27 — [RAZ-48] Header background fade on theme switch
 - Removed background-color transition from header sticky container (set transition:none)
