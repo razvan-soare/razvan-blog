@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 let cachedSessionCookie: string | null = null;
 
-async function loginToPaperclip(
-  apiUrl: string,
-  publicUrl: string,
-): Promise<string | null> {
+async function loginToPaperclip(baseUrl: string): Promise<string | null> {
   const email = process.env.PAPERCLIP_EMAIL;
   const password = process.env.PAPERCLIP_PASSWORD;
 
@@ -16,14 +13,10 @@ async function loginToPaperclip(
     return null;
   }
 
-  const publicHost = new URL(publicUrl).host;
-  const response = await fetch(`${apiUrl}/api/auth/sign-in/email`, {
+  const response = await fetch(`${baseUrl}/api/auth/sign-in/email`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Host: publicHost,
-      Origin: publicUrl,
-      Referer: publicUrl,
     },
     body: JSON.stringify({ email, password }),
   });
@@ -33,9 +26,7 @@ async function loginToPaperclip(
     return null;
   }
 
-  console.log('Paperclip login success, status:', response.status);
   const setCookieHeaders = response.headers.getSetCookie?.() ?? [];
-  console.log('Set-Cookie headers received:', setCookieHeaders.length, setCookieHeaders);
   const cookies = setCookieHeaders.map((c) => c.split(';')[0]).join('; ');
 
   if (cookies) {
@@ -46,25 +37,20 @@ async function loginToPaperclip(
 }
 
 async function createIssue(
-  apiUrl: string,
-  publicUrl: string,
+  baseUrl: string,
   companyId: string,
   issueBody: Record<string, unknown>,
   cookie: string | null,
 ) {
-  const publicHost = new URL(publicUrl).host;
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    Host: publicHost,
-    Origin: publicUrl,
-    Referer: publicUrl,
   };
 
   if (cookie) {
     headers['Cookie'] = cookie;
   }
 
-  return fetch(`${apiUrl}/api/companies/${companyId}/issues`, {
+  return fetch(`${baseUrl}/api/companies/${companyId}/issues`, {
     method: 'POST',
     headers,
     body: JSON.stringify(issueBody),
@@ -72,11 +58,10 @@ async function createIssue(
 }
 
 export async function POST(request: NextRequest) {
-  const apiUrl = process.env.PAPERCLIP_API_URL;
-  const publicUrl = process.env.PAPERCLIP_PUBLIC_URL || apiUrl;
+  const baseUrl = process.env.PAPERCLIP_PUBLIC_URL || process.env.PAPERCLIP_API_URL;
   const companyId = process.env.PAPERCLIP_COMPANY_ID;
   const projectId = process.env.PAPERCLIP_PROJECT_ID;
-  if (!apiUrl || !companyId || !projectId) {
+  if (!baseUrl || !companyId || !projectId) {
     return NextResponse.json(
       { error: 'Paperclip integration not configured' },
       { status: 503 },
@@ -118,25 +103,18 @@ export async function POST(request: NextRequest) {
   };
 
   // Try with cached session
-  let response = await createIssue(
-    apiUrl,
-    publicUrl!,
-    companyId,
-    issueBody,
-    cachedSessionCookie,
-  );
+  let response = await createIssue(baseUrl, companyId, issueBody, cachedSessionCookie);
 
-  console.log('Create issue attempt response:', response.status);
   // If unauthorized, login and retry
   if (response.status === 401 || response.status === 403) {
-    const cookie = await loginToPaperclip(apiUrl, publicUrl!);
+    const cookie = await loginToPaperclip(baseUrl);
     if (!cookie) {
       return NextResponse.json(
         { error: 'Failed to authenticate with Paperclip' },
         { status: 502 },
       );
     }
-    response = await createIssue(apiUrl, publicUrl!, companyId, issueBody, cookie);
+    response = await createIssue(baseUrl, companyId, issueBody, cookie);
   }
 
   if (!response.ok) {
