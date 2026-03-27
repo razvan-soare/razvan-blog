@@ -19,15 +19,15 @@ function generateColor() {
 function PaperclipSvg() {
   return (
     <svg
-      className="absolute -top-[14px] left-1/2 -translate-x-1/2 w-[18px] h-[28px] z-[1]"
-      viewBox="0 0 24 40"
+      className="absolute -top-[10px] left-[6px] w-[12px] h-[28px] z-[-1] pointer-events-none"
+      viewBox="0 0 14 36"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M8 38V10C8 6.68629 10.6863 4 14 4V4C17.3137 4 20 6.68629 20 10V30C20 32.2091 18.2091 34 16 34V34C13.7909 34 12 32.2091 12 30V12"
-        stroke="#888"
-        strokeWidth="2"
+        d="M4 34V8C4 4.5 6.5 2 10 2C13 2 14 4.5 14 8V26C14 28 12.8 30 10.5 30C8.2 30 7 28 7 26V10"
+        stroke="#aaa"
+        strokeWidth="1"
         strokeLinecap="round"
       />
     </svg>
@@ -50,10 +50,10 @@ export default function Snippets({ posts }: { posts: Post[] }) {
               style={{ background: generateColor() }}
             >
               <div className="flex flex-col items-start justify-center overflow-hidden h-full">
-                <div className="absolute top-2 right-0 rotate-[20deg] origin-top-right">
+                <div className="absolute top-2.5 right-0 rotate-[20deg] origin-top-right">
                   <div className="relative">
                     <PaperclipSvg />
-                    <div className="bg-white px-1.5 py-[3px] shadow-[2px_2px_3px_-2px_black] text-xs font-sriracha">
+                    <div className="relative z-[1] bg-white px-2 py-[3px] shadow-[2px_2px_3px_-2px_black] text-[13px] font-sriracha tracking-wide">
                       {post.frontmatter.tags[0]}
                     </div>
                   </div>
