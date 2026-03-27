@@ -1,3 +1,8 @@
+## 2026-03-27 — [RAZ-34] Snippets page UI fixes
+- Reduced title-subtitle spacing from mb-5 to mb-1
+- Replaced emoji paperclip with inline SVG positioned on top of label (clipping effect)
+- Changed label font to Sriracha to match old design
+
 ## 2026-03-27 — [RAZ-48] Header background fade on theme switch
 - Removed background-color transition from header sticky container (set transition:none)
 - Changed mobile overlay transition from opacity+background-color to opacity only
