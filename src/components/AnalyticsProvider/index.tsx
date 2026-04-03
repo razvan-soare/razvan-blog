@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, type ReactNode } from 'react';
+import { Suspense, useEffect, type ReactNode } from 'react';
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
 import * as Sentry from '@sentry/nextjs';
@@ -66,7 +66,9 @@ export default function AnalyticsProvider({ children }: { children: ReactNode })
 
   return (
     <PostHogProvider client={posthog}>
-      <RouteTracking />
+      <Suspense fallback={null}>
+        <RouteTracking />
+      </Suspense>
       {children}
     </PostHogProvider>
   );
