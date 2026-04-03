@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import posthog from 'posthog-js';
 
 const HeartSvg = ({ activePieces, allActive }: { activePieces: number[]; allActive: boolean }) => {
   const activeSet = new Set(activePieces);
@@ -95,6 +96,11 @@ export default function Heart({ slug, compact = false }: { slug: string; compact
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ slug, userId }),
       }).catch(() => {});
+
+      posthog.capture('article_liked', {
+        slug,
+        userId,
+      });
 
       setArticleLikesCnt(c => c + 1);
 

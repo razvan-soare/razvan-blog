@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import http from 'node:http';
+import * as Sentry from '@sentry/nextjs';
 
 let cachedSessionCookie: string | null = null;
 
@@ -58,6 +59,10 @@ async function loginToPaperclip(
   const password = process.env.PAPERCLIP_PASSWORD;
 
   if (!email || !password) {
+    Sentry.captureMessage(
+      'PAPERCLIP_EMAIL and PAPERCLIP_PASSWORD are required for authentication',
+      'warning',
+    );
     console.error(
       'PAPERCLIP_EMAIL and PAPERCLIP_PASSWORD are required for authentication',
     );
@@ -73,6 +78,10 @@ async function loginToPaperclip(
   );
 
   if (res.status !== 200) {
+    Sentry.captureMessage('Paperclip login failed', {
+      level: 'error',
+      extra: { status: res.status, body: res.body },
+    });
     console.error('Paperclip login failed:', res.status, res.body);
     return null;
   }
@@ -170,6 +179,10 @@ export async function POST(request: NextRequest) {
   }
 
   if (res.status < 200 || res.status >= 300) {
+    Sentry.captureMessage('Paperclip API error', {
+      level: 'error',
+      extra: { status: res.status, body: res.body },
+    });
     console.error('Paperclip API error:', res.body);
     return NextResponse.json(
       { error: 'Failed to create issue' },

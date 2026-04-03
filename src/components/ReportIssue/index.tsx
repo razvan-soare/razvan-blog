@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
+import posthog from 'posthog-js';
 
 const ADMIN_STORAGE_KEY = 'razvan-admin';
 const PASSWORD_STORAGE_KEY = 'razvan-report-password';
@@ -101,16 +102,31 @@ export default function ReportIssue() {
 
       if (response.ok) {
         localStorage.setItem(PASSWORD_STORAGE_KEY, password.trim());
+        posthog.capture('issue_report_submitted', {
+          page: window.location.pathname,
+          hasImages: images.length > 0,
+          imageCount: images.length,
+          identifier: data.identifier,
+        });
         setStatus('success');
         setResultMessage(`Issue ${data.identifier} created successfully!`);
         setTitle('');
         setDescription('');
         setImages([]);
       } else {
+        posthog.capture('issue_report_failed', {
+          page: window.location.pathname,
+          error: data.error || 'Something went wrong',
+          status: response.status,
+        });
         setStatus('error');
         setResultMessage(data.error || 'Something went wrong');
       }
     } catch {
+      posthog.capture('issue_report_failed', {
+        page: window.location.pathname,
+        error: 'Failed to connect to the server',
+      });
       setStatus('error');
       setResultMessage('Failed to connect to the server');
     }
