@@ -16,7 +16,7 @@ export default function BlogList({ posts }: { posts: Post[] }) {
         RECENTLY PUBLISHED
       </h2>
       {posts.map(post => (
-        <Link href={`/articles/${post.slug}`} key={post.slug} className="no-underline">
+        <Link href={`/articles/${post.slug}`} prefetch key={post.slug} className="no-underline">
           <div className="group rounded-[7px] py-2.5 mb-8 cursor-pointer">
             <h3 className="text-[24px] text-gray-1000 mb-3 group-hover:text-primary">
               <ViewTransition name={`article-title-${post.slug}`}>
