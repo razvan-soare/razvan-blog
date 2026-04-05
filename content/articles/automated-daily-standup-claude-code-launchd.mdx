@@ -1,0 +1,282 @@
+---
+title: Automated Daily Standup with Claude Code and launchd
+date: 2026-04-05
+tags: [AI, Automation, Productivity, Claude Code, macOS]
+type: 'articles'
+excerpt: A practical guide to automate daily standups on macOS with launchd, Claude Code, GitHub, Linear, and Notion — with safety guards, timezone-aware reporting, and clean operational logs.
+---
+
+If you write standups manually every day, you are probably spending 10–20 minutes on repetitive context switching.
+
+This setup automates the full loop:
+- trigger at a fixed time
+- gather updates from GitHub + Linear
+- generate a clean summary
+- publish to Notion
+- keep logs for traceability
+
+## System architecture
+
+![Automated standup architecture](/images/automated-standup-launchd/standup-architecture.svg)
+
+At a high level:
+1. `launchd` starts a script every weekday at 13:30.
+2. The script calls Claude Code in non-interactive mode.
+3. Claude reads a strict prompt and collects updates from tools.
+4. Claude writes the standup to Notion and exits.
+5. The script stores logs for debugging and auditability.
+
+## Why this is reliable in practice
+
+- deterministic schedule (`launchd`)
+- weekend skip logic in the script
+- timeout watchdog to avoid hung runs
+- timezone-aware reporting window
+- local run logs for fast troubleshooting
+
+<Info>
+A key detail: for PRs, use `merged_at` in your prompt logic, not `created_at`. Otherwise, old PRs merged today can be missed.
+</Info>
+
+## Reporting window design (the part most people get wrong)
+
+![Reporting window diagram](/images/automated-standup-launchd/reporting-window.svg)
+
+Standup quality depends on the time window. The safest approach is:
+- report from previous cutoff to current run time
+- on Monday, include Friday→Monday gap
+- keep one explicit timezone constant in both script and prompt
+
+This avoids duplicates and missing updates around day boundaries.
+
+## Prerequisites
+
+- macOS (this guide uses `launchd`)
+- Claude Code CLI installed
+- GitHub CLI (`gh`) installed and authenticated
+- MCP integrations configured for Linear + Notion
+- a Notion destination page for daily standups
+
+<Warning>
+Non-interactive runs cannot answer permission prompts. If your setup requires `--dangerously-skip-permissions`, keep your prompt scoped to trusted tools only.
+</Warning>
+
+## Step 1: prompt file
+
+Create `~/.claude/standup-prompt.txt`.
+
+Keep the prompt strict and structured:
+- define exact reporting window rules
+- require grouped output sections (PRs, tickets, blockers, next)
+- define fallback behavior when today's Notion section does not exist
+- forbid any actions outside standup generation
+
+Example prompt skeleton:
+
+```txt
+You are generating a daily standup update.
+
+Timezone: Europe/Bucharest
+Current run time: provided by system clock.
+
+Reporting window:
+- Standard days: previous run cutoff -> current run time.
+- Monday: previous Friday cutoff -> current run time.
+
+Data sources:
+1) GitHub via gh CLI (author = me, use merged_at for PRs)
+2) Linear via MCP (my tickets updated/closed in window)
+3) Notion via MCP (append under today's section)
+
+Output format (strict):
+## Yesterday
+- ...
+
+## Today
+- ...
+
+## Blockers
+- ... or "None"
+
+Fallback behavior:
+- If today's section is missing, append to latest visible daily section and include a NOTE line.
+
+Safety constraints:
+- Do not create unrelated pages.
+- Do not modify historical entries outside the current target section.
+```
+
+## Step 2: runner script
+
+Create `~/.claude/standup-runner.sh` and make it executable.
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+BASE_DIR="$HOME/.claude"
+PROMPT_FILE="$BASE_DIR/standup-prompt.txt"
+LOG_DIR="$BASE_DIR/standup-logs"
+mkdir -p "$LOG_DIR"
+
+DAY="$(date +%F)"
+LOG_FILE="$LOG_DIR/$DAY.log"
+
+FORCE=false
+SHOW_LOGS=false
+CRON_MODE=false
+
+for arg in "$@"; do
+  case "$arg" in
+    --force) FORCE=true ;;
+    --logs) SHOW_LOGS=true ;;
+    --cron) CRON_MODE=true ;;
+  esac
+done
+
+if [ "$SHOW_LOGS" = true ]; then
+  tail -n 200 "$LOG_FILE" 2>/dev/null || echo "No log yet for $DAY"
+  exit 0
+fi
+
+# Skip weekends unless manually forced
+DOW="$(date +%u)" # 1..7 (Mon..Sun)
+if [ "$FORCE" = false ] && { [ "$DOW" -eq 6 ] || [ "$DOW" -eq 7 ]; }; then
+  echo "[$(date)] Weekend detected, skipping." >> "$LOG_FILE"
+  exit 0
+fi
+
+CMD=(
+  claude
+  --print
+  --dangerously-skip-permissions
+  -p "$(cat "$PROMPT_FILE")"
+)
+
+# 5-minute watchdog
+if command -v gtimeout >/dev/null 2>&1; then
+  TIMEOUT_BIN="gtimeout"
+else
+  TIMEOUT_BIN="timeout"
+fi
+
+{
+  echo "===== $(date) ====="
+  "$TIMEOUT_BIN" 300 "${CMD[@]}"
+  echo ""
+} >> "$LOG_FILE" 2>&1
+
+if [ "$CRON_MODE" = false ]; then
+  echo "Standup run complete. Log: $LOG_FILE"
+fi
+```
+
+```bash
+chmod +x ~/.claude/standup-runner.sh
+```
+
+## Step 3: launchd job
+
+Create `~/Library/LaunchAgents/com.claude.standup.plist`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.claude.standup</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/bin/bash</string>
+      <string>-lc</string>
+      <string>~/.claude/standup-runner.sh --cron</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+      <key>Hour</key><integer>13</integer>
+      <key>Minute</key><integer>30</integer>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>~/.claude/standup-logs/launchd-stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>~/.claude/standup-logs/launchd-stderr.log</string>
+  </dict>
+</plist>
+```
+
+Load and verify:
+
+```bash
+launchctl unload ~/Library/LaunchAgents/com.claude.standup.plist 2>/dev/null || true
+launchctl load ~/Library/LaunchAgents/com.claude.standup.plist
+launchctl list | grep claude.standup
+```
+
+## Operational commands
+
+```bash
+# Manual test
+~/.claude/standup-runner.sh
+
+# View today's run log
+~/.claude/standup-runner.sh --logs
+
+# Restart after plist edits
+launchctl unload ~/Library/LaunchAgents/com.claude.standup.plist
+launchctl load ~/Library/LaunchAgents/com.claude.standup.plist
+```
+
+## Troubleshooting
+
+1) Nothing runs
+- verify agent is loaded with `launchctl list | grep claude.standup`
+- check launchd stderr log for path/env issues
+
+2) Notion update fails
+- re-auth MCP integrations interactively and re-run manually
+- validate fallback logic for missing daily section
+
+3) Laptop sleeping during run
+- this setup requires machine awake + internet at runtime
+- if reliability is critical, move the same script to an always-on server
+
+4) Wrong standup content window
+- ensure timezone is explicitly set in both prompt and script assumptions
+- check Monday override logic
+
+<Danger>
+Do not allow broad autonomous actions in this workflow. Keep scope narrow: read activity, write one standup destination, exit.
+</Danger>
+
+## Adapting this for Linux
+
+Use cron/systemd timer instead of launchd, but keep the exact same guardrails:
+- strict prompt
+- weekend logic
+- timeout
+- logging
+- timezone-aware windows
+
+Minimal cron example (weekday 13:30):
+
+```bash
+30 13 * * 1-5 /bin/bash -lc '~/.claude/standup-runner.sh --cron'
+```
+
+## Final thoughts
+
+This automation works best when you treat it like a small production system:
+- clear inputs
+- deterministic schedule
+- explicit safety boundaries
+- observability via logs
+
+If you do that, your standup becomes reliable infrastructure instead of daily manual overhead.

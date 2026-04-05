@@ -1,0 +1,58 @@
+<svg width="1200" height="640" viewBox="0 0 1200 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: 700 34px 'Inter', Arial, sans-serif; fill: #0f172a; }
+      .subtitle { font: 500 18px 'Inter', Arial, sans-serif; fill: #334155; }
+      .header { font: 700 17px 'Inter', Arial, sans-serif; fill: #0f172a; }
+      .text { font: 500 15px 'Inter', Arial, sans-serif; fill: #334155; }
+      .small { font: 600 13px 'Inter', Arial, sans-serif; fill: #475569; }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="640" rx="24" fill="#f8fafc"/>
+
+  <text x="56" y="64" class="title">Timezone-aware reporting window</text>
+  <text x="56" y="96" class="subtitle">Prevent missing or double-counting activity by defining a strict window in your local timezone.</text>
+
+  <!-- Timeline bar -->
+  <rect x="90" y="180" width="1020" height="80" rx="16" fill="#e2e8f0"/>
+  <line x1="150" y1="220" x2="1060" y2="220" stroke="#64748b" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <circle cx="320" cy="220" r="12" fill="#2563eb"/>
+  <circle cx="620" cy="220" r="12" fill="#2563eb"/>
+  <circle cx="890" cy="220" r="12" fill="#16a34a"/>
+
+  <text x="230" y="160" class="header">Previous run cutoff</text>
+  <text x="268" y="286" class="small">T-1 day 13:30</text>
+
+  <text x="545" y="160" class="header">Current scheduler time</text>
+  <text x="577" y="286" class="small">Today 13:30</text>
+
+  <text x="828" y="160" class="header">Standup output</text>
+  <text x="846" y="286" class="small">Written to Notion</text>
+
+  <!-- Cards -->
+  <rect x="90" y="340" width="320" height="210" rx="16" fill="#dbeafe" stroke="#93c5fd" stroke-width="2"/>
+  <text x="116" y="382" class="header">Weekday mode</text>
+  <text x="116" y="414" class="text">Window: last run → now</text>
+  <text x="116" y="442" class="text">Collect merged_at for PRs</text>
+  <text x="116" y="470" class="text">Collect updated tickets</text>
+  <text x="116" y="498" class="text">Skip if Saturday/Sunday</text>
+
+  <rect x="440" y="340" width="320" height="210" rx="16" fill="#dcfce7" stroke="#86efac" stroke-width="2"/>
+  <text x="466" y="382" class="header">Monday mode</text>
+  <text x="466" y="414" class="text">Window starts Friday cutoff</text>
+  <text x="466" y="442" class="text">Captures weekend-delayed merges</text>
+  <text x="466" y="470" class="text">Prevents Monday underreporting</text>
+
+  <rect x="790" y="340" width="320" height="210" rx="16" fill="#fee2e2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="816" y="382" class="header">Fallback behavior</text>
+  <text x="816" y="414" class="text">If today's section is missing:</text>
+  <text x="816" y="442" class="text">append to latest visible section</text>
+  <text x="816" y="470" class="text">or write to safe backup area</text>
+
+  <text x="56" y="600" class="small">Tip: keep all date checks in one timezone constant (e.g., Europe/Bucharest or Asia/Singapore) across the prompt and script.</text>
+</svg>

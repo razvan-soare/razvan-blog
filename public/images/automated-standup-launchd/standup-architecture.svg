@@ -1,0 +1,65 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: 700 36px 'Inter', Arial, sans-serif; fill: #0f172a; }
+      .subtitle { font: 500 18px 'Inter', Arial, sans-serif; fill: #334155; }
+      .node-title { font: 700 20px 'Inter', Arial, sans-serif; fill: #0f172a; }
+      .node-text { font: 500 16px 'Inter', Arial, sans-serif; fill: #334155; }
+      .label { font: 600 14px 'Inter', Arial, sans-serif; fill: #334155; }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#475569"/>
+    </marker>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#eef2ff"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="700" rx="24" fill="url(#bg)"/>
+
+  <text x="56" y="70" class="title">Automated Daily Standup Pipeline (macOS + launchd)</text>
+  <text x="56" y="104" class="subtitle">Runs on weekdays, gathers activity from GitHub/Linear, and posts to Notion without manual work.</text>
+
+  <!-- Row 1 -->
+  <rect x="70" y="170" width="220" height="130" rx="16" fill="#dbeafe" stroke="#93c5fd" stroke-width="2"/>
+  <text x="96" y="214" class="node-title">launchd</text>
+  <text x="96" y="242" class="node-text">Weekdays at 13:30</text>
+  <text x="96" y="266" class="node-text">using LaunchAgent plist</text>
+
+  <rect x="360" y="170" width="250" height="130" rx="16" fill="#ede9fe" stroke="#c4b5fd" stroke-width="2"/>
+  <text x="386" y="214" class="node-title">standup-runner.sh</text>
+  <text x="386" y="242" class="node-text">timeout + weekend guard</text>
+  <text x="386" y="266" class="node-text">writes daily logs</text>
+
+  <rect x="680" y="170" width="250" height="130" rx="16" fill="#dcfce7" stroke="#86efac" stroke-width="2"/>
+  <text x="706" y="214" class="node-title">Claude Code CLI</text>
+  <text x="706" y="242" class="node-text">reads standup prompt</text>
+  <text x="706" y="266" class="node-text">runs non-interactively</text>
+
+  <!-- Row 2 -->
+  <rect x="120" y="410" width="250" height="150" rx="16" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+  <text x="146" y="456" class="node-title">GitHub (gh CLI)</text>
+  <text x="146" y="484" class="node-text">Merged PRs in report window</text>
+  <text x="146" y="508" class="node-text">author + links + titles</text>
+
+  <rect x="470" y="410" width="250" height="150" rx="16" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+  <text x="496" y="456" class="node-title">Linear (MCP)</text>
+  <text x="496" y="484" class="node-text">Updated/closed tickets</text>
+  <text x="496" y="508" class="node-text">status + context</text>
+
+  <rect x="820" y="410" width="250" height="150" rx="16" fill="#fee2e2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="846" y="456" class="node-title">Notion (MCP)</text>
+  <text x="846" y="484" class="node-text">Creates/appends standup</text>
+  <text x="846" y="508" class="node-text">fallback if day missing</text>
+
+  <!-- Arrows -->
+  <line x1="290" y1="235" x2="360" y2="235" stroke="#475569" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="610" y1="235" x2="680" y2="235" stroke="#475569" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <line x1="775" y1="300" x2="245" y2="410" stroke="#475569" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="800" y1="300" x2="595" y2="410" stroke="#475569" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="835" y1="300" x2="945" y2="410" stroke="#475569" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <text x="56" y="640" class="label">Key safeguards: weekday-only execution, 5-minute timeout, deterministic output format, and local log history per run.</text>
+</svg>
