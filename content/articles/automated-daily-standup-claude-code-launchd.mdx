@@ -236,40 +236,25 @@ launchctl load ~/Library/LaunchAgents/com.claude.standup.plist
 
 ## Troubleshooting
 
-1) Nothing runs
-- verify agent is loaded with `launchctl list | grep claude.standup`
-- check launchd stderr log for path/env issues
+1. Nothing runs
+   - verify agent is loaded with `launchctl list | grep claude.standup`
+   - check launchd stderr log for path/env issues
 
-2) Notion update fails
-- re-auth MCP integrations interactively and re-run manually
-- validate fallback logic for missing daily section
+2. Notion update fails
+   - re-auth MCP integrations interactively and re-run manually
+   - validate fallback logic for missing daily section
 
-3) Laptop sleeping during run
-- this setup requires machine awake + internet at runtime
-- if reliability is critical, move the same script to an always-on server
+3. Laptop sleeping during run
+   - this setup requires machine awake + internet at runtime
+   - if reliability is critical, move the same script to an always-on server
 
-4) Wrong standup content window
-- ensure timezone is explicitly set in both prompt and script assumptions
-- check Monday override logic
+4. Wrong standup content window
+   - ensure timezone is explicitly set in both prompt and script assumptions
+   - check Monday override logic
 
 <Danger>
 Do not allow broad autonomous actions in this workflow. Keep scope narrow: read activity, write one standup destination, exit.
 </Danger>
-
-## Adapting this for Linux
-
-Use cron/systemd timer instead of launchd, but keep the exact same guardrails:
-- strict prompt
-- weekend logic
-- timeout
-- logging
-- timezone-aware windows
-
-Minimal cron example (weekday 13:30):
-
-```bash
-30 13 * * 1-5 /bin/bash -lc '~/.claude/standup-runner.sh --cron'
-```
 
 ## Final thoughts
 
