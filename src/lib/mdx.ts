@@ -8,7 +8,7 @@ export interface PostFrontmatter {
   title: string;
   date: string;
   tags: string[];
-  type: 'articles' | 'projects' | 'snippets';
+  type: 'articles' | 'projects';
   excerpt: string;
   thumbnail?: string;
   draft?: boolean;
@@ -49,9 +49,8 @@ function getPostsFromDir(dir: string): Post[] {
 export function getAllPosts(): Post[] {
   const articles = getPostsFromDir('articles');
   const projects = getPostsFromDir('projects');
-  const snippets = getPostsFromDir('snippets');
 
-  return [...articles, ...projects, ...snippets];
+  return [...articles, ...projects];
 }
 
 export function getPostsByType(type: string): Post[] {

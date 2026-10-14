@@ -73,7 +73,7 @@ export default function StickMan() {
       style={{ opacity: loaded ? 1 : 0 }}
     >
       {/* Thought cloud - shown on hover via group-hover */}
-      <div className="absolute right-[100px] w-[500px] top-[-80%] opacity-0 transition-opacity duration-200 pointer-events-none pb-[100px] group-hover:opacity-100 group-hover:pointer-events-auto">
+      <div className="absolute right-[100px] w-[500px] top-[-55%] opacity-0 transition-opacity duration-200 pointer-events-none pb-[100px] group-hover:opacity-100 group-hover:pointer-events-auto">
         <ThoughtCloud>
           <h1 className="relative text-text text-xl leading-8 max-tablet:text-[26px] max-tablet:leading-[30px] max-tablet:text-center [&_span]:text-tertiary">
             Hello{' '}

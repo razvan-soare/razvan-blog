@@ -324,16 +324,6 @@ table {
   }
 }
 
-/* ===== Sticky Note Transforms (Snippets) ===== */
-.sticky-note {
-  transform: rotate(-1deg);
-  top: 5px;
-}
-.snippets-grid > :nth-child(even) .sticky-note { transform: rotate(4deg); top: 5px; }
-.snippets-grid > :nth-child(3n) .sticky-note { transform: rotate(-4deg); top: -5px; }
-.snippets-grid > :nth-child(5n) .sticky-note { transform: rotate(5deg); top: -10px; }
-.snippets-grid > :nth-child(7n) .sticky-note { transform: rotate(1deg); top: 0px; }
-
 /* ===== Article Content Styles ===== */
 .article-content {
   word-wrap: break-word;

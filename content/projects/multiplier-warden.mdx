@@ -1,0 +1,25 @@
+---
+title: Multiplier and Warden
+date: 2026-06-01
+tags: []
+type: "projects"
+draft: true
+excerpt: "At Multiplier and Warden I build frontend tools for reviewing data that AI extracts from documents, plus the internal tooling and developer workflow around them."
+---
+
+##### [Check live: the Multiplier website](https://multiplier.soarerazvan.com/)
+
+#### 💻 Technologies used
+
+<List items={['ReactJs', 'Typescript', 'Nx', 'Vitest', 'Monorepo', 'NextJs', 'Tailwind', 'Framer Motion']} />
+
+The products are private, so there are no screenshots, but here is what I do there. Most of it is frontend in a large TypeScript monorepo, with some backend when a feature needs it. The one public piece is the Multiplier website linked above, a full page scrolling site with an animated logo intro, built with Next.js, Tailwind and Framer Motion.
+
+#### What I did
+- Built the interface where a person reviews what an AI model extracted from a document, such as a payslip or a capital gains statement. The PDF sits next to an editable grid, clicking a value highlights where it came from, and a missing value can be marked by drawing on the page.
+- Added drill down into nested tables like earnings and deductions, and saving a reviewed document as a golden set, a trusted answer that new versions of the extractor are tested against.
+- Built internal tools for the team that works on the extractors, such as a visualizer to browse and edit golden sets.
+- Improved the developer workflow in the monorepo, with caching, faster tests and cleaner process handling.
+
+#### Skills I used
+Complex interaction design, PDF and document UIs, working with AI output that is sometimes wrong, internal tooling, and developer experience at monorepo scale.

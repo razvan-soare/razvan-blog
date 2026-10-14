@@ -46,14 +46,6 @@ function Menu({ isOpen }: { isOpen: boolean }) {
         </li>
         <li className="m-1.5">
           <Link
-            href="/snippets"
-            className="no-underline text-text text-sm p-1.5 font-normal tracking-wide"
-          >
-            Snippets
-          </Link>
-        </li>
-        <li className="m-1.5">
-          <Link
             href="/projects"
             className="no-underline text-text text-sm p-1.5 font-normal tracking-wide"
           >
