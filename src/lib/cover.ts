@@ -40,3 +40,14 @@ export function getCoverImageMeta(
     alt,
   };
 }
+
+/** On-page cover: prefer coverInlineImage, then coverImage. */
+export function getInlineCoverImageMeta(
+  frontmatter: { coverInlineImage?: string; coverImage?: string; coverAlt?: string; title: string }
+): CoverImageMeta | null {
+  const alt = frontmatter.coverAlt || frontmatter.title;
+  return (
+    getCoverImageMeta(frontmatter.coverInlineImage, alt) ??
+    getCoverImageMeta(frontmatter.coverImage, alt)
+  );
+}

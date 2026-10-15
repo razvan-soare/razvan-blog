@@ -36,13 +36,12 @@ export default function ArticlePage({ mdxContent, frontmatter, slug, cover }: Ar
           </h1>
 
           {cover && (
-            <div className="article-cover article-content-fade mb-12 w-full overflow-hidden rounded-xl">
+            <div className="article-cover article-content-fade relative mb-12 aspect-[16/9] w-full overflow-hidden rounded-xl">
               <Image
                 src={cover.url}
                 alt={cover.alt}
-                width={cover.width}
-                height={cover.height}
-                className="h-auto w-full object-cover"
+                fill
+                className="object-cover object-[center_58%]"
                 sizes="(max-width: 768px) 100vw, 70vw"
                 priority
               />

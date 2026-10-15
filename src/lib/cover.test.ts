@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getCoverImageMeta, getDefaultOgImage } from './cover';
+import { getCoverImageMeta, getDefaultOgImage, getInlineCoverImageMeta } from './cover';
 
 describe('getDefaultOgImage', () => {
   it('returns the site default OG route with dimensions', () => {
@@ -33,5 +33,30 @@ describe('getCoverImageMeta', () => {
       height: 720,
       alt: 'Life after AI cover',
     });
+  });
+});
+
+describe('getInlineCoverImageMeta', () => {
+  it('prefers coverInlineImage over coverImage', () => {
+    const meta = getInlineCoverImageMeta({
+      title: 'Life after AI',
+      coverImage: '/articles/life-after-ai/cover.jpg',
+      coverInlineImage: '/articles/life-after-ai/cover-inline.jpg',
+      coverAlt: 'Scene alt',
+    });
+    expect(meta).toEqual({
+      url: '/articles/life-after-ai/cover-inline.jpg',
+      width: 704,
+      height: 720,
+      alt: 'Scene alt',
+    });
+  });
+
+  it('falls back to coverImage when coverInlineImage is missing', () => {
+    const meta = getInlineCoverImageMeta({
+      title: 'Life after AI',
+      coverImage: '/articles/life-after-ai/cover.jpg',
+    });
+    expect(meta?.url).toBe('/articles/life-after-ai/cover.jpg');
   });
 });

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { getAllSlugs, getPostBySlug } from '@/lib/mdx';
-import { getCoverImageMeta, getDefaultOgImage } from '@/lib/cover';
+import { getCoverImageMeta, getDefaultOgImage, getInlineCoverImageMeta } from '@/lib/cover';
 import type { Metadata } from 'next';
 import ArticlePage from './ArticlePage';
 import { Primary, Danger, Warning, Success, Info, U } from '@/components/MdxComponents';
@@ -133,10 +133,7 @@ export default async function Page({
     <MDXRemote source={post.content} components={components} />
   );
 
-  const cover = getCoverImageMeta(
-    post.frontmatter.coverImage,
-    post.frontmatter.coverAlt || post.frontmatter.title
-  );
+  const cover = getInlineCoverImageMeta(post.frontmatter);
 
   return (
     <ArticlePage
