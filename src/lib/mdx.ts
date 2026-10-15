@@ -11,6 +11,11 @@ export interface PostFrontmatter {
   type: 'articles' | 'projects';
   excerpt: string;
   thumbnail?: string;
+  /** Public path used for og:image / twitter:image, e.g. `/articles/life-after-ai/cover.jpg` */
+  coverImage?: string;
+  /** Optional on-page cover (text-free). Falls back to coverImage when omitted. */
+  coverInlineImage?: string;
+  coverAlt?: string;
   draft?: boolean;
 }
 
