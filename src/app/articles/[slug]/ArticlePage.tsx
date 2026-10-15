@@ -1,5 +1,7 @@
 import React from 'react';
+import Image from 'next/image';
 import type { PostFrontmatter } from '@/lib/mdx';
+import type { CoverImageMeta } from '@/lib/cover';
 import ArticleEnhancements from './ArticleEnhancements';
 import ArticleTitleTransition from './ArticleTitleTransition';
 
@@ -7,9 +9,10 @@ interface ArticlePageProps {
   mdxContent: React.ReactNode;
   frontmatter: PostFrontmatter;
   slug: string;
+  cover?: CoverImageMeta | null;
 }
 
-export default function ArticlePage({ mdxContent, frontmatter, slug }: ArticlePageProps) {
+export default function ArticlePage({ mdxContent, frontmatter, slug, cover }: ArticlePageProps) {
   const showLikeButton = frontmatter.type === 'articles';
 
   let formattedDate = '';
@@ -31,6 +34,20 @@ export default function ArticlePage({ mdxContent, frontmatter, slug }: ArticlePa
           <h1 className="text-gray-1000 text-[38px] leading-[42px] m-0 mb-12 text-center">
             <ArticleTitleTransition slug={slug} title={frontmatter.title} />
           </h1>
+
+          {cover && (
+            <div className="article-cover article-content-fade mb-12 w-full overflow-hidden rounded-xl">
+              <Image
+                src={cover.url}
+                alt={cover.alt}
+                width={cover.width}
+                height={cover.height}
+                className="h-auto w-full object-cover"
+                sizes="(max-width: 768px) 100vw, 70vw"
+                priority
+              />
+            </div>
+          )}
 
           <div className="article-content-fade">
             {mdxContent}

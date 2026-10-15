@@ -7,6 +7,7 @@ import AnalyticsProvider from '@/components/AnalyticsProvider';
 import './globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://soarerazvan.com'),
   title: 'Razvan Soare',
   description: 'React developer and technology enthusiast',
   openGraph: {
@@ -15,11 +16,20 @@ export const metadata: Metadata = {
     url: 'https://soarerazvan.com',
     siteName: 'Razvan Soare',
     type: 'website',
+    images: [
+      {
+        url: '/og/default',
+        width: 1200,
+        height: 630,
+        alt: 'Razvan Soare',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Razvan Soare',
     description: 'React developer and technology enthusiast',
+    images: ['/og/default'],
   },
 };
 
