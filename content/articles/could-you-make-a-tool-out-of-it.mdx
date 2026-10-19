@@ -1,0 +1,87 @@
+---
+title: Could you make a tool out of it?
+date: 2026-10-19
+tags: [AI, Productivity, Tools]
+type: 'articles'
+excerpt: A colleague asked me to turn a one-off AI video into a reusable tool. The missing piece was never the tool. It was knowing that asking the AI is an option.
+---
+
+A colleague watched a video I had made with Claude Code, a walkthrough of a feature we had just shipped, and said:
+
+"Could you make a tool out of it? I could see myself using it a lot."
+
+She meant it as a compliment, and I am glad she asked, because it showed me a gap I had not seen. She had spotted something useful and wanted one for her own work. A year ago, that would have meant a job for me: turn my one-off video into a proper tool she could reuse.
+
+But the reusable part was already built. I had already added the tooling and skills to the project, so an agent knows how to start the application, use it, and take screenshots and videos along the way. She did not need my video wrapped up as a new tool. She could ask an agent to do the same for her feature, in her own words, and get exactly what she needed. The missing piece was never the tool. It was knowing that asking the AI is an option.
+
+## Lazy, in a good way
+
+Being a good developer means being lazy. Not lazy as in not working, lazy as in doing as little repetitive work as possible. Why click through a UI and cancel 200 orders by hand when a script can call the endpoint and cancel them all at once? Why run the lint command yourself every time when you can drop it in CI and never think about it again?
+
+For a long time that was the job. ‘Lazy’ developers built tools so nobody had to do the boring thing twice. They bought their time back, and everyone else's, and spent it on the parts that actually matter.
+
+That laziness has run my whole career. Lately it has started to work differently.
+
+## 500 entries I did not want to check
+
+A few weeks ago I was working on an extractor, and we needed a golden set. That is a list of answers we have checked and trust, so we can test against them later. Run the extractor over the same document, you should always get the same result back.
+
+Simple job. Terrible job. After ten minutes of checking value A against its place in the PDF, making sure the bounding box sat in the right spot, then moving on to value B, I realised I would rather jump from the balcony than finish this list of 500 entries. No thank you.
+
+That feeling took me in two directions.
+
+The first was simple. Checking one value meant looking left and right across the screen, left and right, hundreds of times. Even with the box highlighted it was hard and tiring, and I was only ten minutes in. If it felt like that to me, what does it feel like in the middle of a busy tax season, when someone has to get this right? They will get tired, and tired people make mistakes.
+
+So after chatting with a friend and trying a bunch of silly prototypes with Claude, an obvious idea showed up. We know where we extracted the value from, and we know what the value is. Why not just put them next to each other? Drop the extracted value right beside its bounding box, in the document itself. Add a keyboard shortcut to jump from one value to the next, and suddenly a reviewer can fly through hundred of lines in minutes instead of hours.
+
+One small change. That was the lazy developer in me, the old kind. 
+
+But my 500 entries were still there, and drawing bounding boxes by hand was still annoying. So I tried the new kind of lazy. I opened Codex, picked GPT SOL on low reasoning, everyone was saying how good it is the computer use. Did not need higher reasoning, a smart and fast model is all I wanted. Sent a prompt I did not really believe in:
+
+> I have on this chrome tab an extractor side by side and I need you to check if the extracted value is correct and if the bounding box matches with the location of data in the document.
+
+Sent. I had such low hopes that I went back to checking the document myself while it worked.
+
+It figured out it needed computer use, opened the page, and started validating. I had not told it how to redraw a wrong bounding box, so it worked that out too. A tedious job I would have hated, solved by two lines of prompt. Crazy.
+
+## The video I did not want to record
+
+Something similar happened again this week. After a week of tweaking edge cases on a migration, I wanted to show the team how the new feature worked. Normally that means recording a three or four minute video and talking through it.
+
+I started planning it. What data do I need, what do I say at each step. Then I took a step back and gave a big sigh. I did not want to do this. I would record it four times because I forgot the order, talk too fast because I was nervous, and nobody would understand what I was presenting anyway.
+
+So, as I always do now, I opened Claude and sent a tiny prompt:
+
+> We implemented this feature and I want to present it to my team. Give me a short video by creating a new template, running the script to populated the data and then creating an item manually.
+
+Pressed send and joined my meetings. About an hour later I opened the thread and a video was waiting for me. Better than I expected. A few slides explaining what the feature does and how to find it, then each step with a description underneath. Almost good, so I asked for one more crazy thing:
+
+> I like it, but would be even better if there was a narrating voice explaining how it works.
+
+Claude did not hesitate. It realised it would need text to speech, went and downloaded a local model, and got on with it. Next time I checked, there was a new video. With narration.
+
+That is the video my colleague saw. The one she wanted turned into a tool, and all it took was for me to be ’lazy’ and a two line prompt.
+
+## Building like it is 10 years ago
+
+Her reaction is the normal one. It is how we have built software for years.
+
+A client needs something, so we add a feature. A client needs a dashboard? Send one person to collect the requirements and write a spec, then a developer picks it up. Sends it to claude, thinks of twenty cases so the tool can be reused between multiple organisations, not just this client, and a week later the client finally sees it and notices what is missing. AI has made this process faster, but it has also made it worse. Adding a feature is now so cheap that people have a tendency to add everything. A new filter, sure. One more table, why not. Five minutes to write the prompt, an hour later it is in production.
+
+What if the feature is the wrong abstraction? What if the client could have built the thing themselves, on day one, exactly the way they needed it?
+
+Sounds crazy, no? Except it is already happening. We have a few champions, domain experts who got access to Claude Code and started building. There is this legend who is making so many prototypes that the developers cannot implement them fast enough. Instead of waiting for a developer to free up and scope the work, these people build one tool, then two, then ten, and walk into a meeting and say: THIS IS WHAT I WANT.
+
+From there a product manager can figure out if the tool is important for other organisations or sometimes there is no developer job at all, because the tool already works and only one team will ever need it. Why generalise it?
+
+## Give them the keys
+
+My colleague did not need me to productise my video prompt. There was a new mental model that needed to be unlocked. Do not wait for a developer to imagine your tool, specify your tool, and build your tool. Ask for the crazy thing. Worst case the AI fails and you have lost five minutes. Best case it just does it, and you were never blocked at all. Even better you will get to unblock other people that have the same problem. 
+
+I think we should design fewer one-size-fits-all products and make more room for small, personal tools, generated by AI and customised to each organisation, each team, each person. Give a Claude Code key to a few more champions and let them build what fits their day. When the same tool keeps showing up in ten places, then we group it, polish it, and integrate it properly. Until then, nobody should sit stuck waiting for a developer's free afternoon.
+
+And developers do not disappear in this picture. We get the more interesting version of our old lazy job. Instead of building every tool by hand, we build what makes self-help easy and reliable. Access to the right organisation data, so the AI answers from real information and not guesses. Skills and best practices, so a domain expert's tool follows good patterns. Guardrails, so asking for crazy things is safe to try. We stop being the bottleneck for every small idea, and start building the platform that lets a hundred small ideas happen without us.
+
+That is a much better use of an engineer than one more filter on one more table.
+
+So next time you catch yourself writing a ticket for a tool only you will use, stop for a second. Open the AI agent and describe the thing you wish existed, and press send.
