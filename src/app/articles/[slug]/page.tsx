@@ -34,10 +34,19 @@ export async function generateMetadata({
   return {
     title: `${title} - Razvan Soare`,
     description,
+    alternates: {
+      canonical: `/articles/${post.slug}`,
+    },
     openGraph: {
       title,
       description,
+      url: `/articles/${post.slug}`,
+      siteName: 'Razvan Soare',
+      locale: 'en_GB',
       type: 'article',
+      publishedTime: post.frontmatter.date,
+      authors: ['Razvan Soare'],
+      tags: post.frontmatter.tags,
       images: [
         {
           url: image.url,
