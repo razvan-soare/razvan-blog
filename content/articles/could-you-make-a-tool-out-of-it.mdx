@@ -33,23 +33,23 @@ That feeling took me in two directions.
 
 The first was simple. Checking one value meant looking left and right across the screen, left and right, hundreds of times. Even with the box highlighted it was hard and tiring, and I was only ten minutes in. If it felt like that to me, what does it feel like in the middle of a busy tax season, when someone has to get this right? They will get tired, and tired people make mistakes.
 
-So after chatting with a friend and trying a bunch of silly prototypes with Claude, an obvious idea showed up. We know where we extracted the value from, and we know what the value is. Why not just put them next to each other? Drop the extracted value right beside its bounding box, in the document itself. Add a keyboard shortcut to jump from one value to the next, and suddenly a reviewer can fly through hundreds of lines in minutes instead of hours.
+So after chatting with a friend and trying a bunch of silly prototypes with Claude, an obvious idea showed up. We know where we extracted the value from, and we know what the value is. Why not just put them next to each other? Drop the extracted value right beside its bounding box, in the document preview. Add a keyboard shortcut to jump from one value to the next, and suddenly a reviewer can fly through hundreds of lines in minutes instead of hours.
 
-One small change. That was the lazy developer in me, the old kind.
+One small change. That was the lazy developer in me, the kind that builds a new tool to solve the problem.
 
-But my 500 entries were still there, and drawing bounding boxes by hand was still annoying. So I tried the new kind of lazy. Everyone was saying how good GPT SOL is at computer use, so I opened Codex and picked it on low reasoning. I did not need a deep thinker, just something smart and fast. Then I sent a prompt I did not really believe in:
+But my 500 entries were still there, and drawing bounding boxes by hand was still annoying. So I tried the new kind of lazy. Everyone was saying how good GPT SOL is at computer use, so I opened Codex and picked it on low reasoning. I did not need a deep thinker, just something smart and fast. Then I sent a prompt:
 
 > I have on this chrome tab an extractor side by side and I need you to check if the extracted value is correct and if the bounding box matches with the location of data in the document.
 
-Sent. I had such low hopes that I went back to checking the document myself while it worked.
+I had such low hopes that I went back to checking the document by hand, while the LLM was trying to understand the layout on my second monitor.
 
-It figured out it needed computer use, opened the page, and started validating. I had not told it how to redraw a wrong bounding box, so it worked that out too. A tedious job I would have hated, solved by two lines of prompt. Crazy.
+It figured out it needed computer use, opened the page, and started validating. There were no instructions on how to redraw a wrong bounding box, so it worked that out too. A tedious job I would have hated, solved by two lines of prompt. Crazy.
 
 ## The video I did not want to record
 
 Something similar happened again this week. After a week of tweaking edge cases on a migration, I wanted to show the team how the new feature worked. Normally that means recording a three or four minute video and talking through it.
 
-I started planning it. What data do I need, what do I say at each step. Then I took a step back and gave a big sigh. I did not want to do this. I would record it four times because I forgot the order, talk too fast because I was nervous, and nobody would understand what I was presenting anyway.
+I started planning it. What data do I need, what do I say at each step. Then I took a step back and gave a big sigh. I did not want to do this. I would record it four times because I would forget the order, talk too fast because I was nervous, and nobody would understand what I was presenting anyway.
 
 So, as I always do now, I opened Claude and sent a tiny prompt:
 
@@ -67,21 +67,21 @@ That is the video my colleague saw. The one she wanted turned into a tool, and a
 
 Her reaction is the normal one. It is how we have built software for years.
 
-A client needs a dashboard. Someone collects the requirements and writes a spec. A developer picks it up, hands it to Claude, and thinks of twenty edge cases so it works for every organisation, not just this one. A week later the client finally sees it and spots what is missing.
+A client needs a dashboard. Someone collects the requirements and writes a spec. A developer picks it up, hands it to Claude, and thinks of twenty edge cases so it works for every organisation, not just this one. A week later the client finally gets access to it and realises it does not match what they expected.
 
-AI made this faster, but also worse. Features are so cheap now that we add everything. A new filter, sure. One more table, why not. Five minutes of prompting, and an hour later it is in production.
+AI made the building process faster, but also worse. Features are so cheap now that we add everything. A new filter, sure. One more table, why not. Five minutes of prompting, and an hour later it is in production.
 
 What if the feature is the wrong abstraction? What if the client could have built the thing themselves, on day one, exactly the way they needed it?
 
 Sounds crazy, no? Except it is already happening. We have a few champions, domain experts who got access to Claude Code and started building. There is this legend who is making so many prototypes that the developers cannot implement them fast enough. Instead of waiting for a developer to free up and scope the work, these people build one tool, then two, then ten, and walk into a meeting and say: THIS IS WHAT I WANT.
 
-From there a product manager can figure out if the tool is important for other organisations or sometimes there is no developer job at all, because the tool already works and only one team will ever need it. Why generalise it?
+From there, a product manager can figure out if the tool can be reused by others, or if it should just stay a local tool that only one team will ever need. Why generalise it?
 
 ## Give them the keys
 
-My colleague did not need me to productise my video prompt. There was a new mental model that needed to be unlocked. Do not wait for a developer to imagine your tool, specify your tool, and build your tool. Ask for the crazy thing. Worst case the AI fails and you have lost five minutes. Best case it just does it, and you were never blocked at all. Even better you will get to unblock other people that have the same problem.
+My colleague did not need me to productise my video prompt. There was a new mental model that needed to be unlocked. Do not wait for a developer to imagine and build the tool. Ask AI for the crazy thing. Worst case the AI fails and you have lost five minutes. Best case it just does it, and you were never blocked at all. Even better, you will get to unblock other people with the same problem.
 
-I think we should design fewer one-size-fits-all products and make more room for small, personal tools, generated by AI and customised to each organisation, each team, each person. Give a Claude Code key to a few more champions and let them build what fits their day. When the same tool keeps showing up in ten places, then we group it, polish it, and integrate it properly. Until then, nobody should sit stuck waiting for a developer's free afternoon.
+I think we should design fewer one-size-fits-all products and make more room for small, personal tools, generated by AI and customised to each organisation, each team, each person. Give a Claude Code key to a few more champions and let them build what fits their day. Let them shape it around the way they actually work. When the same tool keeps showing up in ten places, then we group it, polish it, and integrate it properly - we generalise what they already proved works, instead of replacing it with what we imagined. Until then, nobody should sit stuck waiting for a developer's free afternoon.
 
 And developers do not disappear in this picture. We get the more interesting version of our old lazy job. Instead of building every tool by hand, we build what makes self-help easy and reliable. Access to the right organisation data, so the AI answers from real information and not guesses. Skills and best practices, so a domain expert's tool follows good patterns. Guardrails, so asking for crazy things is safe to try. We stop being the bottleneck for every small idea, and start building the platform that lets a hundred small ideas happen without us.
 

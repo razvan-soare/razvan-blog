@@ -344,6 +344,17 @@ table {
   line-height: 1.6;
   margin-bottom: 32px;
 }
+.article-content blockquote {
+  background: var(--color-text-block-info);
+  border-left: 3px solid var(--color-text-block-border-info);
+  border-radius: 6px 6px 6px 3px;
+  margin: 0 0 32px;
+  padding: 20px 24px;
+}
+.article-content blockquote p {
+  font-size: 17px;
+  margin-bottom: 0;
+}
 .article-content p code {
   color: var(--color-primary);
   display: inline-block;
