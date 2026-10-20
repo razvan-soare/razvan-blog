@@ -9,10 +9,10 @@ import './globals.css';
 export const metadata: Metadata = {
   metadataBase: new URL('https://soarerazvan.com'),
   title: 'Razvan Soare',
-  description: 'React developer and technology enthusiast',
+  description: 'I build products end to end, mostly for the web, and explore what AI can do.',
   openGraph: {
     title: 'Razvan Soare',
-    description: 'React developer and technology enthusiast',
+    description: 'I build products end to end, mostly for the web, and explore what AI can do.',
     url: 'https://soarerazvan.com',
     siteName: 'Razvan Soare',
     type: 'website',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Razvan Soare',
-    description: 'React developer and technology enthusiast',
+    description: 'I build products end to end, mostly for the web, and explore what AI can do.',
     images: ['/og/default'],
   },
 };

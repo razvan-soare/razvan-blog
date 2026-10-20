@@ -34,7 +34,7 @@ export async function GET() {
             marginTop: 16,
           }}
         >
-          React developer and technology enthusiast
+          Building products and exploring what AI can do
         </div>
         <div
           style={{

@@ -78,8 +78,7 @@ export default function StickMan() {
           <h1 className="relative text-text text-xl leading-8 max-tablet:text-[26px] max-tablet:leading-[30px] max-tablet:text-center [&_span]:text-tertiary">
             Hello{' '}
             <span role="img" aria-label="hi">👋</span>{' '}
-            I am Razvan, <span>React developer</span> and technology enthusiast{' '}
-            <span role="img" aria-label="tada">🎉</span>
+            I am Razvan, I <span>build products</span> and explore what AI can do
           </h1>
         </ThoughtCloud>
       </div>
