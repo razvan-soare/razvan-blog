@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { ThemeProvider } from '@/lib/ThemeContext';
 import Header from '@/components/Header';
 import ReportIssue from '@/components/ReportIssue';
@@ -85,6 +86,12 @@ export default function RootLayout({
         `}} />
       </head>
       <body>
+        <Script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="a8992466-8f66-4d7d-bbca-516a317ae82b"
+          strategy="afterInteractive"
+        />
         <ThemeProvider>
           <AnalyticsProvider>
             <ViewTransitionOnBack />
