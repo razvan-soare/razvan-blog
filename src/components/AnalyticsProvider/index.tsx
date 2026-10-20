@@ -7,7 +7,9 @@ import * as Sentry from '@sentry/nextjs';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com';
+/** First-party reverse proxy (see next.config.ts rewrites) — avoids ad blockers. */
+const posthogApiHost = '/ingest';
+const posthogUiHost = 'https://us.posthog.com';
 const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
 const appEnv = process.env.NEXT_PUBLIC_APP_ENV || process.env.NODE_ENV;
 
@@ -38,7 +40,8 @@ export default function AnalyticsProvider({ children }: { children: ReactNode })
   useEffect(() => {
     if (posthogKey && !posthogReady) {
       posthog.init(posthogKey, {
-        api_host: posthogHost,
+        api_host: posthogApiHost,
+        ui_host: posthogUiHost,
         autocapture: true,
         capture_pageview: false,
         capture_pageleave: true,
