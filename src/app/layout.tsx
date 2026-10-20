@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { ThemeProvider } from '@/lib/ThemeContext';
 import Header from '@/components/Header';
 import ReportIssue from '@/components/ReportIssue';
@@ -86,12 +85,6 @@ export default function RootLayout({
         `}} />
       </head>
       <body>
-        {/* beforeInteractive: emitted in initial HTML (Umami reads data-website-id from currentScript) */}
-        <Script
-          src="https://cloud.umami.is/script.js"
-          data-website-id="a8992466-8f66-4d7d-bbca-516a317ae82b"
-          strategy="beforeInteractive"
-        />
         <ThemeProvider>
           <AnalyticsProvider>
             <ViewTransitionOnBack />
