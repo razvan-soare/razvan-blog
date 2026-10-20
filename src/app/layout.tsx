@@ -86,11 +86,11 @@ export default function RootLayout({
         `}} />
       </head>
       <body>
+        {/* beforeInteractive: emitted in initial HTML (Umami reads data-website-id from currentScript) */}
         <Script
-          defer
           src="https://cloud.umami.is/script.js"
           data-website-id="a8992466-8f66-4d7d-bbca-516a317ae82b"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
         />
         <ThemeProvider>
           <AnalyticsProvider>
