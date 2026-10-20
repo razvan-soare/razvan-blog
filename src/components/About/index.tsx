@@ -1,33 +1,23 @@
-'use client';
-
 import React from 'react';
 
 export default function About() {
-  const birthDate = new Date('1994-08-03');
-  const now = new Date();
-  let age = now.getFullYear() - birthDate.getFullYear();
-  const m = now.getMonth() - birthDate.getMonth();
-  if (m < 0 || (m === 0 && now.getDate() < birthDate.getDate())) age--;
-
   return (
     <div className="py-[100px] [&>h1]:text-[42px] [&>h1]:mb-[50px] [&>p]:text-[22px] [&>p]:leading-[1.7] [&>p]:mb-[30px]">
-      <h1>Hello 👋</h1>
+      <h1>Hi, I&apos;m Razvan.</h1>
       <p>
-        My name is Razvan Soare, I&apos;m a {age} year old, Front End Engineer
-        based in United Kingdom 🇬🇧. I describe myself as a passionate developer
-        who loves coding, open challenges and the web platform ❤️.
+        I love technology and I love building. I make products end to end,
+        mostly for the web, and lately a lot of my time goes into exploring
+        what AI can actually do: trying new tools, pushing them to their
+        limits, and keeping what helps me build products that are fast,
+        simple and easy to use.
       </p>
       <p>
-        Aside from my job, I enjoy reading technology related articles,
-        especially React and javascript related. One of the reasons I love React
-        is that no matter how much you know there will always be new things to
-        discover. Also I enjoy writing technical things ✍️ at my blog, hoping I
-        can share some of the most captivating dev related stories.
+        This site is where I write about that: what I am building, what the
+        tools get wrong, and what I learn along the way.
       </p>
       <p>
-        In my free time you can find me longboarding 🛹 (especially on my
-        electric one 😍), running 🏃‍♂️ or most likely playing some Assassin&apos;s
-        Creed.
+        Away from the laptop you will find me longboarding, playing
+        Assassin&apos;s Creed, or most likely fishing.
       </p>
       <br />
       <br />
